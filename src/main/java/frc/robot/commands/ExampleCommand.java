@@ -10,7 +10,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 /** An example command that uses an example subsystem. */
 public class ExampleCommand extends CommandBase {
 
-  private final ExampleSubsystem m_subsystem;
+  private final ExampleSubsystem subsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -18,9 +18,9 @@ public class ExampleCommand extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+    this.subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_subsystem);
+    addRequirements(this.subsystem);
   }
 
   // Called when the command is initially scheduled.
