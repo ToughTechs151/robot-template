@@ -160,3 +160,13 @@ bin/
 
 # Simulation GUI and other tools window save file
 *-window.json
+
+# Ignore Splash Screen txt files
+src/main/resources/*.txt
+
+# Robot deploy txt files
+src/main/deploy/*.txt
+
+# NetworkTable Persistence files
+networktables.ini
+networktables.ini.bak
