@@ -25,10 +25,6 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    
-    # Fetch the main branch for Spotless ratchetfrom.
-    - name: get main
-      run: git fetch origin main:main
       
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
