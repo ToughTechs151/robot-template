@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @java.lang.SuppressWarnings("squid:S106")
 class Splash {
@@ -41,7 +42,7 @@ class Splash {
   private static void printStatusFile(
       String filename, Boolean isDeploy, int rowIndex, int colIndex, int widthIndex) {
     byte[] buffer = new byte[1024];
-    InputStream statusfile;
+    InputStream statusfile = null;
     ShuffleboardTab tab;
     NetworkTableEntry field;
     try {
@@ -63,7 +64,7 @@ class Splash {
 
       try {
         for (int length = 0; (length = statusfile.read(buffer)) != -1; ) {
-          String buf = new String(buffer).replaceAll("\\s", " ");
+          String buf = new String(buffer, StandardCharsets.UTF_8).replaceAll("\\s", " ");
           String tfn = filename.replace(".txt", "");
           String fn = tfn.substring(0, 1).toUpperCase() + tfn.substring(1);
           System.out.write(buffer, 0, length);
@@ -81,6 +82,13 @@ class Splash {
     } catch (Exception e) {
       System.out.println("Unable to find file.");
       System.out.println(e.getMessage());
+    }
+    try {
+      if (statusfile != null) {
+        statusfile.close();
+      }
+    } catch (Exception ignore) {
+      // Ignore nullpointer exception from statusfile.
     }
   }
 }
