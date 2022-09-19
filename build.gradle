@@ -140,12 +140,27 @@ spotbugs {
     excludeFilter = file("config/spotbugs/excludeFilter.xml")
     reportsDir = file("$project.buildDir/reports/spotbugs")
     effort = "max"
+    reportLevel = 'low'
 }
 
-// tasks.withType(com.github.spotbugs.SpotBugsTask) {
-//     reports {
-//         xml.enabled true
-//         html.enabled true
-//     }
-// }
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            stylesheet = 'fancy-hist.xsl'
+        }
+        xml {
+            enabled = true
+        }
+    }
+}
+spotbugsTest {
+    reports {
+        html {
+            enabled = true
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
 compileJava.dependsOn 'spotlessApply'
