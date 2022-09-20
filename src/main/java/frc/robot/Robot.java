@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -65,11 +66,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    this.autonomousCommand = this.robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (this.autonomousCommand != null) {
-      this.autonomousCommand.schedule();
+    if (this.robotContainer == null) {
+      DriverStation.reportError("autonomousInit called with null robotContainer", false);
+    } else {
+
+      this.autonomousCommand = this.robotContainer.getAutonomousCommand();
+
+      // schedule the autonomous command (example)
+      if (this.autonomousCommand != null) {
+        this.autonomousCommand.schedule();
+      }
     }
   }
 
