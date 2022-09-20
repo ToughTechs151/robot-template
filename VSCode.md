@@ -20,3 +20,10 @@ Project Manager for Java
 Sonarlint
 Visual Studio Intellicode
 WPILIB
+
+
+Spotbugs places report in the project directory under
+build/reports/spotbugs in file main.html
+
+Spotbugs exclusions are placed in config/spotbugs/excludeFilter.xml
+Syntax is at https://spotbugs.readthedocs.io/en/stable/filter.html
