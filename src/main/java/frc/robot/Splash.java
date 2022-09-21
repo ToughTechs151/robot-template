@@ -17,7 +17,7 @@ class Splash {
 
   private Splash() {}
 
-  public static boolean printAllStatusFiles() {
+  public static void printAllStatusFiles() {
     final String Sepline = "=====================================================================";
 
     // Print the Splash Screen
@@ -35,8 +35,6 @@ class Splash {
     printStatusFile("remote.txt", true, 3, 0, 10);
     printStatusFile("user.txt", true, 4, 0, 10);
     System.out.println(Sepline);
-
-    return true;
   }
 
   @java.lang.SuppressWarnings("squid:S2095")
