@@ -31,6 +31,9 @@ public class Robot extends TimedRobot {
     // Start up the DataLog Manager
     DataLogManager.start();
 
+    // Collected Drive Station and Joystick data. Comment this out if it is too much data.
+    DriverStation.startDataLog(DataLogManager.getLog());
+
     // Print our splash screen info.
     Splash.printAllStatusFiles();
 
