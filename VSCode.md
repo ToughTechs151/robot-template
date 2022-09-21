@@ -1,4 +1,4 @@
-Bracketpair colors can be enabled by adding the setting "editor.bracketPairColorization.enabled": true. Also set 
+Bracketpair colors can be enabled by adding the setting "editor.bracketPairColorization.enabled": true. Also set
 bracktpair guides and bracketpair guides horizontal to "active".
 
 Installed extensions:
