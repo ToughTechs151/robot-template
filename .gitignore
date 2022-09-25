@@ -173,4 +173,8 @@ networktables.ini.bak
 
 # Data Log Files
 FRC_202*
+FRC_TBD*
 datalogtool.json
+
+# Simulation Gui files
+simgui*.json
