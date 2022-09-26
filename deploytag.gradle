@@ -1,0 +1,45 @@
+import java.text.SimpleDateFormat
+
+def getGitFilesChanged = {
+    ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine "git", "diff", "--name-only", "HEAD"
+        standardOutput = stdout
+    }
+    return stdout.toString().trim().replace("\n", ", ").replace("src/main/java/frc/robot/", "")
+}
+
+task deployGitTag() {
+
+    doLast {
+        String deploy_host = ""
+        String changes_str = ""
+        String tag_name = ""
+        try {
+            deploy_host = java.net.InetAddress.getLocalHost().getHostName()
+        } catch (all) {
+            deploy_host = "unknownHost"
+        }
+        try {
+            changes_str = new File("$projectDir/src/main/resources/changes.txt").getText('UTF-8')
+        } catch (all) {
+            changes_str "UnknownChanges"
+        }
+
+        changes_str = changes_str.replaceAll(",", " ")
+        changes_str = changes_str.replaceAll("\\s+", ",")
+        tag_name = "deploy,${deploy_host},${changes_str}"
+        println "GitTag Writing deploy files in ${tag_name}."
+    }
+}
+
+
+// build.dependsOn versionTxt
+// tasks.getByName('versionTxt').dependsOn(ensureResources)
+// tasks.getByName('simulateExternalJavaDebug').dependsOn(deployHost)
+// tasks.getByName('simulateExternalJavaRelease').dependsOn(deployHost)
+deployroborio.configure { finalizedBy deployGitTag}
+// tasks.getByName('deployGitTag').dependsOn.deploy.targets.roborio.artifacts.frcStaticFileDeploy
+// tasks.getByName('deployGitTag').dependsOn(simulateExternalJavaRelease)
+simulateExternalJavaRelease.configure { finalizedBy deployGitTag}

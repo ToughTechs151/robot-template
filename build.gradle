@@ -44,6 +44,7 @@ def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 
 // test
 apply from: "splash.gradle"
+apply from: "deploytag.gradle"
 
 // Set to true to use debug for JNI.
 wpi.java.debugJni = false
