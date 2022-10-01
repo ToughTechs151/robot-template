@@ -5,9 +5,8 @@
 // track what versions of code have been sent to the robot. Since the date
 // time are encoded, these can be used to match up with the telemetry logs.
 
-// One thing to note is that tags are not push upstream by default. It
-// is necessary to add the lines in the workspace .gitconfig file to
-// the .git/config file to enable pushing the tags by default.
+// Tags are not pushed upstream by default, so we set push.followTags
+// so the tags will make it into the repo.
 
 import java.text.SimpleDateFormat
 
@@ -41,6 +40,9 @@ task deployGitTag() {
         tag_name = "deploy-${now_str}"
         tag_comment = '"deploy,' + "${deploy_host},${changes_str}" + '"'
 
+        exec {
+            commandLine "git", "config", "push.followTags", "true"
+        }
         // Execute the git tag command.
         exec {
             commandLine "git", "tag", "-a", "${tag_name}", "-m", "${tag_comment}"
