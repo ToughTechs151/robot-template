@@ -34,9 +34,22 @@ jobs:
     - name: Compile and run tests on robot code
       run: ./gradlew build
 
+    # Create Java Docs
+    - name: Build Java Docs
+      run: ./gradlew javadoc
+
     # Copy Reports
     - name: Copy Report
       uses: actions/upload-artifact@v3
       with:
         name: Reports
         path: build/reports/
+
+    # Copy Docs
+    - name: Copy Docs
+      uses: actions/upload@v3
+      with:
+        name: Docs
+        path: build/docs
+
+    
