@@ -104,7 +104,7 @@ wpi.java.configureTestTasks(test)
 test {
     useJUnitPlatform()
     testLogging {
-        events "started", "passed", "skipped", "failed"
+        events "passed", "skipped", "failed"
     }
 }
 
