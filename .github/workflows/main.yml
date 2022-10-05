@@ -47,7 +47,7 @@ jobs:
 
     # Copy Docs
     - name: Copy Docs
-      uses: actions/upload@v3
+      uses: actions/upload-artifact@v3
       with:
         name: Docs
         path: build/docs
