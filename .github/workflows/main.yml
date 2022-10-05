@@ -34,9 +34,9 @@ jobs:
     - name: Compile and run tests on robot code
       run: ./gradlew build
 
-    # Copy SpotBugs Report
-    - name: Copy Spot Bugs Report
+    # Copy Reports
+    - name: Copy Report
       uses: actions/upload-artifact@v3
       with:
-        name: SpotBugs
-        path: build/reports/spotbugs/main.html
+        name: Reports
+        path: build/reports/
