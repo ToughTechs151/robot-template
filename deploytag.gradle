@@ -19,7 +19,7 @@ task deployGitTag() {
         String tag_name = ""
         String tag_comment = ""
 
-        // Get thte hostname in case there is more than one drive station.
+        // Get the hostname in case there is more than one drive station.
         try {
             deploy_host = java.net.InetAddress.getLocalHost().getHostName()
         } catch (all) {
