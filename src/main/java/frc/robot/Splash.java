@@ -60,7 +60,8 @@ class Splash {
 
       try {
         for (int length = 0; (length = statusfile.read(buffer)) != -1; ) {
-          String buf = new String(buffer, StandardCharsets.UTF_8).replaceAll("\\s", " ");
+          String buf =
+              new String(buffer, StandardCharsets.UTF_8).replaceAll("\\s", " ").replace("\0", "");
           String tfn = filename.replace(".txt", "");
           String fn = tfn.substring(0, 1).toUpperCase(Locale.ENGLISH) + tfn.substring(1);
           System.out.write(buffer, 0, length);
