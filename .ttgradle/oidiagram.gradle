@@ -1,0 +1,17 @@
+task generatePilotDiagram(type: Copy) {
+
+    doLast {
+        copy {
+            from ('svgdiag') {
+                include '*.svg'
+            }
+            into("config/controllerdiagram")
+            filter { String line ->
+                line.replaceAll("XXXPILOTXXX", "Pilot Xbox")
+            }
+        }
+    }
+}
+
+task generateCoPilot() {
+}
