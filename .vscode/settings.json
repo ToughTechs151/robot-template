@@ -12,7 +12,11 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true,
-    "**/*~": true
+    "**/*~": true,
+    "**/FRC_2*.wpilog": true,
+    "**/FRC_2*.csv": true,
+    "**/datalogtool*.json":true,
+    "**/simgui*.json":true
   },
   "java.test.config": [
     {
