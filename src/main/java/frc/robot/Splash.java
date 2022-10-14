@@ -37,7 +37,6 @@ class Splash {
     System.out.println(Sepline);
   }
 
-  @java.lang.SuppressWarnings("squid:S2095")
   private static void printStatusFile(
       String filename, Boolean isResource, int rowIndex, int colIndex, int widthIndex) {
     byte[] buffer = new byte[1024];
