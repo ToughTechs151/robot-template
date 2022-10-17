@@ -37,4 +37,7 @@ public final class Constants {
   public static final int JS_START = 8;
   public static final int JS_L_STICK = 9;
   public static final int JS_R_STICK = 10;
+
+  // Run time options
+  public static final boolean LOG_JS_DATA = true;
 }
