@@ -18,15 +18,15 @@ public class DataLogging {
 
   private Robot robot;
   private RobotContainer robotContainer;
-  private NetworkTableEntry sbPDPTempEntry;
-  private NetworkTableEntry sbPDPCurrentEntry;
+  private NetworkTableEntry sbPdpTempEntry;
+  private NetworkTableEntry sbPdpCurrentEntry;
   private NetworkTableEntry sbBatVoltEntry;
   private DoubleLogEntry loopTime;
   private PowerDistribution pdp;
   private double startTime;
   private ShuffleboardTab sbRobotTab;
   private boolean prevBrownoutState;
-  private boolean prevDSConnectState;
+  private boolean prevDsConnectState;
 
   public DataLogging(Robot robot) {
     this.robot = robot;
@@ -51,11 +51,11 @@ public class DataLogging {
 
     sbRobotTab = Shuffleboard.getTab("Robot");
 
-    sbPDPTempEntry = sbRobotTab.add("PDP Temp", -1).getEntry();
-    sbPDPCurrentEntry = sbRobotTab.add("PDP Current", -1).getEntry();
+    sbPdpTempEntry = sbRobotTab.add("PDP Temp", -1).getEntry();
+    sbPdpCurrentEntry = sbRobotTab.add("PDP Current", -1).getEntry();
     sbBatVoltEntry = sbRobotTab.add("Battery Voltage", -1).getEntry();
     prevBrownoutState = RobotController.isBrownedOut();
-    prevDSConnectState = DriverStation.isDSAttached();
+    prevDsConnectState = DriverStation.isDSAttached();
 
     loopTime = new DoubleLogEntry(log, "/robot/LoopTime");
   }
@@ -87,8 +87,8 @@ public class DataLogging {
           String.format("Brownout Voltage: %f", RobotController.getBrownoutVoltage()));
     }
 
-    sbPDPTempEntry.setDouble(pdp.getTemperature());
-    sbPDPCurrentEntry.setDouble(pdp.getTotalCurrent());
+    sbPdpTempEntry.setDouble(pdp.getTemperature());
+    sbPdpCurrentEntry.setDouble(pdp.getTotalCurrent());
     sbBatVoltEntry.setDouble(RobotController.getBatteryVoltage());
 
     boolean newBrownoutState = RobotController.isBrownedOut();
@@ -98,12 +98,12 @@ public class DataLogging {
       prevBrownoutState = newBrownoutState;
     }
 
-    boolean newDSConnectState = DriverStation.isDSAttached();
-    if (prevDSConnectState != newDSConnectState) {
+    boolean newDsConnectState = DriverStation.isDSAttached();
+    if (prevDsConnectState != newDsConnectState) {
       Shuffleboard.addEventMarker(
-          "Driver Station is %s" + (newDSConnectState ? "Connected" : "Disconnected"),
+          "Driver Station is %s" + (newDsConnectState ? "Connected" : "Disconnected"),
           EventImportance.kHigh);
-      prevDSConnectState = newDSConnectState;
+      prevDsConnectState = newDsConnectState;
     }
     loopTime.append(Timer.getFPGATimestamp() - startTime);
   }
