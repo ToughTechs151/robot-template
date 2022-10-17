@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +19,7 @@ public class Robot extends TimedRobot {
   private Command autonomousCommand;
 
   private RobotContainer robotContainer;
+  private DataLogging datalog;
 
   /**
    * {@code robotInit} runs when the robot first starts up. It is used to create the robot
@@ -28,16 +28,15 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    // Start up the DataLog Manager
-    DataLogManager.start();
-
-    // Collected Drive Station and Joystick data. Comment this out if it is too much data.
-    DriverStation.startDataLog(DataLogManager.getLog());
+    // Initialize the data logging.
+    datalog = new DataLogging(this);
+    datalog.init();
 
     // Print our splash screen info.
     Splash.printAllStatusFiles();
 
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our
     // autonomous chooser on the dashboard.
     this.robotContainer = new RobotContainer();
   }
@@ -51,11 +50,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // Runs the Scheduler. This is responsible for polling buttons, adding
+    // newly-scheduled
+    // commands, running already-scheduled commands, removing finished or
+    // interrupted commands,
+    // and running subsystem periodic() methods. This must be called from the
+    // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // must be at the end of robotPeriodic
+    datalog.periodic();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -67,6 +72,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     // Add code to run repeatedly while disabled.
+    datalog.startLoopTime();
   }
 
   /**
@@ -92,6 +98,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    datalog.startLoopTime();
     // Add code to run repeatedly during Autonomous mode.
   }
 
@@ -109,6 +116,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    datalog.startLoopTime();
     // Add code to run repeatedly during Teleop mode.
   }
 
@@ -116,11 +124,18 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    // Generally test mode will have the same Init and Periodic code as Teleop, so
+    // call them here. Replace if desired.
+    teleopInit();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    // Generally test mode will have the same Init and Periodic code as Teleop, so
+    // call them here. Replace if desired. If you don't call teleopPeriodic here, then add a call to
+    // StartLoopTime.
+    teleopPeriodic();
     // Add code to run repeatedly during Test mode.
   }
 
@@ -134,5 +149,9 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {
     // Add code to run repeatedly during simulations.
+  }
+
+  public RobotContainer getrobotContainer() {
+    return robotContainer;
   }
 }
