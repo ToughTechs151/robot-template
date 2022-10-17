@@ -5,4 +5,4 @@ https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/<WORKFLOW_FILE>/badge.
 
 Be sure to change this when forking or renaming.
 -->
-[![CI](https://github.com/Tough-Techs151/robot-template/actions/workflows/main.yml/badge.svg)](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml)
+[![CI](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml/badge.svg)](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml)
