@@ -39,5 +39,7 @@ public final class Constants {
   public static final int JS_R_STICK = 10;
 
   // Run time options
+
+  // Set to true to log Joystick data. To false otherwise.
   public static final boolean LOG_JS_DATA = true;
 }
