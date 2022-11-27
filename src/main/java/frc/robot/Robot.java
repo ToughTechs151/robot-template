@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.sim.RobotModel;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -29,8 +30,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     // Initialize the data logging.
-    datalog = new DataLogging(this);
-    datalog.init();
+    datalog = DataLogging.getInstance();
+    datalog.datalogRobotInit();
 
     // Print our splash screen info.
     Splash.printAllStatusFiles();
@@ -39,6 +40,11 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     this.robotContainer = new RobotContainer();
+
+    if (isSimulation()) {
+      simModel = new RobotModel(this);
+    }
+    datalog.dataLogRobotContainerInit(this.robotContainer);
   }
 
   /**
@@ -66,7 +72,11 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    if (isSimulation()) {
+      simModel.reset();
+    }
     // Add code for entering disabled mode.
+    CommandScheduler.getInstance().cancelAll();
   }
 
   @Override
@@ -85,6 +95,9 @@ public class Robot extends TimedRobot {
     if (this.robotContainer == null) {
       DriverStation.reportError("autonomousInit called with null robotContainer", false);
     } else {
+
+      // Cancel any commands already running.
+      CommandScheduler.getInstance().cancelAll();
 
       this.autonomousCommand = this.robotContainer.getAutonomousCommand();
 
@@ -139,6 +152,15 @@ public class Robot extends TimedRobot {
     // Add code to run repeatedly during Test mode.
   }
 
+  /*
+   * This set of functions is for simulation support only, and is not called on the real
+   * robot. Put plant-model related functionality here. For training purposes,
+   * students should not have to modify this functionality.
+   */
+
+  // Simple robot plant model for simulation purposes
+  RobotModel simModel;
+
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
@@ -149,6 +171,8 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {
     // Add code to run repeatedly during simulations.
+
+    simModel.update();
   }
 
   public RobotContainer getrobotContainer() {
