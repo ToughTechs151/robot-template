@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.DataLogging;
 import frc.robot.subsystems.ExampleSubsystem;
 
 /** An example command that uses an example subsystem. */
@@ -17,10 +18,12 @@ public class ExampleCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
+  public ExampleCommand(String commandName, ExampleSubsystem subsystem) {
     this.subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.subsystem);
+    this.setName(commandName);
+    DataLogging.getInstance().logCommand(this.subsystem.getName(), this.getName(), this);
   }
 
   // Called when the command is initially scheduled.
