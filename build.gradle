@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2022.4.1"
     id 'com.diffplug.spotless' version '6.11.0'
-    id "com.github.spotbugs" version "5.0.12"
+    id "com.github.spotbugs" version "5.0.13"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -73,10 +73,20 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    testImplementation 'junit:junit:4.13.1'
-    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    testImplementation 'org.mockito:mockito-core:4.9.0'
     // testCompile('org.junit.platform:junit-platform-runner:1.4.2')
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    // testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+}
+
+test {
+    useJUnitPlatform()
+    // testLogging {
+    //     events "passed", "skipped", "failed"
+    // }
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -97,17 +107,11 @@ sourceSets {
         java.srcDir 'src/test/java'
     }
 }
+
 // Configure jar and deploy tasks
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
 
 spotless {
     java {
@@ -171,6 +175,7 @@ spotbugsMain {
         }
     }
 }
+
 spotbugsTest {
     reports {
         html {
@@ -180,4 +185,4 @@ spotbugsTest {
     }
 }
 
-compileJava.dependsOn 'spotlessApply'
+// compileJava.dependsOn 'spotlessApply'
