@@ -29,10 +29,13 @@ public class DataLogging {
   private ShuffleboardLayout pdpWidget;
   private boolean everBrownout = false;
   private boolean prevDsConnectState;
-  private static DataLogging instance;
 
   private DataLogging() {
     // empty private constructor.
+  }
+
+  private static class InstanceHolder {
+    private static final DataLogging instance = new DataLogging();
   }
 
   /**
@@ -41,10 +44,7 @@ public class DataLogging {
    * @return DataLogging
    */
   public static DataLogging getInstance() {
-    if (instance == null) {
-      instance = new DataLogging();
-    }
-    return instance;
+    return InstanceHolder.instance;
   }
 
   /**
@@ -195,7 +195,7 @@ public class DataLogging {
    */
   public void logCommand(String ssName, String comName, Sendable com) {
     sbCommandsTab.getLayout(ssName, BuiltInLayouts.kList).withSize(2, 0).add(comName, com);
-    // TODO Hide the command name label.
+    // ISSUE #2 Hide the command name label.
     // Add property to layout to set label position to HIDDEN.
     // See "Adding widgets to layouts" in Shuffleboard docs.
   }
