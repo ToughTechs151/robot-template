@@ -13,6 +13,7 @@ Git History
 Github Pull Requests and Issues
 gitignore
 GitLens
+Intellicode
 Language Support for Java
 Open in Github, Bitbucket, Gitlab...
 Project Manager
