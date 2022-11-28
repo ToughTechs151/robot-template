@@ -16,7 +16,8 @@ public class ExampleCommand extends CommandBase {
   /**
    * Creates a new ExampleCommand.
    *
-   * @param subsystem The subsystem used by this command.
+   * @param commandName Name of the command
+   * @param subsystem Subsystem it requires
    */
   public ExampleCommand(String commandName, ExampleSubsystem subsystem) {
     this.subsystem = subsystem;
