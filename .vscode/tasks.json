@@ -4,10 +4,31 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Spotless Apply",
+            "label": "Formatter Spotless Apply",
             "type": "shell",
             "command": "./gradlew",
             "args": ["spotlessApply"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Javadoc Generate",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["javadoc"],
+            "problemMatcher": []
+        },      
+        {
+            "label": "Check all",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["check"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Spotbugs bug finder",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["spotbugsMain"],
             "problemMatcher": []
         }
     ]
