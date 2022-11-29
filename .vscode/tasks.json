@@ -25,6 +25,13 @@
             "problemMatcher": []
         },
         {
+            "label": "Open file",
+            "type": "shell",
+            "command": "ii",
+            "args": ["${file}"],
+            "problemMatcher": []
+        },
+        {
             "label": "Spotbugs bug finder",
             "type": "shell",
             "command": "./gradlew",
