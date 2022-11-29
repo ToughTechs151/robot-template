@@ -31,32 +31,6 @@ public class DataLogging {
   private boolean prevDsConnectState;
 
   private DataLogging() {
-    // empty private constructor.
-  }
-
-  private static class InstanceHolder {
-    private static final DataLogging instance = new DataLogging();
-  }
-
-  /**
-   * Gets the dataloggins Singleton object.
-   *
-   * @return DataLogging
-   */
-  public static DataLogging getInstance() {
-    return InstanceHolder.instance;
-  }
-
-  /**
-   * Runs when the Robot is initialized. This method should be called in the robotInit method in
-   * Robot.java. The code should look like this:
-   *
-   * <pre>{@code
-   * datalog = new DataLogging()
-   * datalog.init();
-   * }</pre>
-   */
-  public void datalogRobotInit() {
     // Starts recording to data log
     DataLogManager.start();
     final DataLog log = DataLogManager.getLog();
@@ -72,8 +46,6 @@ public class DataLogging {
       LiveWindow.disableAllTelemetry();
     }
 
-    /* now
-    is the time to come to the aid of the party */
     ShuffleboardTab sbRobotTab = Shuffleboard.getTab("Robot");
     pdpWidget = sbRobotTab.getLayout("PDP", BuiltInLayouts.kGrid).withSize(3, 3);
     ShuffleboardLayout rcWidget =
@@ -115,6 +87,19 @@ public class DataLogging {
     commandLog.append("Opened commandlog");
 
     loopTime = new DoubleLogEntry(log, "/robot/LoopTime");
+  }
+
+  private static class InstanceHolder {
+    private static final DataLogging instance = new DataLogging();
+  }
+
+  /**
+   * Gets the dataloggins Singleton object.
+   *
+   * @return DataLogging
+   */
+  public static DataLogging getInstance() {
+    return InstanceHolder.instance;
   }
 
   /**
@@ -193,7 +178,7 @@ public class DataLogging {
    * @param comName The name of the command.
    * @param com The command object.
    */
-  public void logCommand(String ssName, String comName, Sendable com) {
+  public final void logCommand(String ssName, String comName, Sendable com) {
     sbCommandsTab.getLayout(ssName, BuiltInLayouts.kList).withSize(2, 0).add(comName, com);
     // ISSUE #2 Hide the command name label.
     // Add property to layout to set label position to HIDDEN.
@@ -204,7 +189,7 @@ public class DataLogging {
     startTime = Timer.getFPGATimestamp();
   }
 
-  public boolean getEverBrownOut() {
+  public final boolean getEverBrownOut() {
     return this.everBrownout;
   }
 }
