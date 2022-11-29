@@ -31,7 +31,6 @@ public class Robot extends TimedRobot {
 
     // Initialize the data logging.
     datalog = DataLogging.getInstance();
-    datalog.datalogRobotInit();
 
     // Print our splash screen info.
     Splash.printAllStatusFiles();
@@ -41,9 +40,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     this.robotContainer = new RobotContainer();
 
-    if (isSimulation()) {
-      simModel = new RobotModel(this);
-    }
     datalog.dataLogRobotContainerInit(this.robotContainer);
   }
 
@@ -159,7 +155,7 @@ public class Robot extends TimedRobot {
    */
 
   // Simple robot plant model for simulation purposes
-  RobotModel simModel;
+  RobotModel simModel = new RobotModel(this);
 
   /** This function is called once when the robot is first started up. */
   @Override

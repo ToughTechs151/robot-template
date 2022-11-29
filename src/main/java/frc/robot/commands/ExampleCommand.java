@@ -24,7 +24,7 @@ public class ExampleCommand extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.subsystem);
     this.setName(commandName);
-    DataLogging.getInstance().logCommand(this.subsystem.getName(), this.getName(), this);
+    DataLogging.getInstance().logCommand(this.subsystem.getName(), commandName, this);
   }
 
   // Called when the command is initially scheduled.
