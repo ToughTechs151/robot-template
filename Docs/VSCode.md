@@ -1,26 +1,28 @@
 Bracketpair colors can be enabled by adding the setting "editor.bracketPairColorization.enabled": true. Also set
 bracktpair guides and bracketpair guides horizontal to "active".
 
-Installed extensions:
+## Pre-Installed extensions
 
-C/C++
-Checkstyle for Java
-    Set style to google.
-Debugger for Java
-Git Extension Pack
-Git Graph
-Git History
-Github Pull Requests and Issues
-gitignore
-GitLens
-Intellicode
-Language Support for Java
-Open in Github, Bitbucket, Gitlab...
-Project Manager
-Project Manager for Java
-Sonarlint
-Visual Studio Intellicode
-WPILIB
+- C/C++
+- Debugger for Java
+- Language Support for Java
+- Project Manager for Java
+- WPILIB
+
+## Install these extensions
+
+- Checkstyle for Java.
+Once installed bring up the command palette and filter on "checkstyle". Select "Set the Checkstyle Configuration File". Select "/google_check.xml".
+- Git Extension Pack (be sure to pick the one from Don Jayamanne, with over a million downloads.)
+  - Git History
+  - gitignore
+  - GitLens
+  - Open in Github, Bitbucket, Gitlab, Visualstudio.com
+  - Project Manager
+- Git Graph
+- Github Pull Requests and Issues
+- Intellicode
+- Sonarlint
 
 
 Spotbugs places report in the project directory under
