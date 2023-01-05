@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -41,7 +41,7 @@ class Splash {
       String filename, Boolean isResource, int rowIndex, int colIndex, int widthIndex) {
     byte[] buffer = new byte[1024];
     ShuffleboardTab tab;
-    NetworkTableEntry field;
+    GenericEntry field;
     String fs = "/";
     String filepath =
         (RobotBase.isSimulation()
