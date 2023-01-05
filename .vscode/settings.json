@@ -30,5 +30,6 @@
     },
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
-  "java.checkstyle.configuration": "/google_checks.xml"
+  "java.checkstyle.configuration": "/google_checks.xml",
+  "java.compile.nullAnalysis.mode": "automatic"
 }
