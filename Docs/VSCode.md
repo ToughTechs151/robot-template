@@ -23,6 +23,7 @@ Once installed bring up the command palette and filter on "checkstyle". Select "
 - Github Pull Requests and Issues
 - Intellicode
 - Sonarlint
+- Code Spell Checker
 
 
 Spotbugs places report in the project directory under
