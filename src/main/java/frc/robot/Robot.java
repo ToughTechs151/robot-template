@@ -155,12 +155,13 @@ public class Robot extends TimedRobot {
    */
 
   // Simple robot plant model for simulation purposes
-  RobotModel simModel = new RobotModel(this);
+  RobotModel simModel;
 
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
     // Add code to run when the robot is initialized during simulations.
+    simModel = new RobotModel(this);
   }
 
   /** This function is called periodically whilst in simulation. */
