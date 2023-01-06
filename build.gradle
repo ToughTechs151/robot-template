@@ -5,8 +5,8 @@ plugins {
     id "com.github.spotbugs" version "5.0.13"
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
@@ -75,9 +75,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    // testCompile('org.junit.platform:junit-platform-runner:1.4.2')
-    // testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testRunTimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
     compileOnly 'net.jcip:jcip-annotations:1.0'
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.7.3'
