@@ -1,5 +1,9 @@
-Bracketpair colors can be enabled by adding the setting "editor.bracketPairColorization.enabled": true. Also set
-bracktpair guides and bracketpair guides horizontal to "active".
+Open preferences page, search for "bracketpair". Look for the line that says:
+
+Editor › Guides: Bracket Pairs
+Controls whether bracket pair guides are enabled or not.
+
+And set it to active.
 
 ## Pre-Installed extensions
 
