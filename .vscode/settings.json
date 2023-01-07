@@ -32,6 +32,14 @@
   "java.checkstyle.configuration": "/google_checks.xml",
   "java.compile.nullAnalysis.mode": "automatic",
   "java.test.defaultConfig": "WPIlibUnitTests",
+  // Set cSpell to Hint so spelling doesn't show up in problems
+  "cSpell.diagnosticLevel": "Hint",
+  "workbench.colorCustomizations": {
+    // With cSpel level set to hint, change the hint indicatoe color to red
+    "editorHint.foreground": "#ff0000",
+    // Now switch the indicator from three dots to entire word
+    "editorHint.border": "#00ff66"
+  },
   "cSpell.words": [
     "buildtime",
     "deployhost",
