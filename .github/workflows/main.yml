@@ -26,16 +26,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
 
-    - name: Print GIT version
-      run: git version
-
-    - name: Print pwd
-      run: pwd
-
-    - name: Print variables
-      run: echo ${{ github.repository }} 
-
-    - name: Fix GIT permissions
+    - name: Fix git permissions
       run: git config --global --add safe.directory `pwd`
 
     # Grant execute permission for gradlew
