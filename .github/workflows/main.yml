@@ -36,7 +36,7 @@ jobs:
       run: echo ${{ github.repository }} 
 
     - name: Fix GIT permissions
-      run: git config --global --add safe.directory /__w/robot-template/robot-template
+      run: git config --global --add safe.directory `pwd`
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
