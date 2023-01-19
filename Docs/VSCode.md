@@ -28,6 +28,9 @@ Once installed bring up the command palette and filter on "checkstyle". Select "
 - Intellicode
 - Sonarlint
 - Code Spell Checker
+- Gradle Extension Pack
+  - Gradle for Java
+  - Gradle Language Support
 
 
 Spotbugs places report in the project directory under
