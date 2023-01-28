@@ -68,9 +68,10 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    if (isSimulation()) {
+    if (isSimulation() && simModel != null) {
       simModel.reset();
     }
+
     // Add code for entering disabled mode.
     CommandScheduler.getInstance().cancelAll();
   }
@@ -168,8 +169,9 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {
     // Add code to run repeatedly during simulations.
-
-    simModel.update();
+    if (isSimulation() && simModel != null) {
+      simModel.update();
+    }
   }
 
   public RobotContainer getrobotContainer() {
