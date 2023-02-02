@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * {@code autonomousInit} runs when the bobot enters autonomous mode. It is used to schedule the
+   * {@code autonomousInit} runs when the robot enters autonomous mode. It is used to schedule the
    * desired autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
@@ -174,7 +174,7 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public RobotContainer getrobotContainer() {
+  public RobotContainer getRobotContainer() {
     return robotContainer;
   }
 }

@@ -84,7 +84,7 @@ public class DataLogging {
             command -> commandLog.append("Command interrupted" + command.getName()));
     CommandScheduler.getInstance()
         .onCommandFinish(command -> commandLog.append("Command finished" + command.getName()));
-    commandLog.append("Opened commandlog");
+    commandLog.append("Opened command log");
 
     loopTime = new DoubleLogEntry(log, "/robot/LoopTime");
   }
@@ -94,7 +94,7 @@ public class DataLogging {
   }
 
   /**
-   * Gets the dataloggins Singleton object.
+   * Gets the datalogging Singleton object.
    *
    * @return DataLogging
    */
@@ -130,7 +130,7 @@ public class DataLogging {
   }
 
   /**
-   * Called from robot.java immedately after the robotContainer is created.
+   * Called from robot.java immediately after the robotContainer is created.
    *
    * @param robotContainer The robotContainer just constructed.
    */

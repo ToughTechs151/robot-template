@@ -110,6 +110,7 @@ Temporary Items
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/snippets.*
+!.vscode/custom-dictionary-workspace.txt
 
 ### Windows ###
 # Windows thumbnail cache files

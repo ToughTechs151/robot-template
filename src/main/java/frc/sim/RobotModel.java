@@ -32,11 +32,11 @@ public class RobotModel {
       return;
     }
 
-    simpdp = new PDPSim(robot.getrobotContainer().getPdp());
+    simpdp = new PDPSim(robot.getRobotContainer().getPdp());
     reset();
   }
 
-  /** Update the simulation model. Call from simulationperiodic method in robot.java. */
+  /** Update the simulation model. Call from simulationPeriodic method in robot.java. */
   public void update() {
     if (isReal) {
       return;

@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
-/** The operator interface (OI) contains the configuraion of the robot controllers. */
+/** The operator interface (OI) contains the configuration of the robot controllers. */
 public class OI {
 
   private GenericHID pilot;

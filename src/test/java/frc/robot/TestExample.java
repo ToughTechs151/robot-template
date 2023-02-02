@@ -24,7 +24,7 @@ class TestExample {
         () -> "Sum should be greater than 5");
   }
 
-  // The following test is skipped becuase it is an example of how to use Lambda
+  // The following test is skipped because it is an example of how to use Lambda
   // functions and assertAll, but as written it fails.
   @Disabled("Example failure")
   @Test
