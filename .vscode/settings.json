@@ -33,7 +33,7 @@
   "java.compile.nullAnalysis.mode": "automatic",
   "java.test.defaultConfig": "WPIlibUnitTests",
    // Set cSpell to Hint so spelling doesn't show up in problems list.
-   "cSpell.diagnosticLevel": "Information",
+   "cSpell.diagnosticLevel": "Hint",
    "cSpell.customDictionaries": {
      "custom-dictionary-workspace": {
        "name": "custom-dictionary-workspace",
