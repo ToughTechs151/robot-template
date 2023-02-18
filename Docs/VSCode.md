@@ -60,6 +60,7 @@ The following preferences are not required to use the robot template, but are ju
 
 - Bracket Pairs. By default VSCode colors matching bracket pairs with the same color. Further, if you click on one bracket in a pair, the other will also get a hollow cursor on it. However, it is easy to not notice a missing bracket or parenthesis if you are not looking for it. We therefore recommend changing the user setting "Bracket Pairs" tp "active". With both bracket pairs settings set to active VSCode will draw a colored line between the innermost enclosing brackets, based on where the cursor is. ![Example Bracket Pair](img/bracktpair.jpg)
 
+### Construction ahead
 
 Spotbugs places report in the project directory under
 build/reports/spotbugs in file main.html
