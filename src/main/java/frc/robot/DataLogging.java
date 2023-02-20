@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ public class DataLogging {
   private ShuffleboardLayout pdpWidget;
   private boolean everBrownout = false;
   private boolean prevDsConnectState;
+  private ShuffleboardTab sbDriverTab;
+  private Field2d sbField;
 
   private DataLogging() {
     // Starts recording to data log
@@ -68,6 +71,12 @@ public class DataLogging {
         .withProperties(Map.of("Color when true", "Red", "Color when false", "Green"));
 
     prevDsConnectState = DriverStation.isDSAttached();
+
+    /* Drivers tab */
+    sbDriverTab = Shuffleboard.getTab("Driver");
+    sbField = new Field2d();
+    sbDriverTab.add("Field", sbField);
+
     DataLogManager.log(String.format("Brownout Voltage: %f", RobotController.getBrownoutVoltage()));
 
     // Set the scheduler to log Shuffleboard events for command initialize,

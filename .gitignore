@@ -172,6 +172,8 @@ src/main/deploy/*.txt
 # NetworkTable Persistence files
 networktables.ini
 networktables.ini.bak
+networktables.json
+networktables.json.bck
 
 # Data Log Files
 FRC_202*
