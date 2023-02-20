@@ -48,9 +48,11 @@ There are two tabs in the editor, one called "User" and one called "Workspace", 
 
 Sometimes you need to edit the settings.json files directly. The easiest way to open the files in a VSCode editor window is to open the settings editor, then click the tab that corresponds to the file you want, either the user or workspace file, and then scroll down until you see a line that says "Edit in settings.json file". ![Edit in settings.json file](img/editinsettings.jpg)  Just click that line an an editor will appear with the correct file. The setting that was associated with the line will be inserted in the file, but you can just use the "Undo" command under the "Edit" menu (or <Ctrl+z>) to remove it again.
 
-The syntax of JSON files is beyond the scope of this document, but if you are aksed to directly modify one you will be shown exactly what to enter.
+The syntax of JSON files is beyond the scope of this document, but if you are asked to directly modify one you will be shown exactly what to enter.
 
 Once the file is is changed how you want, remember to save it.
+
+See [VSCode Getting Started documentation](https://code.visualstudio.com/docs/getstarted/settings) for more information on settings in VSCode.
 
 ### Specific Preference Settings
 
@@ -59,6 +61,25 @@ Once the file is is changed how you want, remember to save it.
 The following preferences are not required to use the robot template, but are just some changes that we recommend to make VSCode easier to work with.
 
 - Bracket Pairs. By default VSCode colors matching bracket pairs with the same color. Further, if you click on one bracket in a pair, the other will also get a hollow cursor on it. However, it is easy to not notice a missing bracket or parenthesis if you are not looking for it. We therefore recommend changing the user setting "Bracket Pairs" tp "active". With both bracket pairs settings set to active VSCode will draw a colored line between the innermost enclosing brackets, based on where the cursor is. ![Example Bracket Pair](img/bracktpair.jpg)
+
+- Auto Save. Setting this to "afterDelay" causes VSCode to save the file you are editing when you change it, after a short delay. You can still use the undo command to undo changes in your session. And you can use the "Timeline" pane in the Explorer tab to go back to even older versions. Without the auto save feature enabled, you have to remember to save you files before you build or commit or anything that accesses the file outside of the editor. You can also enable Auto Save temporarily from the "File" menu.
+
+#### Extension specific preferences
+
+Many of the following settings are already set in the workspace settings file for the template, which is kept under source code management. If you make a copy of this template and are working with others, remember that any changes you make to this file will be used by everyone.
+
+- Code Spell Checker. By default, this extension flags spelling errors as "problems" and when importing code from elsewhere, the number of such problems can obscure real problems that need to be fixed. This can be remedied by changing the reporting level from "information" to "Hint". The preferences for Code Spell Checker are already set in the workspace settings file, but it is a good idea to set them at the user level. ![Setting Code Spell Check to use Hints](img/codespell-hint.gif)
+
+  The default way hints show up in VSCode is very easy to miss, so next we change the color customization to make them stand out more, by putting two rows of red dots at the beginning of flagged words. Again, this setting is in the workspace, but you should add it at the user level. Simply open the Settings Editor, select the "User" tab, and in the search bar type "color workbench custom", then click on "Edit in settings.json" to open the User settings.json file in the editor. VSCode will have already inserted the headings for the setting for you. It will also suggest some choices with autocomplete. What you want to end up with looks like this:
+  
+  ```json
+  "workbench.colorCustomizations": {
+  "editorHint.border": "#ff0000",
+  "editorHint.foreground": "#ff0000"
+  }
+  ```
+
+  By default when you tell Code Spell Check to ignore a word, it adds it to a list of words maintained in the settings.json file. In the robot-template we tell it to add the word to a custom dictionary in the workspace instead so the the dictionary can be updated a lot without risking changing the settings.json file in the workspace too much. You don't need to do this for your User preferences.
 
 ### Construction ahead
 
