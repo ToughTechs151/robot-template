@@ -1,3 +1,4 @@
+Autofetch
 bracketpair
 buildtime
 Checkstyle
@@ -7,6 +8,7 @@ deployhost
 deploytime
 Intellicode
 Jayamanne
+myname
 Robo
 sendables
 Sepline

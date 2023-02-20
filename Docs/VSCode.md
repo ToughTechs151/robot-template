@@ -71,7 +71,7 @@ Many of the following settings are already set in the workspace settings file fo
 - Code Spell Checker. By default, this extension flags spelling errors as "problems" and when importing code from elsewhere, the number of such problems can obscure real problems that need to be fixed. This can be remedied by changing the reporting level from "information" to "Hint". The preferences for Code Spell Checker are already set in the workspace settings file, but it is a good idea to set them at the user level. ![Setting Code Spell Check to use Hints](img/codespell-hint.gif)
 
   The default way hints show up in VSCode is very easy to miss, so next we change the color customization to make them stand out more, by putting two rows of red dots at the beginning of flagged words. Again, this setting is in the workspace, but you should add it at the user level. Simply open the Settings Editor, select the "User" tab, and in the search bar type "color workbench custom", then click on "Edit in settings.json" to open the User settings.json file in the editor. VSCode will have already inserted the headings for the setting for you. It will also suggest some choices with autocomplete. What you want to end up with looks like this:
-  
+
   ```json
   "workbench.colorCustomizations": {
   "editorHint.border": "#ff0000",
@@ -81,19 +81,16 @@ Many of the following settings are already set in the workspace settings file fo
 
   By default when you tell Code Spell Check to ignore a word, it adds it to a list of words maintained in the settings.json file. In the robot-template we tell it to add the word to a custom dictionary in the workspace instead so the the dictionary can be updated a lot without risking changing the settings.json file in the workspace too much. You don't need to do this for your User preferences.
 
-### Construction ahead
+  Complete documentation for Code Spell Check can be found at [Code Spell Check Homepage.](https://streetsidesoftware.com/vscode-spell-checker/)
 
-Spotbugs places report in the project directory under
-build/reports/spotbugs in file main.html
+- Project Manager. The Project Manager panel allows you to organize your workspaces into an easily displayed list. You can save a workspace as a project, in which case it will appear in the "Favorites" list at the top of the panel, and the Project Manager can also detect workspaces or Git Repositories if you tell it where to look. You can use the Setting Editor, look under the "Project Manager" extension for the item "Project Manager > Git: Base Folders". Click the "Add Item" button, and enter the path to the base directory where your workspaces are saved. If you followed the team Java course, it will be "Documents\FRCProjects", under your home user folder. You can use thr string "$home" to represent your home folder, so for this standard location you would enter "$home\Documents\FRCProject" before you pressed enter. After that the Project Manager will detect all Git repositories under that folder.
 
-Spotbugs exclusions are placed in config/spotbugs/excludeFilter.xml
-Syntax is at https://spotbugs.readthedocs.io/en/stable/filter.html
-Open preferences page, search for "bracketpair". Look for the line that says:
+- Git. The Git extension might ask you if you want to to auto fetch from remote repositories. This means that updates made to the remote repository will be periodically downloaded to the local repository, without sending local changes up to the remote, as the "Sync" button or command does. When the fetch is done, it does not update the working files with the changes, but they are available locally if you want to update manually. In you probably want auto fetching to be on, unless your computer is primarily used as a Drive Station, since a Drive Station spends a lot of time without the Internet being accessible. If you answered no to the prompt you can search for "Autofetch" under the Git extension in Settings Editor, and set it to "True".
 
-Editor › Guides: Bracket Pairs
-Controls whether bracket pair guides are enabled or not.
+  Another Git setting to change is "Git > Default Clone Directory". Open the Settings Editor, click on "User", search for "Default Clone Directory" and then click on "Edit in settings.json". In the editor window, enter your projects folder as you did for the Git project Base Folders between the quotes. Unfortunately the Git Extension does not understand "$home" like the Project Manager did, so you will need to enter the entire path. Also, backslashes will need to be escaped with backslashes, so enter two backslashes for each oen instead of one. So it will probably look something like "C:\\\\Users\\\\_myname_\\\\Documents\\\\FRCProjects". When cloning a Git repository VSCode will still open a explorer window for the folder, but it will already have the base folder selected.
 
-And set it to active.
+  Finally, look for "Git > Merge Editor" and check the box so that the merge editor will automatically open when you have merge conflicts.
 
-- Checkstyle for Java.
-Once installed bring up the command palette and filter on "checkstyle". Select "Set the Checkstyle Configuration File". Select "/google_check.xml".
+- Checkstyle for Java. The Checkstyle for Java extension needs to know what style rules it should enforce. The template workspace already has the standard Google style rules selected, but you may or may not want to enable them for all of your workspaces. There are two ways to set the rules to use. One is to search for "checkstyle configuration" in the Settings Editor, and then enter the path to a rules file in the "Java > Checkstyle: Configuration" field. However, the extension adds a command for setting the file, including the option of using one of the two built in rules files. Simply open the command palette (\<Ctrl+Shift+p\>) and search for "checkstyle" and select "Set the Checkstyle Configuration File". You will be presented with a menu of options, one for the standard Google style, one for the standard Sun/Oracle style, one to enter the URL of a rules file, and one for selecting a local file. We are using the Google style file.
+
+More information on Checkstyle for Java can be found at the [Checkstyle for Java Homepage](https://marketplace.visualstudio.com/items?itemName%3Dshengchen.vscode-checkstyle). The style rules for Java can be found at [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
