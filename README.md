@@ -1,6 +1,6 @@
 # Using the robot-template repository
 
-## Is this repoisitory currenty building correctly?
+## Is this repository currently building correctly?
 <!---
 See https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge
 for details on how to update the badge. The general format for the badge is
