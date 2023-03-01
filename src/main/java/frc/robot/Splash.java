@@ -55,7 +55,12 @@ class Splash {
             ? Main.class.getResourceAsStream("/" + filename)
             : new BufferedInputStream(new FileInputStream(filepath))) {
 
-      System.out.print((filename + ": ").replace(".txt", ""));
+      if (statusfile != null) {
+        System.out.print((filename + ": ").replace(".txt", ""));
+      } else {
+        System.out.println("File not found: " + filename);
+        return;
+      }
 
       try {
         for (int length = 0; (length = statusfile.read(buffer)) != -1; ) {
@@ -74,9 +79,9 @@ class Splash {
         System.out.println();
       }
     } catch (RuntimeException e) {
-      throw e;
+      throw (e);
     } catch (Exception e) {
-      System.out.println("Unable to open file" + filename);
+      System.out.println("Unable to open file " + filename);
       System.out.println(e.getMessage());
     }
   }
