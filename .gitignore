@@ -165,6 +165,7 @@ bin/
 
 # Ignore Splash Screen txt files
 src/main/resources/*.txt
+!src/main/resources/placeholder.txt
 
 # Robot deploy txt files
 src/main/deploy/*.txt
