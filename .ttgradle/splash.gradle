@@ -59,12 +59,22 @@ def getGitUser = {
     return stdout.toString().trim() + "  global:" + stdoutglobal.toString().trim()
 }
 
-task versionTxt()  {
+task emptyDeployFiles() {
+
+    String deployDir = "$projectDir/src/main/deploy"
+
+    println "Emptying deploy files."
+    new File("$deployDir/deployhost.txt").text = "Empty"
+    new File("$deployDir/deploytime.txt").text = "Empty"
+}
+
+task versionTxt(dependsOn: compileJava)  {
+
+    onlyIf { compileJava.didWork }
     // Things in the resources directory get packaged into
     // the jar file. This means we can figure out where a
     // jar file came from.
     String resourcesDir = "$projectDir/src/main/resources"
-    String deployDir = "$projectDir/src/main/deploy"
 
     doLast {
         println "Populating version files."
@@ -81,17 +91,11 @@ task versionTxt()  {
 
         new File("$resourcesDir/buildtime.txt").text = projectDir +
                 "Build Date Time: " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())
-
-        println "Emptying deploy files."
-        new File("$deployDir/deployhost.txt").text = "Empty"
-        new File("$deployDir/deploytime.txt").text = "Empty"
     }
 }
 
 task deployHost() {
     String deployDir = "$projectDir/src/main/deploy"
-
-    println "Emptying deploy files in ${deployDir}."
 
     doLast {
         String deploy_host = ""
@@ -107,15 +111,21 @@ task deployHost() {
                 new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())
     }
 }
+
 // Even though the resources directory is special, it is not there by default.
+// This isn't really necessary since we created the placholder file in the
+// resources folder, but better to be safe.
 task ensureResources() {
-    doLast {
-        String resourcesDir = "$projectDir/src/main/resources"
-        mkdir "$resourcesDir"
+
+    def folder = new File("$projectDir/src/main/resources")
+    if (!folder.exists() ) {
+        folder.mkdirs()
     }
 }
 
-build.dependsOn versionTxt
+processResources.dependsOn versionTxt
+jar.dependsOn versionTxt
+// Make sure we have the resources directory.
 tasks.getByName('versionTxt').dependsOn(ensureResources)
 tasks.getByName('simulateExternalJavaDebug').dependsOn(deployHost)
 tasks.getByName('simulateExternalJavaRelease').dependsOn(deployHost)
