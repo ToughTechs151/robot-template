@@ -13,9 +13,11 @@ Robo
 sendables
 Sepline
 simpdp
+slname
 Sonarlint
 spotbugs
 statusfile
 teleop
 teleoperated
 WPILIB
+wpilibj
