@@ -27,9 +27,9 @@
         "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
-    },
+    }
   ],
-  "java.checkstyle.configuration": "${workspaceFolder}\\config\\style\\google_checks.xml",
+  "java.checkstyle.configuration": "${workspaceFolder}\\config\\style\\tt151_checks.xml",
   "java.compile.nullAnalysis.mode": "automatic",
   "java.test.defaultConfig": "WPIlibUnitTests",
    // Set cSpell to Hint so spelling doesn't show up in problems list.
@@ -51,5 +51,6 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "toughtechs151",
     "projectKey": "ToughTechs151_robot-template"
-  }
+  },
+  "java.checkstyle.version": "10.8.0"
 }
