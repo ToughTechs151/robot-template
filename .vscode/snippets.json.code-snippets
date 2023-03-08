@@ -15,4 +15,11 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
+	"Suppress SonarLint Name Warnings": {
+		"scope": "java",
+		"prefix": "slname",
+		"body": [
+			"@java.lang.SuppressWarnings({\"java:S115\", \"java:S116\"})"
+		]
+	}
 }
