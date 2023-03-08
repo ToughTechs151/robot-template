@@ -46,6 +46,7 @@
     // With cSpell level set to hint, change hints to be more obvious.
     "editorHint.foreground": "#ff0000",
     "editorHint.border": "#ff0000"
+  }
   },
   "githubIssues.issueBranchTitle": "${user}/issue${issueNumber}-${sanitizedIssueTitle}",
   "sonarlint.connectedMode.project": {
