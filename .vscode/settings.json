@@ -49,7 +49,7 @@
     "editorHint.foreground": "#ff0000",
     "editorHint.border": "#ff0000"
   },
-  "githubIssues.issueBranchTitle": "${user}/issue${issueNumber}-${sanitizedIssueTitle}",
+  "githubIssues.issueBranchTitle": "issue${issueNumber}/${sanitizedIssueTitle}",
   "sonarlint.connectedMode.project": {
     "connectionId": "toughtechs151",
     "projectKey": "ToughTechs151_robot-template"
