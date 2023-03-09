@@ -56,5 +56,9 @@
   },
   "java.checkstyle.version": "10.8.0",
   "githubPullRequests.createOnPublishBranch": "never",
-  "githubPullRequests.notifications": "pullRequests"
+  "githubPullRequests.notifications": "pullRequests",
+  "taskExplorer.clickAction": "Execute",
+  "taskExplorer.enableExplorerView": false,
+  "taskExplorer.enableSideBar": true,
+  "taskExplorer.showHiddenWsTasks": false
 }
