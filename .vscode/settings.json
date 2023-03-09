@@ -14,17 +14,19 @@
     "**/.factorypath": true,
     "**/FRC_2*.wpilog": true,
     "**/FRC_2*.csv": true,
-    "**/datalogtool*.json":true,
-    "**/simgui*.json":true,
+    "**/datalogtool*.json": true,
+    "**/simgui*.json": true,
     "**/*~": true
   },
   "java.test.config": [
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
       "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
     }
@@ -32,21 +34,20 @@
   "java.checkstyle.configuration": "${workspaceFolder}\\config\\style\\tt151_checks.xml",
   "java.compile.nullAnalysis.mode": "automatic",
   "java.test.defaultConfig": "WPIlibUnitTests",
-   // Set cSpell to Hint so spelling doesn't show up in problems list.
-   "cSpell.diagnosticLevel": "Hint",
-   "cSpell.customDictionaries": {
-     "custom-dictionary-workspace": {
-       "name": "custom-dictionary-workspace",
-       "path": "${workspaceFolder}/.vscode/custom-dictionary-workspace.txt",
-       "addWords": true,
-       "scope": "workspace"
-     }
-   },
+  // Set cSpell to Hint so spelling doesn't show up in problems list.
+  "cSpell.diagnosticLevel": "Hint",
+  "cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+      "name": "custom-dictionary-workspace",
+      "path": "${workspaceFolder}/.vscode/custom-dictionary-workspace.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  },
   "workbench.colorCustomizations": {
     // With cSpell level set to hint, change hints to be more obvious.
     "editorHint.foreground": "#ff0000",
     "editorHint.border": "#ff0000"
-  }
   },
   "githubIssues.issueBranchTitle": "${user}/issue${issueNumber}-${sanitizedIssueTitle}",
   "sonarlint.connectedMode.project": {
