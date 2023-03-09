@@ -54,5 +54,7 @@
     "connectionId": "toughtechs151",
     "projectKey": "ToughTechs151_robot-template"
   },
-  "java.checkstyle.version": "10.8.0"
+  "java.checkstyle.version": "10.8.0",
+  "githubPullRequests.createOnPublishBranch": "never",
+  "githubPullRequests.notifications": "pullRequests"
 }
