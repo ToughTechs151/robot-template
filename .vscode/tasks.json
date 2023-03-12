@@ -29,6 +29,15 @@
           "type": "shell",
           "command": "invoke-item",
           "args": ["${workspaceFolder}/build/reports/spotbugs/main.html"],
+          "presentation": {
+            "echo": true,
+            "reveal": "never",
+            "focus": false,
+            "panel": "shared",
+            "showReuseMessage": false,
+            "clear": false,
+            "close": true
+          },
           "problemMatcher": []
       },
       {
@@ -48,6 +57,15 @@
         "type": "shell",
         "command": "invoke-item",
         "args": ["${workspaceFolder}/build/docs/javadoc/index.html"],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
         "problemMatcher": []
     },
       {
@@ -70,6 +88,15 @@
         "type": "shell",
         "command": "Start-Process",
         "args": ["https://github.wpilib.org/allwpilib/docs/release/java/index.html"],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
         "problemMatcher": []
       }
     ],
