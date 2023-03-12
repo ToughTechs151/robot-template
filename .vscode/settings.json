@@ -85,5 +85,6 @@
     "**/vendor/**",
     "**/work/**",
     "**/.ttgradle/**"
-  ]
+  ],
+  "git.fetchOnPull": true
 }

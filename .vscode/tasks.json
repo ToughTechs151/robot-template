@@ -3,40 +3,128 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "Formatter Spotless Apply",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["spotlessApply"],
-            "problemMatcher": []
+      {
+          "label": "Formatter: Apply All",
+          "type": "shell",
+          "command": "./gradlew",
+          "args": ["spotlessApply"],
+          "problemMatcher": []
+      },
+      {
+          "label": "Javadoc: Generate",
+          "type": "shell",
+          "command": "./gradlew",
+          "args": ["javadoc"],
+          "problemMatcher": []
+      },      
+      {
+          "label": "Check all",
+          "type": "shell",
+          "command": "./gradlew",
+          "args": ["check"],
+          "problemMatcher": []
+      },
+      {
+          "label": "Spotbugs: Open Report",
+          "type": "shell",
+          "command": "invoke-item",
+          "args": ["${workspaceFolder}/build/reports/spotbugs/main.html"],
+          "presentation": {
+            "echo": true,
+            "reveal": "never",
+            "focus": false,
+            "panel": "shared",
+            "showReuseMessage": false,
+            "clear": false,
+            "close": true
+          },
+          "problemMatcher": []
+      },
+      {
+        "label": "Git: Clear User",
+        "type": "shell",
+        "command": "git config --global --unset user.name; git config --global --unset user.email",
+        "problemMatcher": []
+      },
+      {
+        "label": "Git: Set User",
+        "type": "shell",
+        "command": "git config --global user.name \"${input:userPrompt}\" ; git config --global user.email \"${input:emailPrompt}\" ",
+        "problemMatcher": []
+      },
+      {
+        "label": "Javadocs: Open",
+        "type": "shell",
+        "command": "invoke-item",
+        "args": ["${workspaceFolder}/build/docs/javadoc/index.html"],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
         },
-        {
-            "label": "Javadoc Generate",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["javadoc"],
-            "problemMatcher": []
-        },      
-        {
-            "label": "Check all",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["check"],
-            "problemMatcher": []
+        "problemMatcher": []
+    },
+      {
+          "label": "Spotbugs: Run",
+          "type": "shell",
+          "command": "./gradlew",
+          "args": ["spotbugsMain"],
+          "problemMatcher": []
+      },
+  
+      {
+        "label": "Echo input",
+        "type": "shell",
+        "hide": true,
+        "command": "echo \"${input:echoPrompt}  ${input:echoPick} ${input:echoPrompt} ${command:extension.pickNodeProcess}\"",
+        "problemMatcher": []
+      },
+      {
+        "label": "WPILIB: Open API docs.",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": ["https://github.wpilib.org/allwpilib/docs/release/java/index.html"],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
         },
-        {
-            "label": "Open file",
-            "type": "shell",
-            "command": "ii",
-            "args": ["${file}"],
-            "problemMatcher": []
-        },
-        {
-            "label": "Spotbugs bug finder",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["spotbugsMain"],
-            "problemMatcher": []
-        }
+        "problemMatcher": []
+      }
+    ],
+    "inputs":[
+      {
+        "id": "echoPrompt",
+        "description": "Please enter a value",
+        "default": "test echo",
+        "type": "promptString",
+      },
+      {
+        "id": "echoPick",
+        "description": "Select one of the values",
+        "default": "two",
+        "type": "pickString",
+        "options": ["one", "two", "three"]
+      },
+      {
+        "id": "userPrompt",
+        "description": "Please enter your Git user name.",
+        "default": "",
+        "type": "promptString",
+      },
+      {
+        "id": "emailPrompt",
+        "description": "Please enter your email address.",
+        "default": "",
+        "type": "promptString",
+      },
     ]
 }
