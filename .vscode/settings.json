@@ -86,5 +86,12 @@
     "**/work/**",
     "**/.ttgradle/**"
   ],
-  "git.fetchOnPull": true
+  "git.fetchOnPull": true,
+  "VsCodeTaskButtons.tasks": [
+    {
+      "label": "Reformat",
+      "task": "spotlessApply",
+      "tooltip": "Reformat all the files using Spotless"
+    }
+  ]
 }

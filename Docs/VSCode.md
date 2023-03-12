@@ -35,8 +35,8 @@ These extensions need to be installed in you WPILIB VSCode. Some of are extensio
 - Gradle Extension Pack
   - Gradle for Java
   - Gradle Language Support
+- Task Buttons
 - Task Explorer
-- Live Preview
 
 ## Configure settings for VSCode with extensions
 
