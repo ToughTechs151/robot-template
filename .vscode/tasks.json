@@ -4,14 +4,18 @@
     "version": "2.0.0",
     "tasks": [
       {
-          "label": "Apply Formatter",
+          "label": "Formatter: Apply All",
           "type": "shell",
           "command": "./gradlew",
           "args": ["spotlessApply"],
           "problemMatcher": []
       },
+      {   
+          "label": "test task",
+          "dependsOn": "gradle:spotlessApply"
+    },
       {
-          "label": "Generate Javadoc",
+          "label": "Javadoc: Generate",
           "type": "shell",
           "command": "./gradlew",
           "args": ["javadoc"],
@@ -25,33 +29,33 @@
           "problemMatcher": []
       },
       {
-          "label": "Open Spotbugs Report",
+          "label": "Spotbugs: Open Report",
           "type": "shell",
           "command": "invoke-item",
           "args": ["${workspaceFolder}/build/reports/spotbugs/main.html"],
           "problemMatcher": []
       },
       {
-        "label": "Clear Git User",
+        "label": "Git: Clear User",
         "type": "shell",
         "command": "git config --global --unset user.name; git config --global --unset user.email",
         "problemMatcher": []
       },
       {
-        "label": "Set Git User",
+        "label": "Git: Set User",
         "type": "shell",
         "command": "git config --global user.name \"${input:userPrompt}\" ; git config --global user.email \"${input:emailPrompt}\" ",
         "problemMatcher": []
       },
       {
-        "label": "Open Javadocs",
+        "label": "Javadocs: Open",
         "type": "shell",
         "command": "invoke-item",
         "args": ["${workspaceFolder}/build/docs/javadoc/index.html"],
         "problemMatcher": []
     },
       {
-          "label": "Run Spotbugs bug finder",
+          "label": "Spotbugs: Run",
           "type": "shell",
           "command": "./gradlew",
           "args": ["spotbugsMain"],
@@ -63,7 +67,7 @@
         "type": "shell",
         "command": "echo \"${input:echoPrompt}  ${input:echoPick} ${input:echoPrompt} ${command:extension.pickNodeProcess}\"",
         "problemMatcher": []
-      }
+      },
     ],
     "inputs":[
       {
@@ -90,6 +94,6 @@
         "description": "Please enter your email address.",
         "default": "",
         "type": "promptString",
-      }
+      },
     ]
 }
