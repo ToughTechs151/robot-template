@@ -90,7 +90,7 @@
   "VsCodeTaskButtons.tasks": [
     {
       "label": "Reformat",
-      "task": "spotlessApply",
+      "task": "gradle: spotlessApply",
       "tooltip": "Reformat all the files using Spotless"
     }
   ]
