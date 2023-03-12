@@ -10,10 +10,6 @@
           "args": ["spotlessApply"],
           "problemMatcher": []
       },
-      {   
-          "label": "test task",
-          "dependsOn": "gradle:spotlessApply"
-    },
       {
           "label": "Javadoc: Generate",
           "type": "shell",
@@ -65,9 +61,17 @@
       {
         "label": "Echo input",
         "type": "shell",
+        "hide": true,
         "command": "echo \"${input:echoPrompt}  ${input:echoPick} ${input:echoPrompt} ${command:extension.pickNodeProcess}\"",
         "problemMatcher": []
       },
+      {
+        "label": "WPILIB: Open API docs.",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": ["https://github.wpilib.org/allwpilib/docs/release/java/index.html"],
+        "problemMatcher": []
+      }
     ],
     "inputs":[
       {
