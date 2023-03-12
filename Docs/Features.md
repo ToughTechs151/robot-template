@@ -9,4 +9,4 @@
 - spotbugs
 - sonarlint
 - spell checking
-- tasks
+- tasks in sidebar
