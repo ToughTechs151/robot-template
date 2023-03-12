@@ -59,5 +59,31 @@
   "githubPullRequests.notifications": "pullRequests",
   "taskExplorer.enableExplorerView": false,
   "taskExplorer.enableSideBar": true,
-  "taskExplorer.showHiddenWsTasks": false
+  "taskExplorer.showHiddenWsTasks": false,
+  "taskExplorer.exclude": [
+    "**/.vscode-test/**",
+    "**/Assets/**",
+    "**/bin/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/doc/**",
+    "**/example/**",
+    "**/examples/**",
+    "**/ext/**",
+    "**/obj/**",
+    "**/out/**",
+    "**/output/**",
+    "**/packages/**",
+    "**/release/**",
+    "**/releases/**",
+    "**/samples/**",
+    "**/sdks/**",
+    "**/static/**",
+    "**/target/**",
+    "**/test/**",
+    "**/third_party/**",
+    "**/vendor/**",
+    "**/work/**",
+    "**/.ttgradle/**"
+  ]
 }
