@@ -4,41 +4,49 @@
     "version": "2.0.0",
     "tasks": [
       {
-          "label": "Formatter: Apply All",
-          "type": "shell",
-          "command": "./gradlew",
-          "args": ["spotlessApply"],
-          "problemMatcher": []
+        "label": "Formatter: Apply All",
+        "type": "shell",
+        "command": "./gradlew",
+        "args": [
+          "spotlessApply"
+        ],
+        "problemMatcher": []
       },
       {
-          "label": "Javadoc: Generate",
-          "type": "shell",
-          "command": "./gradlew",
-          "args": ["javadoc"],
-          "problemMatcher": []
-      },      
-      {
-          "label": "Check all",
-          "type": "shell",
-          "command": "./gradlew",
-          "args": ["check"],
-          "problemMatcher": []
+        "label": "Javadoc: Generate",
+        "type": "shell",
+        "command": "./gradlew",
+        "args": [
+          "javadoc"
+        ],
+        "problemMatcher": []
       },
       {
-          "label": "Spotbugs: Open Report",
-          "type": "shell",
-          "command": "invoke-item",
-          "args": ["${workspaceFolder}/build/reports/spotbugs/main.html"],
-          "presentation": {
-            "echo": true,
-            "reveal": "never",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": false,
-            "clear": false,
-            "close": true
-          },
-          "problemMatcher": []
+        "label": "Check all",
+        "type": "shell",
+        "command": "./gradlew",
+        "args": [
+          "check"
+        ],
+        "problemMatcher": []
+      },
+      {
+        "label": "Spotbugs: Open Report",
+        "type": "shell",
+        "command": "invoke-item",
+        "args": [
+          "${workspaceFolder}/build/reports/spotbugs/main.html"
+        ],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
+        "problemMatcher": []
       },
       {
         "label": "Git: Clear User",
@@ -56,7 +64,9 @@
         "label": "Javadocs: Open",
         "type": "shell",
         "command": "invoke-item",
-        "args": ["${workspaceFolder}/build/docs/javadoc/index.html"],
+        "args": [
+          "${workspaceFolder}/build/docs/javadoc/index.html"
+        ],
         "presentation": {
           "echo": true,
           "reveal": "never",
@@ -67,15 +77,16 @@
           "close": true
         },
         "problemMatcher": []
-    },
-      {
-          "label": "Spotbugs: Run",
-          "type": "shell",
-          "command": "./gradlew",
-          "args": ["spotbugsMain"],
-          "problemMatcher": []
       },
-  
+      {
+        "label": "Spotbugs: Run",
+        "type": "shell",
+        "command": "./gradlew",
+        "args": [
+          "spotbugsMain"
+        ],
+        "problemMatcher": []
+      },
       {
         "label": "Echo input",
         "type": "shell",
@@ -87,7 +98,9 @@
         "label": "WPILIB: Open API docs.",
         "type": "shell",
         "command": "Start-Process",
-        "args": ["https://github.wpilib.org/allwpilib/docs/release/java/index.html"],
+        "args": [
+          "https://github.wpilib.org/allwpilib/docs/release/java/index.html"
+        ],
         "presentation": {
           "echo": true,
           "reveal": "never",
