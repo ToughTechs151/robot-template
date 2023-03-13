@@ -93,5 +93,6 @@
       "task": "gradle: spotlessApply",
       "tooltip": "Reformat all the files using Spotless"
     }
-  ]
+  ],
+  "VsCodeTaskButtons.showCounter": false
 }
