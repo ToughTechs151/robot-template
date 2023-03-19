@@ -16,9 +16,11 @@ The following extensions come preinstalled in the WPILIB VSCode environment. If 
 - Project Manager for Java
 - WPILIB
 
-### Install these extensions
+### Install the Team Extension Pack
 
-These extensions need to be installed in you WPILIB VSCode. Some of are extension packs, which means that installing them actually causes a set of extensions to be installed. Extension packs here will have an indented list of extensions that the pack will install. You will not need to install these individually. In a later section in this document we will deal with how to set these extensions up, but for now, just install them.
+Our Team has an extension pack in the VSCode Marketplace that will automatically install all of the extensions needed to work with the robot-template. Some of the included extensions are extension packs themselves, so they will cause other extensions to be installed as well. You can install the team extension pack by going to the extensions tab in VScode and searching for "Tough Techs". The topmost extension should be ours. You can verify it by looking at the icon, which is our team logo. To install it, just click the install button. The extension can also be found at the [Marketplace Page](https://marketplace.visualstudio.com/items?itemName=ToughTechs151.tt151extpack) or the [repository releases.](https://github.com/ToughTechs151/tt151extpack/releases)
+
+The following extensions will be installed. Extension packs here will have an indented list of extensions that the pack will install. In a later section in this document we will deal with how to set these extensions up.
 
 - Checkstyle for Java
 - Git Extension Pack (be sure to pick the one from Don Jayamanne, with over a million downloads.)
