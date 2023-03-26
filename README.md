@@ -10,10 +10,11 @@ Be sure to change this when forking or renaming.
 -->
 [![CI](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml/badge.svg)](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
 
 ## Setting up your VScode environment
