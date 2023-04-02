@@ -176,14 +176,14 @@
         "id": "echoPrompt",
         "description": "Please enter a value",
         "default": "test echo",
-        "type": "promptString",
+        "type": "promptString"
       },      
       {
         "id": "hostPrompt",
         "description": "Please enter a hostname",
         // "default": "roborio-151-frc.local",
         "default": "${config:roborio.hostname",
-        "type": "promptString",
+        "type": "promptString"
       },
       {
         "id": "echoPick",
@@ -196,13 +196,13 @@
         "id": "userPrompt",
         "description": "Please enter your Git user name.",
         "default": "",
-        "type": "promptString",
+        "type": "promptString"
       },
       {
         "id": "emailPrompt",
         "description": "Please enter your email address.",
         "default": "",
-        "type": "promptString",
+        "type": "promptString"
       },
     ]
 }

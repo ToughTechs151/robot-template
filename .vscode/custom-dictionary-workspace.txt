@@ -15,6 +15,7 @@ Sepline
 simpdp
 slname
 Sonarlint
+Sonarqube
 spotbugs
 statusfile
 teleop
