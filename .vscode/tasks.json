@@ -1,5 +1,5 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // See https://go.mputty -ssh lvuser@roborio-161icrosoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
@@ -111,6 +111,64 @@
           "close": true
         },
         "problemMatcher": []
+      },
+      {
+        "label": "Roborio: Show Configuration page",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "http://${input:hostPrompt}:8080"
+        ],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Roborio: Copy logs",
+        "type": "shell",
+        "command": "winscp.execom",
+        "args": [
+          "/command",
+          "open sftp://${config:roborio.username}@${config:roborio.hostname}",
+          "get *.wpilog",
+          "exit"
+        ],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "RoboRio: SSH",
+        "type": "process",
+        "command": "putty",
+        "args": [
+          "-ssh",
+          "${config:roborio.username}@${config:roborio.hostname}"
+        ],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
+        "problemMatcher": []
       }
     ],
     "inputs":[
@@ -118,6 +176,13 @@
         "id": "echoPrompt",
         "description": "Please enter a value",
         "default": "test echo",
+        "type": "promptString",
+      },      
+      {
+        "id": "hostPrompt",
+        "description": "Please enter a hostname",
+        // "default": "roborio-151-frc.local",
+        "default": "${config:roborio.hostname",
         "type": "promptString",
       },
       {

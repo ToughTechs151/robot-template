@@ -94,5 +94,7 @@
       "tooltip": "Reformat all the files using Spotless"
     }
   ],
-  "VsCodeTaskButtons.showCounter": false
+  "VsCodeTaskButtons.showCounter": false,
+  "roborio.username": "lvuser",
+  "roborio.hostname": "roborio-151-frc.local"
 }
