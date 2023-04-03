@@ -275,7 +275,7 @@
       <property name="allowedAbbreviationLength" value="0" />
       <property name="allowedAbbreviations"
         value="PID, LED, JNI, CAN, DIO, DMA, FRC, HAL, I2C, PWM, REVPH, SPI, WPI,
-                    CTRE, CTREPCM, LTV, PDP, PDU, PDH" />
+                    CTRE, CTREPCM, LTV, PDP, PDU, PDH, OI" />
       <property name="tokens"
         value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF,
