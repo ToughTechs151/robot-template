@@ -113,6 +113,24 @@
         "problemMatcher": []
       },
       {
+        "label": "Sonarcloud: Open Project Page.",
+        "type": "shell",
+        "command": "Start-Process",
+        "args": [
+          "https://sonarcloud.io/project/overview?id=${config:sonarcloud.orgname}_${config:sonarcloud.projectname}"
+        ],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": false,
+          "clear": false,
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
         "label": "Roborio: Show Configuration page",
         "type": "shell",
         "command": "Start-Process",

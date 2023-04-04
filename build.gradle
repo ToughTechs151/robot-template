@@ -124,6 +124,7 @@ sonarqube {
         property "sonar.projectKey", "ToughTechs151_robot-template"
         property "sonar.organization", "toughtechs151"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.java.spotbugs.reportPaths", "${buildDir}/reports/spotbugs/main.xml"
     }
 }
 
