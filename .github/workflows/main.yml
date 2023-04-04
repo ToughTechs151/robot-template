@@ -24,7 +24,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    # Set the fetch-depth to get all history so blame analysis in Sonar will work.
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Fix git permissions
       run: git config --global --add safe.directory `pwd`
