@@ -8,14 +8,14 @@ https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/<WORKFLOW_FILE>/badge.
 
 Be sure to change this when forking or renaming.
 -->
-[![CI](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml/badge.svg)](https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template)
+[![CI][github-CI-badge]][github-CI]
+[![Bugs][sonar-bugs]][sonar-project]
+[![Code Smells][sonar-code-smells]][sonar-project]
+[![Quality Gate Status][sonar-quality-gate]][sonar-project]
+[![Duplicated Lines (%)][sonar-duplicated-lines]][sonar-project]
+[![Reliability Rating][sonar-reliability-rating]][sonar-project]
+[![Lines of Code][sonar-lines-of-code]][sonar-project]
+[![Maintainability Rating][sonar-maintainability-rating]][sonar-project]
 
 ## Setting up your VScode environment
 
@@ -25,3 +25,14 @@ Be sure to change this when forking or renaming.
 
 After you fork the template, you need to change repository for the CI badge in the README.md file,
 and then set up a project in SonarCloud and change the badge URLs to the new project.
+
+[github-CI-badge]: https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml/badge.svg
+[github-CI]: https://github.com/ToughTechs151/robot-template/actions/workflows/main.yml
+[sonar-project]: https://sonarcloud.io/summary/new_code?id=ToughTechs151_robot-template
+[sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=bugs
+[sonar-code-smells]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=code_smells
+[sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=alert_status
+[sonar-duplicated-lines]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=duplicated_lines_density
+[sonar-reliability-rating]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=reliability_rating
+[sonar-lines-of-code]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=ncloc
+[sonar-maintainability-rating]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=sqale_rating
