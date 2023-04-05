@@ -96,5 +96,8 @@
   ],
   "VsCodeTaskButtons.showCounter": false,
   "roborio.username": "lvuser",
-  "roborio.hostname": "roborio-151-frc.local"
+  "roborio.hostname": "roborio-151-frc.local",
+  "sonarcloud.orgname": "ToughTechs151",
+  "sonarcloud.projectname": "robot-template",
+
 }
