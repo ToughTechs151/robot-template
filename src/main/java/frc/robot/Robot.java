@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     if (isSimulation() && simModel != null) {
       Integer ttt = 0;
       simModel.reset();
-      ttt = ttt / 0;
+      ttt = ttt / 2;
     }
 
     // Add code for entering disabled mode.
