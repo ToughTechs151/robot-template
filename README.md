@@ -16,6 +16,7 @@ Be sure to change this when forking or renaming.
 [![Reliability Rating][sonar-reliability-rating]][sonar-project]
 [![Lines of Code][sonar-lines-of-code]][sonar-project]
 [![Maintainability Rating][sonar-maintainability-rating]][sonar-project]
+[![Issues][issues-image]][issues-url]
 
 ## Setting up your VScode environment
 
@@ -36,3 +37,5 @@ and then set up a project in SonarCloud and change the badge URLs to the new pro
 [sonar-reliability-rating]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=reliability_rating
 [sonar-lines-of-code]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=ncloc
 [sonar-maintainability-rating]: https://sonarcloud.io/api/project_badges/measure?project=ToughTechs151_robot-template&metric=sqale_rating
+[issues-image]: https://img.shields.io/github/issues-raw/ToughTechs151/robot-template.svg
+[issues-url]: https://github.com/ToughTechs151/robot-template/issues
