@@ -1,11 +1,15 @@
+assertj
 Autofetch
+Blinkin
 bracketpair
 buildtime
 Checkstyle
 datalog
 datalogging
+deadband
 deployhost
 deploytime
+EEPROM
 Intellicode
 Jayamanne
 myname
