@@ -91,9 +91,11 @@ test {
     //     events "passed", "skipped", "failed"
     // }
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+    finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
+    dependsOn test
     reports {
         xml.enabled true
     }
