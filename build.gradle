@@ -93,7 +93,7 @@ test {
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
-jacoTestReport {
+jacocoTestReport {
     reports {
         xml.enabled true
     }

@@ -11,6 +11,7 @@ deployhost
 deploytime
 EEPROM
 Intellicode
+jacoco
 javadoc
 Jayamanne
 myname
