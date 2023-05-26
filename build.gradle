@@ -3,6 +3,7 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2023.4.2"
     id 'com.diffplug.spotless' version '6.12.0'
     id "com.github.spotbugs" version "5.0.13"
+    id "jacoco"
     id "org.sonarqube" version "3.5.0.2730"
 }
 
@@ -76,10 +77,12 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-
     compileOnly 'net.jcip:jcip-annotations:1.0'
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.7.3'
+
+    spotbugsPlugins('com.mebigfatguy.sb-contrib:sb-contrib:7.6.0') { transitive = false }
 }
 
 test {
@@ -88,6 +91,14 @@ test {
     //     events "passed", "skipped", "failed"
     // }
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+    }
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -177,6 +188,7 @@ spotbugs {
     reportsDir = file("$project.buildDir/reports/spotbugs")
     effort = "max"
     reportLevel = 'low'
+    onlyAnalyze = ['frc.robot']
 }
 
 spotbugsMain {
@@ -196,6 +208,9 @@ spotbugsTest {
         html {
             enabled = true
             stylesheet = 'fancy-hist.xsl'
+        }
+        xml {
+            enabled = true
         }
     }
 }
