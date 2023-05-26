@@ -3,6 +3,7 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2023.4.2"
     id 'com.diffplug.spotless' version '6.12.0'
     id "com.github.spotbugs" version "5.0.13"
+    id "jacoco"
     id "org.sonarqube" version "3.5.0.2730"
 }
 
@@ -90,6 +91,12 @@ test {
     //     events "passed", "skipped", "failed"
     // }
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+
+jacoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 // Simulation configuration (e.g. environment variables).
