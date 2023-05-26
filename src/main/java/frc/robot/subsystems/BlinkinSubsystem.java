@@ -45,9 +45,7 @@ public class BlinkinSubsystem extends SubsystemBase {
   private final double trueValue;
   private final double falseValue;
 
-  /*
-
-  */
+  /* Color Constants when in factory default state. */
 
   public static final double HOT_PINK = 0.57;
   public static final double DARK_RED = 0.59;
@@ -164,8 +162,9 @@ public class BlinkinSubsystem extends SubsystemBase {
   @Override
   public void periodic() throws IllegalArgumentException {
     /*
-     * Currently the PWM simulation code maintains separate values for the PWM when set by setSpeed, setPosition and setSpeed.
-     * Because of this we have to be careful to always use only  one pair of get and set options so the simulator works.
+     * Currently the PWM simulation code maintains separate values for the PWM when set by setSpeed,
+     * setPosition and setSpeed. Because of this we have to be careful to always use only one pair
+     * of get and set options so the simulator works.
      */
     if (!isEnabled) {
       return;
