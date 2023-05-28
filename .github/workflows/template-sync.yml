@@ -1,5 +1,5 @@
 # File: .github/workflows/template-sync.yml
-
+name:   Resync-template
 on:
     # cronjob trigger
     #schedule:
