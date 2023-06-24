@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.sim.RobotModel;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
@@ -23,8 +24,9 @@ public class Robot extends TimedRobot {
   private DataLogging datalog;
 
   /**
-   * {@code robotInit} runs when the robot first starts up. It is used to create the robot
-   * container, and can optionally be used for any initialization code.
+   * {@code robotInit} runs when the robot first starts up. It is used to create
+   * the robot container, and can optionally be used for any initialization
+   * code.
    */
   @Override
   public void robotInit() {
@@ -44,8 +46,9 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * {@code robotPeriodic} called every 20 ms, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * {@code robotPeriodic} called every 20 ms, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
@@ -53,12 +56,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
-    // block in order for anything in the Command-based framework to work.
+    // newly-scheduled commands, running already-scheduled commands, removing
+    // finished or interrupted commands, and running subsystem periodic()
+    // methods. This must be called from the robot's periodic block in order for
+    // anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
     // must be at the end of robotPeriodic
@@ -83,8 +84,9 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * {@code autonomousInit} runs when the robot enters autonomous mode. It is used to schedule the
-   * desired autonomous command selected by your {@link RobotContainer} class.
+   * {@code autonomousInit} runs when the robot enters autonomous mode. It is
+   * used to schedule the desired autonomous command selected by your
+   * {@link RobotContainer} class.
    */
   @Override
   public void autonomousInit() {
@@ -134,25 +136,25 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    // Generally test mode will have the same Init and Periodic code as Teleop, so
-    // call them here. Replace if desired.
+    // Generally test mode will have the same Init and Periodic code as Teleop,
+    // so call them here. Replace if desired.
     teleopInit();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    // Generally test mode will have the same Init and Periodic code as Teleop, so
-    // call them here. Replace if desired. If you don't call teleopPeriodic here, then add a call to
-    // StartLoopTime.
+    // Generally test mode will have the same Init and Periodic code as Teleop,
+    // so call them here. Replace if desired. If you don't call teleopPeriodic
+    // here, then add a call to StartLoopTime.
     teleopPeriodic();
     // Add code to run repeatedly during Test mode.
   }
 
   /*
-   * This set of functions is for simulation support only, and is not called on the real
-   * robot. Put plant-model related functionality here. For training purposes,
-   * students should not have to modify this functionality.
+   * This set of functions is for simulation support only, and is not called on
+   * the real robot. Put plant-model related functionality here. For training
+   * purposes, students should not have to modify this functionality.
    */
 
   // Simple robot plant model for simulation purposes
