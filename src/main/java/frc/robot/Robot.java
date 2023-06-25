@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.sim.RobotModel;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the name of this class or
+ * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
@@ -24,9 +23,8 @@ public class Robot extends TimedRobot {
   private DataLogging datalog;
 
   /**
-   * {@code robotInit} runs when the robot first starts up. It is used to create
-   * the robot container, and can optionally be used for any initialization
-   * code.
+   * {@code robotInit} runs when the robot first starts up. It is used to create the robot
+   * container, and can optionally be used for any initialization code.
    */
   @Override
   public void robotInit() {
@@ -46,20 +44,18 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * {@code robotPeriodic} called every 20 ms, no matter the mode. Use this for
-   * items like diagnostics that you want ran during disabled, autonomous,
-   * teleoperated and test.
+   * {@code robotPeriodic} called every 20 ms, no matter the mode. Use this for items like
+   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
    *
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled commands, running already-scheduled commands, removing
-    // finished or interrupted commands, and running subsystem periodic()
-    // methods. This must be called from the robot's periodic block in order for
-    // anything in the Command-based framework to work.
+    // Runs the Scheduler. This is responsible for polling buttons, adding newly-scheduled commands,
+    // running already-scheduled commands, removing finished or interrupted commands, and running
+    // subsystem periodic() methods. This must be called from the robot's periodic block in order
+    // for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
     // must be at the end of robotPeriodic
@@ -84,9 +80,8 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * {@code autonomousInit} runs when the robot enters autonomous mode. It is
-   * used to schedule the desired autonomous command selected by your
-   * {@link RobotContainer} class.
+   * {@code autonomousInit} runs when the robot enters autonomous mode. It is used to schedule the
+   * desired autonomous command selected by your {@link RobotContainer} class.
    */
   @Override
   public void autonomousInit() {
