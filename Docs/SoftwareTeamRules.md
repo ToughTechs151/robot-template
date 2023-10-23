@@ -24,6 +24,6 @@
 1. In command-based WPI programming, a subsystem is a mutual exclusion primitive for command scheduling. It’s commonly used to prevent two commands running simultaneously that touch the same hardware, but more generally it’s just categorizing commands that are incompatible with each other. [Chief Delphi](https://www.chiefdelphi.com/t/commandbase-subsystembase-depreciation/438975/7)
 1. NEO encoders:
    * Lower resolution.
-   * 112 ms filter delay, not adjustable, versus 82ms default, adjustable on the AMT. [Chief Delphi](https://www.chiefdelphi.com/t/thoughts-on-neos-and-spark-max/400769/65?u=blu28)
+   * 112 ms filter delay, not adjustable, versus 82ms default, adjustable on the AMT. [Chief Delphi](https://www.chiefdelphi.com/t/thoughts-on-neos-and-spark-max/400769/65?u=blu28). This is only on velocity measurements. Position is not delayed.
    * Wrong end of the backlash.
    * Comes for free with brushless motors.
