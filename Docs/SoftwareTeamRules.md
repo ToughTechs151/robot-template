@@ -18,3 +18,12 @@
    but we must be informed of what choices are to be made. There should be one official golden source recording this information, preferably on Github.
 1. The Drive Team should be the final arbiter of controller assignments. Again, there should be one official source of this information, preferably on Github. Software and the Drive Team and Strategy teams should discuss
    these assignments frequently.
+
+## Software information learned
+
+1. In command-based WPI programming, a subsystem is a mutual exclusion primitive for command scheduling. It’s commonly used to prevent two commands running simultaneously that touch the same hardware, but more generally it’s just categorizing commands that are incompatible with each other. [Chief Delphi commandbase-subsystembase-depreciation](https://www.chiefdelphi.com/t/commandbase-subsystembase-depreciation/438975/7)
+1. NEO encoders:
+   * Lower resolution.
+   * 112 ms filter delay, none adjustable, versus 82ms default, adjustable on the AMT. 
+   * Wrong end of the backlash.
+   * Comes for free with brushless motors.

@@ -2,6 +2,7 @@ assertj
 Autofetch
 Blinkin
 bracketpair
+brushless
 buildtime
 Checkstyle
 datalog
