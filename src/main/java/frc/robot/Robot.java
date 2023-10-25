@@ -18,7 +18,6 @@ import frc.sim.RobotModel;
  */
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
-
   private RobotContainer robotContainer;
   private DataLogging datalog;
 
@@ -58,7 +57,7 @@ public class Robot extends TimedRobot {
     // for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    // must be at the end of robotPeriodic
+    // Must be at the end of robotPeriodic
     datalog.periodic();
   }
 

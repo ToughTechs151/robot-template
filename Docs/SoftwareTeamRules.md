@@ -10,6 +10,7 @@
 4. Create a Github issue for your current task at hand, whatever it is, then create a branch for the issue and code using the branch. Always commit to this branch before you deploy code to the robot. Record in the
    commit comments on what you are trying to do and why you made your latest change.
 5. Make sure Git will record your name in the commits.
+6. Never trust setting in firmware. Always restore to factory defaults at robot init, and then setting everything yourself.
 
 ## Rules for other teams working with software
 
