@@ -11,6 +11,7 @@
    commit comments on what you are trying to do and why you made your latest change.
 5. Make sure Git will record your name in the commits.
 6. Never trust setting in firmware. Always restore to factory defaults at robot init, and then setting everything yourself.
+7. Whenever reasonable, a class should implement the Sendable interface.
 
 ## Rules for other teams working with software
 
