@@ -30,6 +30,7 @@ The following extensions will be installed. Extension packs here will have an in
   - Open in Github, Bitbucket, Gitlab, Visualstudio.com
   - Project Manager
 - Git Graph
+- Github Actions
 - Github Pull Requests and Issues
 - Intellicode
 - Sonarlint
