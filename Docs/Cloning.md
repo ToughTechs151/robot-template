@@ -17,6 +17,7 @@
 * Choose your organization
 * Choose you repo.
 * Press setup
+* Under Administration, Analysis Method, turn off automatic analysis.
 * Github workflow analysis
 * Create secret name SONAR_TOKEN, value from setup
   * Click on your profile picture
@@ -30,7 +31,7 @@
   * Create a secret called "SONAR_TOKEN" with the value you copied before, then click "Add Secret".
 ## Things to change in the Repo before first use
 
-- Repo name in README.md
+- Repo name in README.md. File find and replace "robot-template" to new name.
 - Team number in settings.json
 - Sonarqube account/project in README.md
 - sonarqube account/project in .vscode/settings.json
