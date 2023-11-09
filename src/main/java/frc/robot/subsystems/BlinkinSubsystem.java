@@ -58,46 +58,67 @@ public class BlinkinSubsystem extends SubsystemBase {
 
   /** Set color to hot pink. */
   public static final double HOT_PINK = 0.57;
+
   /** Set color dark red. */
   public static final double DARK_RED = 0.59;
+
   /** Set color dark red. */
   public static final double RED = 0.61;
+
   /** Set color red-orange. */
   public static final double RED_ORANGE = 0.63;
+
   /** Set color orange. */
   public static final double ORANGE = 0.65;
+
   /** Set color gold. */
   public static final double GOLD = 0.67;
+
   /** Set color yellow. */
   public static final double YELLOW = 0.69;
+
   /** Set color lawn green. */
   public static final double LAWN_GREEN = 0.71;
+
   /** Set color lime. */
   public static final double LIME = 0.73;
+
   /** Set color dark green. */
   public static final double DARK_GREEN = 0.75;
+
   /** Set color green. */
   public static final double GREEN = 0.77;
+
   /** Set color blue-green. */
   public static final double BLUE_GREEN = 0.79;
+
   /** Set color aqua. */
   public static final double AQUA = 0.81;
+
   /** Set color sky blue. */
   public static final double SKY_BLUE = 0.83;
+
   /** Set color dark blue. */
   public static final double DARK_BLUE = 0.85;
+
   /** Set color blue. */
   public static final double BLUE = 0.87;
+
   /** Set color blue-violet. */
   public static final double BLUE_VIOLET = 0.89;
+
   /** Set color violet. */
   public static final double VIOLET = 0.91;
+
   /** Set color white. */
   public static final double WHITE = 0.93;
+
   /** Set color gray. */
   public static final double GRAY = 0.95;
+
   /** Set color dark gray. */
   public static final double DARK_GRAY = 0.97;
+
   /** Set color black. */
   public static final double BLACK = 0.99;
 

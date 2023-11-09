@@ -3,32 +3,25 @@
 ## Click "Use this template"
 
 ## Create new SonarQube project for the new repo
-### Add new repo to list of repos accessible to SonarQube:
-* Navigate to the repo on Github.com
-* Select repo settings
-* Select Github apps
-* Click SonarCloud - configure
-* Add any missing permissions.
-* Add repo to list under "Select repositories"
 
 ### Add repo to list of Projects on SonarQube
 * Log into SonarQube at https://sonarcloud.io
-* press the "+" on your home page to create a new project
+* press the "+" on your home page and select "analyze new project" to create a new project
 * Choose your organization
-* Choose you repo.
-* Press setup
-* Under Administration, Analysis Method, turn off automatic analysis.
-* Github workflow analysis
-* Create secret name SONAR_TOKEN, value from setup
-  * Click on your profile picture
-  * Click on "My Account"
-  * Select the "Security Tab"
-  * Fill in the new token name and click "Generate Token"
-  * Copy the token value
-  * Go back to Github, open repo settings.
-  * Under "Security", open "Secrets and variables".
-  * Select "Actions", and clicK "New Repository Secret".
-  * Create a secret called "SONAR_TOKEN" with the value you copied before, then click "Add Secret".
+* Choose you repo. Select it with a checkmark if it is there. if not then:
+  * Click "GitHub app configuration" at the bottom of the page.
+  * Click SonarCloud - Configure.
+  * Pull down menu that says "Select repositories"
+  * Select your new repository.
+  * Click "Save"
+  * Close Previous SonarCloud browser tab, and start this section over, starting from "Log into sonarQube"
+* Press setup, select "Previous version", click "Create project"
+* On the new project page, under Administration, Analysis Method, turn off automatic analysis.
+* Click "With GitHub Actions"
+* Create secret name SONAR_TOKEN in your repo. Follow directions under "1 Create GitHub Secret"
+* Under "2 Create or Update a build file", select Gradle and Groovy.
+* Update the build.gradle and .github/workflows/main.yml as directed. Don't worry about the file name being different.
+
 ## Things to change in the Repo before first use
 
 - Repo name in README.md. File find and replace "robot-template" to new name.
