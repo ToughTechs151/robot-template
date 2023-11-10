@@ -16,11 +16,15 @@ jacoco
 javadoc
 Jayamanne
 myname
+orgname
+projectname
 Robo
+roborio
 sendables
 Sepline
 simpdp
 slname
+sonarcloud
 Sonarlint
 Sonarqube
 spotbugs

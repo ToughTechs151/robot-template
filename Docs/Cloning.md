@@ -25,7 +25,15 @@
 ## Things to change in the Repo before first use
 
 - Repo name in README.md. File find and replace "robot-template" to new name.
-- Team number in settings.json
+- Team name in settings.json
+  - Change the line with "connectionID" to your SonarQube organization name.
+  - Change the line with "projectKey" to the project key from SonarQube for this project.
+  - Change the line for "roborio.hostname" to match your team number. Only change the number.
+  - Change the line for "sonarcloud.orgname" to your SonarCloud organization name.
+  - Change the line for "sonarcloud.projectname" to this project's name.
 - Sonarqube account/project in README.md
-- sonarqube account/project in .vscode/settings.json
 - sonarqube account/project in build.gradle
+  - Change the line that says "sonar.projectKey".
+  - Change the line that says "sonar.organization".
+
+The easiest way to do all the above is to use the "Replace in files" item in the "Edit" menu. If your SonarQube organization matches your GitHub organization, then you can simply do a replace of "ToughTech151" with your organizations name. Replace "robot-template" with your Github Repo name. Be sure to do both with "Match case" turned on. You will still need to replace the lower-case version, one in   The only place that you do not want to change robot-template to your repo name is in the file .github/workflows/template-sync.yml, if you want to be able to pull template changes. 

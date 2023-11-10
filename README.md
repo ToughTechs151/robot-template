@@ -1,4 +1,4 @@
-# Using the robot-template repository
+# Using the Robot Template repository
 
 ## Is this repository currently building correctly?
 <!---

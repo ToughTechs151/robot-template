@@ -20,4 +20,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ToughTechs151/robot-template
           upstream_branch: main # defaults to main
-          # pr_labels: robot-template # optional, no default
+          pr_labels: template-resync

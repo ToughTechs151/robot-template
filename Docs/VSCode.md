@@ -1,4 +1,4 @@
-# Preparing your VSCode environment for use with the robot-template
+# Preparing your VSCode environment for use with the Robot Template
 
 ## Install extensions
 
@@ -18,7 +18,7 @@ The following extensions come preinstalled in the WPILIB VSCode environment. If 
 
 ### Install the Team Extension Pack
 
-Our Team has an extension pack in the VSCode Marketplace that will automatically install all of the extensions needed to work with the robot-template. Some of the included extensions are extension packs themselves, so they will cause other extensions to be installed as well. You can install the team extension pack by going to the extensions tab in VScode and searching for "Tough Techs". The topmost extension should be ours. You can verify it by looking at the icon, which is our team logo. To install it, just click the install button. The extension can also be found at the [Marketplace Page](https://marketplace.visualstudio.com/items?itemName=ToughTechs151.tt151extpack) or the [repository releases.](https://github.com/ToughTechs151/tt151extpack/releases)
+Our Team has an extension pack in the VSCode Marketplace that will automatically install all of the extensions needed to work with the Robot Template. Some of the included extensions are extension packs themselves, so they will cause other extensions to be installed as well. You can install the team extension pack by going to the extensions tab in VScode and searching for "Tough Techs". The topmost extension should be ours. You can verify it by looking at the icon, which is our team logo. To install it, just click the install button. The extension can also be found at the [Marketplace Page](https://marketplace.visualstudio.com/items?itemName=ToughTechs151.tt151extpack) or the [repository releases.](https://github.com/ToughTechs151/tt151extpack/releases)
 
 The following extensions will be installed. Extension packs here will have an indented list of extensions that the pack will install. In a later section in this document, we will deal with how to set these extensions up.
 
@@ -63,7 +63,7 @@ See [VSCode Getting Started documentation](https://code.visualstudio.com/docs/ge
 
 #### Recommended preferences
 
-The following preferences are not required to use the robot-template, but are just some changes that we recommend to make VSCode easier to work with.
+The following preferences are not required to use the Robot Template, but are just some changes that we recommend to make VSCode easier to work with.
 
 - Bracket Pairs. By default VSCode colors matching bracket pairs with the same color. Further, if you click on one bracket in a pair, the other will also get a hollow cursor on it. However, it is easy to not notice a missing bracket or parenthesis if you are not looking for it. We recommend changing the user setting "Bracket Pairs" to "active". With both bracket pairs settings set to active VSCode will draw a colored line between the innermost enclosing brackets, based on where the cursor is. ![Example Bracket Pair](img/bracktpair.jpg)
 
@@ -84,7 +84,7 @@ Many of the following settings are already set in the workspace settings file fo
   }
   ```
 
-  By default when you tell Code Spell Check to ignore a word, it adds it to a list of words maintained in the settings.json file. In the robot-template we tell it to add the word to a custom dictionary in the workspace instead so the the dictionary can be updated a lot without risking changing the settings.json file in the workspace too much. You don't need to do this for your User preferences.
+  By default when you tell Code Spell Check to ignore a word, it adds it to a list of words maintained in the settings.json file. In the Robot Template we tell it to add the word to a custom dictionary in the workspace instead so the the dictionary can be updated a lot without risking changing the settings.json file in the workspace too much. You don't need to do this for your User preferences.
 
   Complete documentation for Code Spell Check can be found at [Code Spell Check Homepage.](https://streetsidesoftware.com/vscode-spell-checker/)
 

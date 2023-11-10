@@ -1,4 +1,4 @@
-# The Features of the robot-template
+# The Features of the Robot Template
 
 - Deploy tags
 - Spotless formatter
