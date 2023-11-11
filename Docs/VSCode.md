@@ -32,12 +32,10 @@ The following extensions will be installed. Extension packs here will have an in
 - Git Graph
 - Github Actions
 - Github Pull Requests and Issues
+- Gradle for Java
 - Intellicode
 - Sonarlint
 - Code Spell Checker
-- Gradle Extension Pack
-  - Gradle for Java
-  - Gradle Language Support
 - Task Buttons
 - Task Explorer
 
