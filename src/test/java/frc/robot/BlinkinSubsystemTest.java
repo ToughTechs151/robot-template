@@ -2,6 +2,7 @@ package frc.robot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.within;
 
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.wpilibj.PWM;
@@ -50,7 +51,7 @@ class BlinkinSubsystemTest {
     blinkin.enable();
     blinkin.periodic();
     /* Enabled now, so the raw value should be the right value. */
-    assertThat(blinkin.getSpeed()).isEqualTo(expectedValue);
+    assertThat(blinkin.getSpeed()).isCloseTo(expectedValue, within(0.005));
     blinkin.disable();
     blinkin.periodic();
     /* Disabled again. The raw value goes to zero, but the current value remains the same. */
@@ -79,11 +80,11 @@ class BlinkinSubsystemTest {
     /* Enable. The boolean is false. */
     blinkin.enable();
     blinkin.periodic();
-    assertThat(blinkin.getSpeed()).isEqualTo(mainState ? trueValue : falseValue);
+    assertThat(blinkin.getSpeed()).isCloseTo(mainState ? trueValue : falseValue, within(0.005));
     /* change mainState */
     mainState = !mainState;
     blinkin.periodic();
-    assertThat(blinkin.getSpeed()).isEqualTo(mainState ? trueValue : falseValue);
+    assertThat(blinkin.getSpeed()).isCloseTo(mainState ? trueValue : falseValue, within(0.005));
     /* Disable. */
     blinkin.disable();
     blinkin.periodic();
@@ -108,11 +109,11 @@ class BlinkinSubsystemTest {
     /* change whatDouble */
     whatDouble = 0.5;
     blinkin.periodic();
-    assertThat(blinkin.getSpeed()).isEqualTo(whatDouble);
+    assertThat(blinkin.getSpeed()).isCloseTo(whatDouble, within(0.005));
     /* change whatDouble again */
     whatDouble = 0.3;
     blinkin.periodic();
-    assertThat(blinkin.getSpeed()).isEqualTo(whatDouble);
+    assertThat(blinkin.getSpeed()).isCloseTo(whatDouble, within(0.005));
     /* Disable. */
     blinkin.disable();
     blinkin.periodic();
@@ -135,11 +136,16 @@ class BlinkinSubsystemTest {
     blinkin.periodic();
     assertThat(blinkin.getSpeed()).isZero();
     blinkin.setDisplayAlliance(true);
+    DriverStationSim.setAllianceStationId(AllianceStationID.Unknown);
     blinkin.periodic();
-    assertThat(blinkin.getSpeed()).isEqualTo(BlinkinSubsystem.RED);
+    assertThat(blinkin.getSpeed()).isCloseTo(BlinkinSubsystem.BLACK, within(0.005));
     DriverStationSim.setAllianceStationId(AllianceStationID.Blue2);
     DriverStationSim.notifyNewData();
     blinkin.periodic();
-    assertThat(blinkin.getSpeed()).isEqualTo(BlinkinSubsystem.BLUE);
+    assertThat(blinkin.getSpeed()).isCloseTo(BlinkinSubsystem.BLUE, within(0.005));
+    DriverStationSim.setAllianceStationId(AllianceStationID.Red3);
+    DriverStationSim.notifyNewData();
+    blinkin.periodic();
+    assertThat(blinkin.getSpeed()).isCloseTo(BlinkinSubsystem.RED, within(0.005));
   }
 }

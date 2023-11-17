@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -133,7 +134,7 @@ public class BlinkinSubsystem extends SubsystemBase {
     /* The next line is from the spark controller code. */
     /* this.ledController.setBounds(2.003, 1.55, 1.50, 1.46, 0.999)
     /* The next line sets the widths as defined in the BLinkin manual. */
-    this.ledController.setBounds(2000.0, 1500.0, 1500.0, 1500.0, 1000);
+    this.ledController.setBoundsMicroseconds(2000, 1500, 1500, 1500, 1000);
     this.ledController.enableDeadbandElimination(false);
     this.ledController.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
     this.ledController.setSpeed(0.0);
@@ -235,20 +236,24 @@ public class BlinkinSubsystem extends SubsystemBase {
     }
 
     if (displayAlliance) {
-      Alliance whichAlliance = DriverStation.getAlliance();
-      switch (whichAlliance) {
-        case Red:
-          this.ledController.setSpeed(RED);
+      double colorToSet;
+
+      Optional<Alliance> whichAlliance = DriverStation.getAlliance();
+
+      switch (whichAlliance.isPresent() ? whichAlliance.get().toString() : "Black") {
+        case "Red":
+          colorToSet = RED;
           break;
-        case Blue:
-          this.ledController.setSpeed(BLUE);
+        case "Blue":
+          colorToSet = BLUE;
           break;
-        case Invalid:
-          this.ledController.setSpeed(BLACK);
+        case "Black":
+          colorToSet = BLACK;
           break;
         default:
           throw new IllegalArgumentException(whichAlliance.toString());
       }
+      this.ledController.setSpeed(colorToSet);
       return;
     }
 
