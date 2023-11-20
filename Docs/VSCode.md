@@ -1,5 +1,13 @@
 # Preparing your VSCode environment for use with the Robot Template
 
+## Prepare Working Environment
+
+### Install WPILib on your system
+
+The WPILib installation images can be downloaded from [Github](https://github.com/wpilibsuite/allwpilib/releases). It is very important that everyone working on a particular robot is using the same version. Usually that will be the latest version, but it may not be. It possible to have more than one version of WPILib installed on the same system if they are from different years, but only one version can be installed for each year. Generally versions within a year a compatible, but be careful as this is not guaranteed. You can install a later version from the same year the same way as the original was installed. The installer will see the previous version and upgrade it.
+
+After WPILib is installed you will need to install a version of GIT for your platform. The distribution for Windows is available at [Git for Windows](https://gitforwindows.org/). installing Git on MacOS is a little more involved. One way is to install [Xcode from the App Store](https://apps.apple.com/gb/app/xcode/id497799835?mt=12). Another option is to install the [Github for Desktop App](https://desktop.github.com/).
+
 ## Install extensions
 
 ### How to install extensions in VSCode
