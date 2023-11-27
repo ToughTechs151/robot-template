@@ -2,12 +2,14 @@ package frc.sim;
 
 import edu.wpi.first.math.util.Units;
 
+/** Constants utility class for the arm simulation. */
 public final class Constants {
 
   private Constants() {
     throw new IllegalStateException("Utility class");
   }
 
+  /** Arm simulation constants. */
   public static final class ArmSim {
     private ArmSim() {
       throw new IllegalStateException("ArmSim Utility Class");

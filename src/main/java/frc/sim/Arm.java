@@ -20,7 +20,10 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.sim.Constants.ArmSim;
 
-
+/**
+ * Arm is the simulation example class to show how to simulate a robot arm. It can also serve as an
+ * example for any linear robot system simulation.
+ */
 public class Arm implements AutoCloseable {
   // The P gain for the PID controller that drives this arm.
   private double armKp = ArmSim.DEFAULT_ARM_KP;
