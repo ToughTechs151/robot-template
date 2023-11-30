@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.sim.Arm;
 import frc.sim.RobotModel;
 
 /**
@@ -154,11 +155,20 @@ public class Robot extends TimedRobot {
   // Simple robot plant model for simulation purposes
   RobotModel simModel;
 
+  // Mechanical arm driven by motor with gear reduction for simulation purposes.
+  // Works in conjunction with ArmSubsystem
+ Arm armSim;
+
+
+
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
+
     // Add code to run when the robot is initialized during simulations.
     simModel = new RobotModel(this);
+
+    armSim = new Arm(this.robotContainer.getArmSubsystem());
   }
 
   /** This function is called periodically whilst in simulation. */
@@ -167,6 +177,11 @@ public class Robot extends TimedRobot {
     // Add code to run repeatedly during simulations.
     if (isSimulation() && simModel != null) {
       simModel.update();
+    }
+
+    if (isSimulation() && armSim != null) {
+      armSim.updateSim();
+      armSim.updateShuffleboard();
     }
   }
 
