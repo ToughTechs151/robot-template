@@ -172,6 +172,7 @@ out/
 
 # Simulation GUI and other tools window save file
 *-window.json
+glass.json
 
 # Ignore Splash Screen txt files
 src/main/resources/*.txt

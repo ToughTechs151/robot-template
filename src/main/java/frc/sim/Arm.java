@@ -7,8 +7,6 @@ package frc.sim;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -16,16 +14,16 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.sim.Constants.ArmSim;
 
 /** A robot arm simulation based on a linear system model with Mech2d display. */
-public class Arm extends SubsystemBase implements AutoCloseable {
+public class Arm implements AutoCloseable {
 
   private final ArmSubsystem armSubsystem;
   private double lastPosition = 0.0;
+  private double simCurrent = 0.0;
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor armGearbox = DCMotor.getVex775Pro(2);
@@ -63,9 +61,9 @@ public class Arm extends SubsystemBase implements AutoCloseable {
               new Color8Bit(Color.kYellow)));
 
   /** Create a new ArmSubsystem. */
-  public Arm(ArmSubsystem simulationArmSubsystem) {
+  public Arm(ArmSubsystem armSubsystemToSimulate) {
 
-    armSubsystem = simulationArmSubsystem;
+    armSubsystem = armSubsystemToSimulate;
     simulationInit();
 
     // Put Mechanism 2d to SmartDashboard
@@ -98,8 +96,7 @@ public class Arm extends SubsystemBase implements AutoCloseable {
     lastPosition = newPosition;
 
     // SimBattery estimates loaded battery voltages
-    double simCurrent = armSim.getCurrentDrawAmps();
-    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(simCurrent));
+    simCurrent = armSim.getCurrentDrawAmps();
 
     // Update the Mechanism Arm angle based on the simulated arm angle
     mechArm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
@@ -110,6 +107,11 @@ public class Arm extends SubsystemBase implements AutoCloseable {
     armSubsystem.setSimCurrent(simCurrent);
 
     updateShuffleboard();
+  }
+
+  /** Return the simulated current */
+  public double getSimCurrent() {
+    return simCurrent;
   }
 
   public void updateShuffleboard() {
