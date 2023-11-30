@@ -7,25 +7,23 @@ package frc.sim;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
-
 import frc.sim.Constants.ArmSim;
 
 /** A robot arm simulation based on a linear system model with Mech2d display. */
 public class Arm extends SubsystemBase implements AutoCloseable {
-   
+
   private final ArmSubsystem armSubsystem;
   private double lastPosition = 0.0;
 
@@ -64,7 +62,6 @@ public class Arm extends SubsystemBase implements AutoCloseable {
               6,
               new Color8Bit(Color.kYellow)));
 
-  
   /** Create a new ArmSubsystem. */
   public Arm(ArmSubsystem simulationArmSubsystem) {
 
@@ -74,15 +71,15 @@ public class Arm extends SubsystemBase implements AutoCloseable {
     // Put Mechanism 2d to SmartDashboard
     SmartDashboard.putData("Arm Sim", mech2d);
     mechArmTower.setColor(new Color8Bit(Color.kBlue));
-
   }
 
+  /** Initialize the arm simulation. */
   public void simulationInit() {
 
     encoderSimDistance = 0;
 
     // This shouldn't be needed in 2024 since SingleJointedArmSim will allow setting in constructor
-    armSim.setState(ArmConstants.ARM_OFFSET_RADS,0);
+    armSim.setState(ArmConstants.ARM_OFFSET_RADS, 0);
   }
 
   /** Update the simulation model. */
@@ -97,13 +94,12 @@ public class Arm extends SubsystemBase implements AutoCloseable {
     // Finally, we set our simulated encoder's readings and simulated battery voltage
     double newPosition = armSim.getAngleRads() - ArmConstants.ARM_OFFSET_RADS;
     encoderSimDistance = newPosition;
-    double encoderSimRate = (newPosition-lastPosition)/0.02;
+    double encoderSimRate = (newPosition - lastPosition) / 0.02;
     lastPosition = newPosition;
 
     // SimBattery estimates loaded battery voltages
     double simCurrent = armSim.getCurrentDrawAmps();
-    RoboRioSim.setVInVoltage(
-        BatterySim.calculateDefaultBatteryLoadedVoltage(simCurrent));
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(simCurrent));
 
     // Update the Mechanism Arm angle based on the simulated arm angle
     mechArm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
@@ -114,13 +110,11 @@ public class Arm extends SubsystemBase implements AutoCloseable {
     armSubsystem.setSimCurrent(simCurrent);
 
     updateShuffleboard();
-
   }
-  
+
   public void updateShuffleboard() {
 
-    SmartDashboard.putNumber("Arm Sim Angle", Units.radiansToDegrees(armSim.getAngleRads())); //sim
-
+    SmartDashboard.putNumber("Arm Sim Angle", Units.radiansToDegrees(armSim.getAngleRads())); // sim
   }
 
   @Override
@@ -130,5 +124,3 @@ public class Arm extends SubsystemBase implements AutoCloseable {
     mechArm.close();
   }
 }
-
-

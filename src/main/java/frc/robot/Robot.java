@@ -157,9 +157,7 @@ public class Robot extends TimedRobot {
 
   // Mechanical arm driven by motor with gear reduction for simulation purposes.
   // Works in conjunction with ArmSubsystem
- Arm armSim;
-
-
+  Arm armSim;
 
   /** This function is called once when the robot is first started up. */
   @Override

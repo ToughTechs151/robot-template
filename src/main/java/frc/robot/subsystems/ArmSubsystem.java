@@ -4,37 +4,37 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import frc.robot.Constants;
-import frc.robot.Constants.ArmConstants;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 
 /** A robot arm subsystem that moves with a motion profile. */
 public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable {
-  private final CANSparkMax motor =
-  new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
+  private final CANSparkMax motor = new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
-  
+
   private ArmFeedforward feedforward =
       new ArmFeedforward(
-          ArmConstants.DEFAULT_KS_VOLTS, ArmConstants.DEFAULT_KG_VOLTS,
-          ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD, 
+          ArmConstants.DEFAULT_KS_VOLTS,
+          ArmConstants.DEFAULT_KG_VOLTS,
+          ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD,
           ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
- 
+
   private double voltageCommand = 0.0;
   private double goalPosition;
 
@@ -45,15 +45,16 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
   public ArmSubsystem() {
-    super(new ProfiledPIDController(
-      Constants.ArmConstants.DEFAULT_ARM_KP,
-      0,
-      0,
-      new TrapezoidProfile.Constraints(
-          ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC,
-          ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC)),
-      0);
-        
+    super(
+        new ProfiledPIDController(
+            Constants.ArmConstants.DEFAULT_ARM_KP,
+            0,
+            0,
+            new TrapezoidProfile.Constraints(
+                ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC,
+                ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC)),
+        0);
+
     // Setup the encoder scale factors and reset encoder to 0
     encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
     encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
@@ -64,13 +65,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     motor.setVoltage(0.0);
 
     /* Assume the arm is starting in the back rest position, so initialize goal to this point so no
-       movement is needed when enabled */
+    movement is needed when enabled */
     setGoal(ArmConstants.ARM_OFFSET_RADS);
 
     setupShuffleboard();
 
     initPreferences();
-   
   }
 
   @Override
@@ -79,7 +79,6 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
       useOutput(m_controller.calculate(getMeasurement()), m_controller.getSetpoint());
     }
     updateShuffleboard();
-
   }
 
   // Generate the motor command using the PID controller and feedforward
@@ -91,27 +90,26 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
       newFeedforward = feedforward.calculate(setpoint.position, setpoint.velocity);
       // Add the feedforward to the PID output to get the motor output
       voltageCommand = output + newFeedforward;
-    }
-    else {
+    } else {
       voltageCommand = 0;
-    } 
+    }
     motor.setVoltage(voltageCommand);
 
     SmartDashboard.putNumber("feedforward", newFeedforward);
     SmartDashboard.putNumber("output", output);
     SmartDashboard.putNumber("SetPt Pos", Units.radiansToDegrees(setpoint.position));
     SmartDashboard.putNumber("SetPt Vel", Units.radiansToDegrees(setpoint.velocity));
-
   }
 
   @Override
   // Arm position for PID measurement (Radians relative to horizontal)
   public double getMeasurement() {
     if (RobotBase.isReal()) {
-      return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS; // Add offset for starting zero point
-    }
-    else {
-      return encoderSimDistance + ArmConstants.ARM_OFFSET_RADS; // Add offset for starting zero point
+      return encoder.getPosition()
+          + ArmConstants.ARM_OFFSET_RADS; // Add offset for starting zero point
+    } else {
+      return encoderSimDistance
+          + ArmConstants.ARM_OFFSET_RADS; // Add offset for starting zero point
     }
   }
 
@@ -119,8 +117,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
   public double getVelocity() {
     if (RobotBase.isReal()) {
       return encoder.getVelocity();
-    }
-    else {
+    } else {
       return encoderSimRate;
     }
   }
@@ -129,8 +126,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
   public double getCurrent() {
     if (RobotBase.isReal()) {
       return motor.getOutputCurrent();
-    }
-    else {
+    } else {
       return simCurrent;
     }
   }
@@ -166,18 +162,20 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     }
   }
 
-   // Calculate increased  goal limited to allowed range
-   public double increasedGoal() {
+  // Calculate increased  goal limited to allowed range
+  public double increasedGoal() {
     double newGoal = m_controller.getGoal().position + Constants.ArmConstants.POS_INCREMENT;
-    return MathUtil.clamp(newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
+    return MathUtil.clamp(
+        newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
   }
 
   // Calculate decreased  goal limited to allowed range
   public double decreasedGoal() {
-    double newGoal =  m_controller.getGoal().position - Constants.ArmConstants.POS_INCREMENT;
-    return MathUtil.clamp(newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
+    double newGoal = m_controller.getGoal().position - Constants.ArmConstants.POS_INCREMENT;
+    return MathUtil.clamp(
+        newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
+  }
 
-  } 
   @Override
   /** Enables the PID control. Resets the controller. */
   public void enable() {
@@ -197,22 +195,22 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
 
     // Set goal to current position to minimize movement on re-enable and reset output
     m_enabled = false;
-    setGoal(getMeasurement()); 
+    setGoal(getMeasurement());
     useOutput(0, new State());
     DataLogManager.log("Arm Disabled");
-
   }
 
   /** Sets the goal state for the subsystem. Goal velocity assumed to be zero. */
   @Override
-    public void setGoal(double goal) {
+  public void setGoal(double goal) {
     setGoal(new TrapezoidProfile.State(goal, 0));
     goalPosition = goal;
-
   }
 
   /** Shuffleboard settings that only need to done during initialization */
-  private void setupShuffleboard() {}
+  private void setupShuffleboard() {
+    // Put shuffleboard initialization here
+  }
 
   /** Update Shuffleboard values (call periodically) */
   public void updateShuffleboard() {
@@ -221,48 +219,76 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     SmartDashboard.putNumber("Arm Goal", Units.radiansToDegrees(goalPosition));
     SmartDashboard.putNumber("Measured Angle", Units.radiansToDegrees(getMeasurement()));
     SmartDashboard.putNumber("Arm Velocity", Units.radiansToDegrees(getVelocity()));
-    SmartDashboard.putNumber("Motor Voltage", voltageCommand); 
-    SmartDashboard.putNumber("Battery Voltage",RobotController.getBatteryVoltage()); // sim
-    SmartDashboard.putNumber("Motor Current", getCurrent()); 
-
+    SmartDashboard.putNumber("Motor Voltage", voltageCommand);
+    SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage()); // sim
+    SmartDashboard.putNumber("Motor Current", getCurrent());
   }
 
   /** Put tunable values in Preferences table if the keys don't already exist */
   private void initPreferences() {
 
-    // Preferences for PID controller  
-    Preferences.initDouble(Constants.ArmConstants.ARM_KP_KEY, Constants.ArmConstants.DEFAULT_ARM_KP);
+    // Preferences for PID controller
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_KP_KEY, Constants.ArmConstants.DEFAULT_ARM_KP);
 
     // Preferences for Trapezoid Profile
-    Preferences.initDouble(Constants.ArmConstants.ARM_VMAX_KEY, Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
-    Preferences.initDouble(Constants.ArmConstants.ARM_AMAX_KEY, Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_VMAX_KEY,
+        Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_AMAX_KEY,
+        Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
 
-    // Preferences for Feedforward 
-    Preferences.initDouble(Constants.ArmConstants.ARM_KS_KEY, Constants.ArmConstants.DEFAULT_KS_VOLTS);
-    Preferences.initDouble(Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
-    Preferences.initDouble(Constants.ArmConstants.ARM_KV_KEY, Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    Preferences.initDouble(Constants.ArmConstants.ARM_KA_KEY, Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
+    // Preferences for Feedforward
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_KS_KEY, Constants.ArmConstants.DEFAULT_KS_VOLTS);
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_KV_KEY, Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
+    Preferences.initDouble(
+        Constants.ArmConstants.ARM_KA_KEY,
+        Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
   }
 
-  /** Load Preferences for values that can be tuned at runtime.
-      This should only be called when the controller is disabled, for example from enable() */
+  /**
+   * Load Preferences for values that can be tuned at runtime. This should only be called when the
+   * controller is disabled, for example from enable()
+   */
   private void loadPreferences() {
 
-    // Read Preferences for PID controller  
-    m_controller.setP(Preferences.getDouble(Constants.ArmConstants.ARM_KP_KEY, Constants.ArmConstants.DEFAULT_ARM_KP));
+    // Read Preferences for PID controller
+    m_controller.setP(
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_KP_KEY, Constants.ArmConstants.DEFAULT_ARM_KP));
 
     // Read Preferences for Trapezoid Profile and update
-    double vMax = Preferences.getDouble(Constants.ArmConstants.ARM_VMAX_KEY, Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
-    double aMax = Preferences.getDouble(Constants.ArmConstants.ARM_AMAX_KEY, Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
+    double vMax =
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_VMAX_KEY,
+            Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
+    double aMax =
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_AMAX_KEY,
+            Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
     m_controller.setConstraints(new TrapezoidProfile.Constraints(vMax, aMax));
 
     // Read Preferences for Feedforward and create a new instance
-    double kS = Preferences.getDouble(Constants.ArmConstants.ARM_KS_KEY, Constants.ArmConstants.DEFAULT_KS_VOLTS);
-    double kG = Preferences.getDouble(Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
-    double kV = Preferences.getDouble(Constants.ArmConstants.ARM_KV_KEY, Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    double kA = Preferences.getDouble(Constants.ArmConstants.ARM_KA_KEY, Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
+    double kS =
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_KS_KEY, Constants.ArmConstants.DEFAULT_KS_VOLTS);
+    double kG =
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
+    double kV =
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_KV_KEY,
+            Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
+    double kA =
+        Preferences.getDouble(
+            Constants.ArmConstants.ARM_KA_KEY,
+            Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
-
   }
 
   @Override

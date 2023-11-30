@@ -8,14 +8,13 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,7 +40,6 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-    
   }
 
   /**
@@ -83,7 +81,7 @@ public class RobotContainer {
                   robotArm.enable();
                 },
                 robotArm));
-                
+
     // Shift position up a small amount when the POV Down is pressed.
     driverController
         .povUp()
@@ -95,14 +93,12 @@ public class RobotContainer {
                 },
                 robotArm));
 
-
-    /* Reset the encoders to zero when the 'Y' button is pressed. 
-      Should only be used when arm is in neutral (starting) position. */
+    /* Reset the encoders to zero when the 'Y' button is pressed.
+    Should only be used when arm is in neutral (starting) position. */
     driverController.y().onTrue(Commands.runOnce(robotArm::resetPosition));
 
     // Disable the arm controller when the 'X' button is pressed.
     driverController.x().onTrue(Commands.runOnce(robotArm::disable));
-
   }
 
   /**
@@ -112,7 +108,6 @@ public class RobotContainer {
   public void disablePIDSubsystems() {
     robotArm.disable();
     DataLogManager.log("disablePIDSubsystems");
-
   }
 
   /**
@@ -142,5 +137,4 @@ public class RobotContainer {
   public ArmSubsystem getArmSubsystem() {
     return robotArm;
   }
-
 }

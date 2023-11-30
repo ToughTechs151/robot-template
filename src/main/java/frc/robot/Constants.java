@@ -51,6 +51,7 @@ public final class Constants {
 
   // Set to true to log loop timing data. To false to disable.
   public static final boolean LOOP_TIMING_LOG = true;
+
   public static final class ArmConstants {
 
     private ArmConstants() {
@@ -62,8 +63,8 @@ public final class Constants {
     // These are fake gains; in actuality these must be determined individually for each robot
 
     // Constants tunable through preferences
-    public static final String ARM_KP_KEY = "ArmKP";  // The P gain for the PID controller that drives this arm.
-    public static final double DEFAULT_ARM_KP = 3.0; 
+    public static final String ARM_KP_KEY = "ArmKP"; // The P gain for the PID controller
+    public static final double DEFAULT_ARM_KP = 3.0;
     public static final String ARM_KS_KEY = "ArmKS"; // Static motor gain
     public static final double DEFAULT_KS_VOLTS = 0.5;
     public static final String ARM_KG_KEY = "ArmKG"; // Gravity gain
@@ -81,19 +82,20 @@ public final class Constants {
     public static final double ARM_RAD_PER_ENCODER_ROTATION = 2.0 * Math.PI * GEAR_RATIO;
     public static final double RPM_TO_RAD_PER_SEC = ARM_RAD_PER_ENCODER_ROTATION / 60;
 
-    // Arm positions.  Horizontal = 0 radians
+    // Arm positions.  Horizontal = 0 radians. Assume arm starts at lowest (rest) position
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-45);
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(120);
-    public static final double ARM_OFFSET_RADS = MIN_ANGLE_RADS; // Assume arm starts at rest at lowest position
+    public static final double ARM_OFFSET_RADS = MIN_ANGLE_RADS;
     public static final double ARM_GOAL_POSITION = Units.degreesToRadians(45);
     public static final double POS_INCREMENT = Units.degreesToRadians(2); // For small adjustments
   }
+
   public static final class OIConstants {
 
     private OIConstants() {
       throw new IllegalStateException("OIConstants Utility Class");
     }
+
     public static final int DRIVER_CONTROLLER_PORT = 0;
   }
-
 }
