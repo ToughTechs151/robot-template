@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
@@ -37,11 +36,6 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
 
   private double voltageCommand = 0.0;
   private double goalPosition;
-
-  // Attributes that are set by the arm simulation for use in place of real hardware
-  private double encoderSimDistance;
-  private double encoderSimRate;
-  private double simCurrent;
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
   public ArmSubsystem() {
@@ -104,51 +98,13 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
   @Override
   // Arm position for PID measurement (Radians relative to horizontal)
   public double getMeasurement() {
-    if (RobotBase.isReal()) {
-      return encoder.getPosition()
-          + ArmConstants.ARM_OFFSET_RADS; // Add offset for starting zero point
-    } else {
-      return encoderSimDistance
-          + ArmConstants.ARM_OFFSET_RADS; // Add offset for starting zero point
-    }
-  }
-
-  // Motor speed (Rad/sec)
-  public double getVelocity() {
-    if (RobotBase.isReal()) {
-      return encoder.getVelocity();
-    } else {
-      return encoderSimRate;
-    }
-  }
-
-  // Motor current (Amps)
-  public double getCurrent() {
-    if (RobotBase.isReal()) {
-      return motor.getOutputCurrent();
-    } else {
-      return simCurrent;
-    }
+    // Add offset for starting zero point
+    return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS; 
   }
 
   // Motor Commanded Voltage
   public double getVoltageCommand() {
     return voltageCommand;
-  }
-
-  // Set encoder distance for use in simulation
-  public void setSimDistance(double distance) {
-    encoderSimDistance = distance;
-  }
-
-  // Set encoder rate for use in simulation
-  public void setSimRate(double rate) {
-    encoderSimRate = rate;
-  }
-
-  // Set motor current for use in simulation
-  public void setSimCurrent(double current) {
-    simCurrent = current;
   }
 
   // Reset the encoder to zero. Should only be used when arm is in neutral offset position.
@@ -218,10 +174,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     SmartDashboard.putBoolean("Arm Enabled", m_enabled);
     SmartDashboard.putNumber("Arm Goal", Units.radiansToDegrees(goalPosition));
     SmartDashboard.putNumber("Measured Angle", Units.radiansToDegrees(getMeasurement()));
-    SmartDashboard.putNumber("Arm Velocity", Units.radiansToDegrees(getVelocity()));
+    SmartDashboard.putNumber("Arm Velocity", Units.radiansToDegrees(encoder.getVelocity()));
     SmartDashboard.putNumber("Motor Voltage", voltageCommand);
     SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage()); // sim
-    SmartDashboard.putNumber("Motor Current", getCurrent());
+    SmartDashboard.putNumber("Motor Current", motor.getOutputCurrent());
   }
 
   /** Put tunable values in Preferences table if the keys don't already exist */

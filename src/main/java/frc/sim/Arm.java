@@ -4,9 +4,13 @@
 
 package frc.sim;
 
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -22,8 +26,9 @@ import frc.sim.Constants.ArmSim;
 public class Arm implements AutoCloseable {
 
   private final ArmSubsystem armSubsystem;
-  private double lastPosition = 0.0;
   private double simCurrent = 0.0;
+  private CANSparkMaxSim sparkSim;
+
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor armGearbox = DCMotor.getVex775Pro(2);
@@ -43,8 +48,6 @@ public class Arm implements AutoCloseable {
           ArmSim.START_ANGLE_RADS,
           VecBuilder.fill(ArmSim.ENCODER_DISTANCE_PER_PULSE) // Add noise with a std-dev of 1 tick
           );
-
-  private double encoderSimDistance;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final Mechanism2d mech2d = new Mechanism2d(70, 60);
@@ -74,7 +77,8 @@ public class Arm implements AutoCloseable {
   /** Initialize the arm simulation. */
   public void simulationInit() {
 
-    encoderSimDistance = 0;
+    // Setup a simulation of the CANSparkMax and methods to set values
+    sparkSim = new CANSparkMaxSim(ArmConstants.MOTOR_PORT);
 
     // This shouldn't be needed in 2024 since SingleJointedArmSim will allow setting in constructor
     armSim.setState(ArmConstants.ARM_OFFSET_RADS, 0);
@@ -89,22 +93,19 @@ public class Arm implements AutoCloseable {
     // Next, we update it. The standard loop time is 20ms.
     armSim.update(0.020);
 
-    // Finally, we set our simulated encoder's readings and simulated battery voltage
-    double newPosition = armSim.getAngleRads() - ArmConstants.ARM_OFFSET_RADS;
-    encoderSimDistance = newPosition;
-    double encoderSimRate = (newPosition - lastPosition) / 0.02;
-    lastPosition = newPosition;
+    // Finally, we set our simulated encoder's readings and simulated battery voltage and
+    // save the current so it can be retrieved later.
+    sparkSim.setPosition(armSim.getAngleRads() - ArmConstants.ARM_OFFSET_RADS);
+    sparkSim.setVelocity(armSim.getVelocityRadPerSec());
+    simCurrent = armSim.getCurrentDrawAmps();
+    sparkSim.setCurrent(simCurrent);
 
     // SimBattery estimates loaded battery voltages
-    simCurrent = armSim.getCurrentDrawAmps();
+    RoboRioSim.setVInVoltage(
+        BatterySim.calculateDefaultBatteryLoadedVoltage(armSim.getCurrentDrawAmps()));
 
     // Update the Mechanism Arm angle based on the simulated arm angle
     mechArm.setAngle(Units.radiansToDegrees(armSim.getAngleRads()));
-
-    // Update the arm subsystem to follow the simulation
-    armSubsystem.setSimDistance(encoderSimDistance);
-    armSubsystem.setSimRate(encoderSimRate);
-    armSubsystem.setSimCurrent(simCurrent);
 
     updateShuffleboard();
   }
