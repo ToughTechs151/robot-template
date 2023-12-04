@@ -23,7 +23,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.sim.Constants.ArmSim;
 
 /** A robot arm simulation based on a linear system model with Mech2d display. */
-public class Arm implements AutoCloseable {
+public class ArmModel implements AutoCloseable {
 
   private final ArmSubsystem armSubsystem;
   private double simCurrent = 0.0;
@@ -64,7 +64,7 @@ public class Arm implements AutoCloseable {
               new Color8Bit(Color.kYellow)));
 
   /** Create a new ArmSubsystem. */
-  public Arm(ArmSubsystem armSubsystemToSimulate) {
+  public ArmModel(ArmSubsystem armSubsystemToSimulate) {
 
     armSubsystem = armSubsystemToSimulate;
     simulationInit();

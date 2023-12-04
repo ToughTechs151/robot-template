@@ -15,7 +15,7 @@ public class RobotModel {
 
   // Mechanical arm driven by motor with gear reduction for simulation purposes.
   // Works in conjunction with ArmSubsystem
-  Arm simArm;
+  ArmModel simArm;
 
   Random random = new Random();
   private final boolean isReal;
@@ -39,7 +39,7 @@ public class RobotModel {
       return;
     }
 
-    simArm = new Arm(robot.getRobotContainer().getArmSubsystem());
+    simArm = new ArmModel(robot.getRobotContainer().getArmSubsystem());
 
     simpdp = new PDPSim(robot.getRobotContainer().getPdp());
     reset();
