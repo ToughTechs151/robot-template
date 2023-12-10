@@ -99,7 +99,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
   // Arm position for PID measurement (Radians relative to horizontal)
   public double getMeasurement() {
     // Add offset for starting zero point
-    return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS; 
+    return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS;
   }
 
   // Motor Commanded Voltage
@@ -107,8 +107,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     return voltageCommand;
   }
 
-  // Reset the encoder to zero. Should only be used when arm is in neutral offset position.
-  // Function only allowed when arm is disabled
+  /**
+   * Reset the Arm encoder to zero. Should only be used when the arm is in the neutral offset
+   * position. This method is only allowed when the arm is disabled.
+   */
   public void resetPosition() {
 
     if (m_enabled) {
@@ -118,22 +120,22 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     }
   }
 
-  // Calculate increased  goal limited to allowed range
+  /** Calculate increased goal, limited to allowed range. */
   public double increasedGoal() {
     double newGoal = m_controller.getGoal().position + Constants.ArmConstants.POS_INCREMENT;
     return MathUtil.clamp(
         newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
   }
 
-  // Calculate decreased  goal limited to allowed range
+  /** Calculate decreased goal, limited to allowed range. */
   public double decreasedGoal() {
     double newGoal = m_controller.getGoal().position - Constants.ArmConstants.POS_INCREMENT;
     return MathUtil.clamp(
         newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
   }
 
-  @Override
   /** Enables the PID control. Resets the controller. */
+  @Override
   public void enable() {
 
     // Don't enable if already enabled since this may cause control transients
@@ -145,8 +147,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     }
   }
 
-  @Override
   /** Disables the PID control. Sets output to zero. */
+  @Override
   public void disable() {
 
     // Set goal to current position to minimize movement on re-enable and reset output
@@ -163,12 +165,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     goalPosition = goal;
   }
 
-  /** Shuffleboard settings that only need to done during initialization */
+  /** Shuffleboard settings that only need to done during initialization. */
   private void setupShuffleboard() {
     // Put shuffleboard initialization here
   }
 
-  /** Update Shuffleboard values (call periodically) */
+  /** Update Shuffleboard values (call periodically). */
   public void updateShuffleboard() {
 
     SmartDashboard.putBoolean("Arm Enabled", m_enabled);
@@ -180,7 +182,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     SmartDashboard.putNumber("Motor Current", motor.getOutputCurrent());
   }
 
-  /** Put tunable values in Preferences table if the keys don't already exist */
+  /** Put tunable values in Preferences table if the keys don't already exist. */
   private void initPreferences() {
 
     // Preferences for PID controller
@@ -219,32 +221,32 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
             Constants.ArmConstants.ARM_KP_KEY, Constants.ArmConstants.DEFAULT_ARM_KP));
 
     // Read Preferences for Trapezoid Profile and update
-    double vMax =
+    double velocityMax =
         Preferences.getDouble(
             Constants.ArmConstants.ARM_VMAX_KEY,
             Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
-    double aMax =
+    double accelerationMax =
         Preferences.getDouble(
             Constants.ArmConstants.ARM_AMAX_KEY,
             Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
-    m_controller.setConstraints(new TrapezoidProfile.Constraints(vMax, aMax));
+    m_controller.setConstraints(new TrapezoidProfile.Constraints(velocityMax, accelerationMax));
 
     // Read Preferences for Feedforward and create a new instance
-    double kS =
+    double staticGain =
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KS_KEY, Constants.ArmConstants.DEFAULT_KS_VOLTS);
-    double kG =
+    double gravityGain =
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
-    double kV =
+    double velocityGain =
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KV_KEY,
             Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    double kA =
+    double accelerationGain =
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KA_KEY,
             Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
-    feedforward = new ArmFeedforward(kS, kG, kV, kA);
+    feedforward = new ArmFeedforward(staticGain, gravityGain, velocityGain, accelerationGain);
   }
 
   @Override

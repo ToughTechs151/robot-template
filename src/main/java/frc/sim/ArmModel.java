@@ -4,13 +4,11 @@
 
 package frc.sim;
 
-import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
-import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -28,7 +26,6 @@ public class ArmModel implements AutoCloseable {
   private final ArmSubsystem armSubsystem;
   private double simCurrent = 0.0;
   private CANSparkMaxSim sparkSim;
-
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor armGearbox = DCMotor.getVex775Pro(2);
@@ -110,7 +107,7 @@ public class ArmModel implements AutoCloseable {
     updateShuffleboard();
   }
 
-  /** Return the simulated current */
+  /** Return the simulated current. */
   public double getSimCurrent() {
     return simCurrent;
   }

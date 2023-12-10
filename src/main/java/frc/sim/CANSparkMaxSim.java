@@ -7,9 +7,9 @@ package frc.sim;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 
-/** Wrapper for a simulation interface to a CANSparkMax motor controller.
- *  Provides methods to set simulated values in the controller to use in place of real
- *  values during simulation.
+/**
+ * Wrapper for a simulation interface to a CANSparkMax motor controller. Provides methods to set
+ * simulated values in the controller to use in place of real values during simulation.
  */
 public class CANSparkMaxSim {
 
@@ -18,6 +18,7 @@ public class CANSparkMaxSim {
   private SimDouble simVelocity;
   private SimDouble simMotorCurrent;
 
+  /** Simulated CANSparkMax. */
   public CANSparkMaxSim(int motorPort) {
 
     // Setup an interface to the CANSparkMax and methods to set values during simulation

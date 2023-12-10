@@ -52,6 +52,7 @@ public final class Constants {
   // Set to true to log loop timing data. To false to disable.
   public static final boolean LOOP_TIMING_LOG = true;
 
+  /** Constants used for the Arm subsystem. */
   public static final class ArmConstants {
 
     private ArmConstants() {
@@ -90,6 +91,7 @@ public final class Constants {
     public static final double POS_INCREMENT = Units.degreesToRadians(2); // For small adjustments
   }
 
+  /** Constants used for assigning operator input. */
   public static final class OIConstants {
 
     private OIConstants() {
