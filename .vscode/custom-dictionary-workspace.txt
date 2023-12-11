@@ -11,6 +11,7 @@ deadband
 deployhost
 deploytime
 EEPROM
+Feedforward
 Intellicode
 jacoco
 javadoc
@@ -22,6 +23,7 @@ Robo
 roborio
 sendables
 Sepline
+Setpoint
 simpdp
 slname
 sonarcloud

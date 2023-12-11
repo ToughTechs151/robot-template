@@ -3,6 +3,7 @@ package frc.sim;
 /* Code poached from https://github.com/RobotCasserole1736/TheBestSwerve2021 */
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import frc.robot.Robot;
@@ -11,6 +12,11 @@ import java.util.Random;
 public class RobotModel {
 
   PDPSim simpdp;
+
+  // Mechanical arm driven by motor with gear reduction for simulation purposes.
+  // Works in conjunction with ArmSubsystem
+  ArmModel simArm;
+
   Random random = new Random();
   private final boolean isReal;
   static final double QUIESCENT_CURRENT_DRAW_A = 2.0; // Misc electronics
@@ -33,6 +39,8 @@ public class RobotModel {
       return;
     }
 
+    simArm = new ArmModel(robot.getRobotContainer().getArmSubsystem());
+
     simpdp = new PDPSim(robot.getRobotContainer().getPdp());
     reset();
   }
@@ -42,10 +50,22 @@ public class RobotModel {
     if (isReal) {
       return;
     }
-    RoboRioSim.setVInVoltage(batteryVoltageV * 0.98 + ((random.nextDouble() / 10) - 0.05));
-    simpdp.setVoltage(batteryVoltageV);
+
+    // Update subsystem simulations
+    simArm.updateSim();
+
+    // Simulate battery voltage drop based on total simulated current
+    double armCurrent = simArm.getSimCurrent();
+    double[] simCurrents = {armCurrent};
+    double unloadedVoltage = batteryVoltageV * 0.98 + ((random.nextDouble() / 10) - 0.05);
+    double loadedVoltage =
+        BatterySim.calculateLoadedBatteryVoltage(
+            unloadedVoltage, BATTERY_NOMINAL_RESISTANCE, simCurrents);
+    RoboRioSim.setVInVoltage(loadedVoltage);
+
+    simpdp.setVoltage(loadedVoltage);
     simpdp.setCurrent(0, currentDrawA + random.nextDouble());
-    simpdp.setCurrent(7, currentDrawA + random.nextDouble());
+    simpdp.setCurrent(7, armCurrent);
     simpdp.setTemperature(26.5);
   }
 
