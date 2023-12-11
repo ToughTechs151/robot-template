@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -30,6 +32,7 @@ public class RobotContainer {
       new ExampleCommand("ExampleCommand", this.exampleSubsystem);
   private PowerDistribution pdp = new PowerDistribution();
   private final ArmSubsystem robotArm = new ArmSubsystem();
+  private final DriveSubsystem robotDrive = new DriveSubsystem();
 
   // The driver's controller
   private CommandXboxController driverController =
@@ -40,6 +43,19 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    // Configure default commands
+    // Set the default drive command to split-stick tank drive
+    this.robotDrive.setDefaultCommand(
+        // A split-stick arcade command, with left side forward/backward controlled by the left
+        // hand, and right side controlled by the right.
+        new RunCommand(
+            () ->
+                this.robotDrive.tankDrive(
+                    -this.driverController.getLeftY(),
+                    -this.driverController.getRightY(),
+                    this.driverController.rightBumper().getAsBoolean()),
+            this.robotDrive));
   }
 
   /**
@@ -136,5 +152,14 @@ public class RobotContainer {
    */
   public ArmSubsystem getArmSubsystem() {
     return robotArm;
+  }
+
+  /**
+   * Use this to get the Drivetrain Subsystem
+   *
+   * @return the Drivetrain Subsystem
+   */
+  public DriveSubsystem getDriveSubsystem() {
+    return robotDrive;
   }
 }
