@@ -201,10 +201,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
 
     // Preferences for Trapezoid Profile
     Preferences.initDouble(
-        Constants.ArmConstants.ARM_VMAX_KEY,
+        Constants.ArmConstants.ARM_VELOCITY_MAX_KEY,
         Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
     Preferences.initDouble(
-        Constants.ArmConstants.ARM_AMAX_KEY,
+        Constants.ArmConstants.ARM_ACCELERATION_MAX_KEY,
         Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
 
     // Preferences for Feedforward
@@ -233,11 +233,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     // Read Preferences for Trapezoid Profile and update
     double velocityMax =
         Preferences.getDouble(
-            Constants.ArmConstants.ARM_VMAX_KEY,
+            Constants.ArmConstants.ARM_VELOCITY_MAX_KEY,
             Constants.ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC);
     double accelerationMax =
         Preferences.getDouble(
-            Constants.ArmConstants.ARM_AMAX_KEY,
+            Constants.ArmConstants.ARM_ACCELERATION_MAX_KEY,
             Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
     m_controller.setConstraints(new TrapezoidProfile.Constraints(velocityMax, accelerationMax));
 

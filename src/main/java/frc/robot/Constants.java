@@ -74,9 +74,9 @@ public final class Constants {
     public static final double DEFAULT_KV_VOLTS_PER_SEC_PER_RAD = 0.8;
     public static final String ARM_KA_KEY = "ArmKA"; // Acceleration gain
     public static final double DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD = 0.05;
-    public static final String ARM_VMAX_KEY = "ArmVmax";
+    public static final String ARM_VELOCITY_MAX_KEY = "ArmVelocityMax";
     public static final double DEFAULT_MAX_VELOCITY_RAD_PER_SEC = Units.degreesToRadians(90);
-    public static final String ARM_AMAX_KEY = "ArmAmax";
+    public static final String ARM_ACCELERATION_MAX_KEY = "ArmAccelerationMax";
     public static final double DEFAULT_MAX_ACCELERATION_RAD_PER_SEC = Units.degreesToRadians(360);
 
     public static final double GEAR_RATIO = 1.0d / 200;
