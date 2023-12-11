@@ -143,7 +143,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
       m_enabled = true;
       loadPreferences();
       m_controller.reset(getMeasurement());
-      DataLogManager.log("Arm Enabled");
+      DataLogManager.log(
+          "Arm Enabled - kP="
+              + m_controller.getP()
+              + " kI="
+              + m_controller.getI()
+              + " kD="
+              + m_controller.getD()
+              + " PosGoal="
+              + Units.radiansToDegrees(goalPosition)
+              + " CurPos="
+              + Units.radiansToDegrees(getMeasurement()));
     }
   }
 
