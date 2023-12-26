@@ -1,13 +1,23 @@
 # Basic Github workflow
 
+## Overview
+1. Clone the repo.
+1. Create issue.
+1. Create a branch.
+1. Make your changes.
+1. Create a Pull Request (PR)
+1. Get PR approved.
+1. Merge PR.
+
 ## Prerequisites
 A laptop or desktop system with the correct version of WPILib installed. See [build.gradle file, the line for GradleRIO, line 3](../build.gradle). Git installed, a Github account that is in the team organization organization. The Tough Techs VSCode extension installed in VSCode and configured as explained in https://github.com/ToughTechs151/robot-template/blob/main/Docs/VSCode.md See [VSCode.md](VSCode.md) You should be logged into GitHub and have authorized VSCode and its extensions. VSCode will ask you to log in when it needs that authorization, you don't need to do this ahead of time.
 
 ## Process Steps
-1. Clone repo
+1. Clone repo.
 
+   There are three ways to clone the repo from Github.
    Open the repo on GitHub in a browser.
-   Look for the green button tha says "Code" and click the dropdown. Select "HTTPS" and the copy symbol to copy the URL.
+   Look for the green button that says "Code" and click the dropdown. Select "HTTPS" and the copy symbol to copy the URL.
    In VSCode, create a new window and select "Clone Git Repository" on the Welcome tab. If you don't see it, you can use ctrl-shift-P to bring up the command palette and type
    "git clone", then paste the repo URL you previously copied in the dialog field.
    Select the repository destination. This is not the folder the repo files wil be in, it is the folder where all your VSCode projects are kept.
