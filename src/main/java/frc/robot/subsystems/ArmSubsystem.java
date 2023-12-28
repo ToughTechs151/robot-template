@@ -60,7 +60,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
 
     /* Assume the arm is starting in the back rest position, so initialize goal to this point so no
     movement is needed when enabled */
-    setGoal(ArmConstants.ARM_OFFSET_RADS);
+    setGoalPosition(ArmConstants.ARM_OFFSET_RADS);
 
     setupShuffleboard();
 
@@ -163,14 +163,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
 
     // Set goal to current position to minimize movement on re-enable and reset output
     m_enabled = false;
-    setGoal(getMeasurement());
+    setGoalPosition(getMeasurement());
     useOutput(0, new State());
     DataLogManager.log("Arm Disabled");
   }
 
-  /** Sets the goal state for the subsystem. Goal velocity assumed to be zero. */
-  @Override
-  public void setGoal(double goal) {
+  /** Set the goal state for the subsystem and save the value for dashboard display and logging.
+   *  Goal velocity assumed to be zero. */
+  public void setGoalPosition(double goal) {
     setGoal(new TrapezoidProfile.State(goal, 0));
     goalPosition = goal;
   }
