@@ -55,7 +55,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  robotArm.setGoal(Constants.ArmConstants.ARM_OFFSET_RADS);
+                  robotArm.setGoalPosition(Constants.ArmConstants.ARM_OFFSET_RADS);
                   robotArm.enable();
                 },
                 robotArm));
@@ -66,7 +66,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  robotArm.setGoal(Constants.ArmConstants.ARM_GOAL_POSITION);
+                  robotArm.setGoalPosition(Constants.ArmConstants.ARM_GOAL_POSITION);
                   robotArm.enable();
                 },
                 robotArm));
@@ -77,7 +77,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  robotArm.setGoal(robotArm.decreasedGoal());
+                  robotArm.setGoalPosition(robotArm.decreasedGoal());
                   robotArm.enable();
                 },
                 robotArm));
@@ -88,7 +88,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  robotArm.setGoal(robotArm.increasedGoal());
+                  robotArm.setGoalPosition(robotArm.increasedGoal());
                   robotArm.enable();
                 },
                 robotArm));
