@@ -168,8 +168,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
     DataLogManager.log("Arm Disabled");
   }
 
-  /** Set the goal state for the subsystem and save the value for dashboard display and logging.
-   *  Goal velocity assumed to be zero. */
+  /**
+   * Set the goal state for the subsystem and save the value for dashboard display and logging. Goal
+   * velocity assumed to be zero.
+   */
   public void setGoalPosition(double goal) {
     setGoal(new TrapezoidProfile.State(goal, 0));
     goalPosition = goal;
