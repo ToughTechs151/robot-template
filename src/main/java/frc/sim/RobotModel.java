@@ -17,6 +17,9 @@ public class RobotModel {
   // Works in conjunction with ArmSubsystem
   ArmModel simArm;
 
+  // Differential drive simulation. Works in conjunction with DriveSubsystem
+  DrivetrainModel simDrivetrain;
+
   Random random = new Random();
   private final boolean isReal;
   static final double QUIESCENT_CURRENT_DRAW_A = 2.0; // Misc electronics
@@ -41,6 +44,8 @@ public class RobotModel {
 
     simArm = new ArmModel(robot.getRobotContainer().getArmSubsystem());
 
+    simDrivetrain = new DrivetrainModel(robot.getRobotContainer().getDriveSubsystem());
+
     simpdp = new PDPSim(robot.getRobotContainer().getPdp());
     reset();
   }
@@ -53,10 +58,14 @@ public class RobotModel {
 
     // Update subsystem simulations
     simArm.updateSim();
+    simDrivetrain.updateSim();
 
     // Simulate battery voltage drop based on total simulated current
-    double armCurrent = simArm.getSimCurrent();
-    double[] simCurrents = {armCurrent};
+    double armCurrent = Math.abs(simArm.getSimCurrent());
+    double leftDriveCurrent = Math.abs(simDrivetrain.getLeftSimCurrent());
+    double rightDriveCurrent = Math.abs(simDrivetrain.getRightSimCurrent());
+    double[] simCurrents = {armCurrent, leftDriveCurrent, rightDriveCurrent};
+
     double unloadedVoltage = batteryVoltageV * 0.98 + ((random.nextDouble() / 10) - 0.05);
     double loadedVoltage =
         BatterySim.calculateLoadedBatteryVoltage(
@@ -66,6 +75,10 @@ public class RobotModel {
     simpdp.setVoltage(loadedVoltage);
     simpdp.setCurrent(0, currentDrawA + random.nextDouble());
     simpdp.setCurrent(7, armCurrent);
+    simpdp.setCurrent(10, leftDriveCurrent / 2);
+    simpdp.setCurrent(11, leftDriveCurrent / 2);
+    simpdp.setCurrent(12, rightDriveCurrent / 2);
+    simpdp.setCurrent(13, rightDriveCurrent / 2);
     simpdp.setTemperature(26.5);
   }
 
