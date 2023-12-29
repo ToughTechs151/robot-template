@@ -143,7 +143,6 @@ public class DataLogging {
     if (Constants.LOOP_TIMING_LOG) {
       loopTime.append(Timer.getFPGATimestamp() - startTime);
     }
-
   }
 
   /**
@@ -173,7 +172,6 @@ public class DataLogging {
     pdpWidget.addNumber("PDP Power", pdp::getTotalPower);
 
     drive = robotContainer.getDriveSubsystem();
-
   }
 
   /**
