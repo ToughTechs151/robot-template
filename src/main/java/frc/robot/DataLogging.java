@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveSubsystem;
-
 import java.util.Map;
 
 /** The DataLogging class contains all the logic for using telemetry. */
@@ -137,13 +136,14 @@ public class DataLogging {
           EventImportance.kHigh);
       prevDsConnectState = newDsConnectState;
     }
+
+    // Get the pose from the drivetrain subsystem and update the field display
+    sbField.setRobotPose(drive.getPose());
+
     if (Constants.LOOP_TIMING_LOG) {
       loopTime.append(Timer.getFPGATimestamp() - startTime);
     }
 
-    // Get the pose from the drivetrain subsystem and update the field display
-    sbField.setRobotPose(drive.getPose());
-  
   }
 
   /**
