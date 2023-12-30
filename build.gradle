@@ -219,4 +219,5 @@ spotbugsTest {
     }
 }
 
-// compileJava.dependsOn 'spotlessApply'
+// Run spotlessApply before compiling to fix style errors.
+compileJava.dependsOn 'spotlessApply'
