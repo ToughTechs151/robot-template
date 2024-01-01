@@ -46,8 +46,8 @@ public class RobotContainer {
     // Configure default commands
     // Set the default drive command to split-stick tank drive
     this.robotDrive.setDefaultCommand(
-        // A split-stick arcade command, with left side forward/backward controlled by the left
-        // hand, and right side controlled by the right.
+        // A split-stick tank command, with left side forward/backward controlled by the left
+        // joystick, and right side controlled by the right joystick.
         new RunCommand(
                 () ->
                     this.robotDrive.tankDrive(
@@ -55,7 +55,7 @@ public class RobotContainer {
                         -this.driverController.getRightY(),
                         this.driverController.rightBumper().getAsBoolean()),
                 this.robotDrive)
-            .withName("Drive Tank"));
+            .withName("Drive: Tank"));
   }
 
   /**
@@ -69,7 +69,9 @@ public class RobotContainer {
     driverController
         .a()
         .onTrue(
-            robotArm.moveToPosition(Constants.ArmConstants.ARM_LOW_POSITION).withName("Move Low"));
+            robotArm
+                .moveToPosition(Constants.ArmConstants.ARM_LOW_POSITION)
+                .withName("Arm: Move to Low Position"));
 
     // Move the arm to the high position when the 'B' button is pressed.
     driverController
@@ -77,7 +79,7 @@ public class RobotContainer {
         .onTrue(
             robotArm
                 .moveToPosition(Constants.ArmConstants.ARM_HIGH_POSITION)
-                .withName("Move High"));
+                .withName("Arm: Move to High Position"));
 
     // Shift position down a small amount when the POV Down is pressed.
     driverController.povDown().onTrue(robotArm.shiftDown());
@@ -86,6 +88,8 @@ public class RobotContainer {
     driverController.povUp().onTrue(robotArm.shiftUp());
 
     // Disable the arm controller when the 'X' button is pressed.
+    // NOTE: This is intended for initial arm testing and should be removed in the final robot
+    // to prevent accidental disable resulting in lowering of the arm.
     driverController.x().onTrue(Commands.runOnce(robotArm::disable));
   }
 

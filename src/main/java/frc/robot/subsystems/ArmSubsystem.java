@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
           ArmConstants.DEFAULT_KS_VOLTS,
           ArmConstants.DEFAULT_KG_VOLTS,
           ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD,
-          ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
+          0.0); // Acceleration is not used in this implementation
 
   private double output = 0.0;
   private TrapezoidProfile.State setpoint = new State();
@@ -53,17 +53,20 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
   public ArmSubsystem() {
 
-    // Setup the encoder scale factors and reset encoder to 0
+    // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
+    // arm position will only be correct if the arm is in the starting rest position when the
+    // subsystem is constructed.
     encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
     encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
     encoder.setPosition(0);
 
-    // Configure the motor to use EMF braking when idle and set voltage to 0
+    // Configure the motor to use EMF braking when idle and set voltage to 0.
     motor.setIdleMode(IdleMode.kBrake);
     motor.setVoltage(0.0);
 
+    // Set tolerances that will be used to determine when the arm is at the goal position.
     armController.setTolerance(
-        Constants.ArmConstants.POS_INCREMENT, Constants.ArmConstants.VELOCITY_TOLERANCE);
+        Constants.ArmConstants.POSITION_TOLERANCE, Constants.ArmConstants.VELOCITY_TOLERANCE);
 
     disable();
 
@@ -89,15 +92,24 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
 
   /** Generate the motor command using the PID controller and feedforward. */
   public void useOutput() {
+    // Calculate the next set point along the profile to the goal and the next PID output based
+    // on the set point and current position.
     output = armController.calculate(getMeasurement());
     setpoint = armController.getSetpoint();
 
     if (armEnabled) {
-      // Calculate the feedforward from the setpoint
+      // Calculate the feedforward to move the arm at the desired velocity and offset
+      // the effect of gravity at the desired position. Voltage for acceleration is not
+      // used.
       newFeedforward = feedforward.calculate(setpoint.position, setpoint.velocity);
+
       // Add the feedforward to the PID output to get the motor output
       voltageCommand = output + newFeedforward;
+
     } else {
+      // If the arm isn't enabled, set the motor command to 0. In this state the arm
+      // will move down until it hits the rest position. Motor EMF braking will slow movement
+      // if that mode is used.
       voltageCommand = 0;
     }
     motor.setVoltage(voltageCommand);
@@ -110,12 +122,15 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
         .until(this::atGoalPosition);
   }
 
-  /** Returns a Command that holds the arm position. */
+  /**
+   * Returns a Command that holds the arm at the last goal position using the PID Controller driving
+   * the motor.
+   */
   public Command holdPosition() {
-    return run(this::useOutput).withName("Hold Position");
+    return run(this::useOutput).withName("Arm: Hold Position");
   }
 
-  /** Returns a Command that shifts position up. */
+  /** Returns a Command that shifts arm position up by a fixed increment. */
   public Command shiftUp() {
     return runOnce(
             () ->
@@ -123,10 +138,10 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
                     armController.getGoal().position + Constants.ArmConstants.POS_INCREMENT))
         .andThen(run(this::useOutput))
         .until(this::atGoalPosition)
-        .withName("Shift Up");
+        .withName("Arm: Shift Position Up");
   }
 
-  /** Returns a Command that shifts position down. */
+  /** Returns a Command that shifts arm position down by a fixed increment. */
   public Command shiftDown() {
     return runOnce(
             () ->
@@ -134,11 +149,12 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
                     armController.getGoal().position - Constants.ArmConstants.POS_INCREMENT))
         .andThen(run(this::useOutput))
         .until(this::atGoalPosition)
-        .withName("Shift Down");
+        .withName("Arm: Shift Position Down");
   }
 
   /**
-   * Set the goal state for the subsystem limited to allowable range. Goal velocity is set to zero.
+   * Set the goal state for the subsystem, limited to allowable range. Goal velocity is set to zero.
+   * The ProfiledPIDController drives the arm to this position and holds it there.
    */
   private void setGoalPosition(double goal) {
     armController.setGoal(
@@ -146,23 +162,30 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
             MathUtil.clamp(
                 goal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS),
             0));
+
+    // Call enable() to configure and start the controller in case it is not already enabled.
     enable();
   }
 
-  /** Returns whether the arm has reached the goal position. */
+  /** Returns whether the arm has reached the goal position and velocity is within limits. */
   public boolean atGoalPosition() {
     return armController.atGoal();
   }
 
-  /** Enables the PID control. Resets the controller. */
+  /**
+   * Sets up the PID controller to move the arm to the defined goal position and hold at that
+   * position. Preferences for tuning the controller are applied.
+   */
   private void enable() {
 
     // Don't enable if already enabled since this may cause control transients
     if (!armEnabled) {
-      armEnabled = true;
       loadPreferences();
-      armController.reset(getMeasurement());
       setDefaultCommand(holdPosition());
+
+      // Reset the PID controller to clear any previous state
+      armController.reset(getMeasurement());
+      armEnabled = true;
 
       DataLogManager.log(
           "Arm Enabled - kP="
@@ -178,7 +201,10 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     }
   }
 
-  /** Disables the PID control. Sets output to zero. */
+  /**
+   * Disables the PID control of the arm. Sets motor output to zero. NOTE: In this state the arm
+   * will move until it hits the stop. Using EMF braking mode with motor will slow this movement.
+   */
   public void disable() {
 
     // Clear the enabled flag and call useOutput to zero the motor command
@@ -194,9 +220,10 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     DataLogManager.log("Arm Disabled");
   }
 
-  /** Returns the Arm position for PID measurement (Radians relative to horizontal). */
+  /** Returns the Arm position for PID control and logging (Units are Radians from horizontal). */
   private double getMeasurement() {
-    // Add offset for starting zero point
+    // Add the offset from the starting point. The arm must be at this position at startup for
+    // the relative encoder to provide a correct position.
     return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS;
   }
 
@@ -205,7 +232,10 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     return voltageCommand;
   }
 
-  /** Put tunable values in Preferences table if the keys don't already exist. */
+  /**
+   * Put tunable values in the Preferences table using default values, if the keys don't already
+   * exist.
+   */
   private void initPreferences() {
 
     // Preferences for PID controller
@@ -227,14 +257,11 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
         Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
     Preferences.initDouble(
         Constants.ArmConstants.ARM_KV_KEY, Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    Preferences.initDouble(
-        Constants.ArmConstants.ARM_KA_KEY,
-        Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
   }
 
   /**
    * Load Preferences for values that can be tuned at runtime. This should only be called when the
-   * controller is disabled, for example from enable()
+   * controller is disabled - for example from enable().
    */
   private void loadPreferences() {
 
@@ -265,13 +292,11 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KV_KEY,
             Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    double accelerationGain =
-        Preferences.getDouble(
-            Constants.ArmConstants.ARM_KA_KEY,
-            Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
-    feedforward = new ArmFeedforward(staticGain, gravityGain, velocityGain, accelerationGain);
+
+    feedforward = new ArmFeedforward(staticGain, gravityGain, velocityGain, 0);
   }
 
+  /** Close any objects that support it. */
   @Override
   public void close() {
     motor.close();
