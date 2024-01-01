@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
@@ -65,65 +64,28 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Move the arm to neutral (starting) position when the 'A' button is pressed.
+    // Move the arm to the low position when the 'A' button is pressed.
     driverController
         .a()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(Constants.ArmConstants.ARM_OFFSET_RADS);
-                  robotArm.enable();
-                },
-                robotArm));
+            robotArm.moveToPosition(Constants.ArmConstants.ARM_LOW_POSITION).withName("Move Low"));
 
-    // Move the arm to the goal position when the 'B' button is pressed.
+    // Move the arm to the high position when the 'B' button is pressed.
     driverController
         .b()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(Constants.ArmConstants.ARM_GOAL_POSITION);
-                  robotArm.enable();
-                },
-                robotArm));
+            robotArm
+                .moveToPosition(Constants.ArmConstants.ARM_HIGH_POSITION)
+                .withName("Move High"));
 
     // Shift position down a small amount when the POV Down is pressed.
-    driverController
-        .povDown()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(robotArm.decreasedGoal());
-                  robotArm.enable();
-                },
-                robotArm));
+    driverController.povDown().onTrue(robotArm.shiftDown());
 
     // Shift position up a small amount when the POV Down is pressed.
-    driverController
-        .povUp()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(robotArm.increasedGoal());
-                  robotArm.enable();
-                },
-                robotArm));
-
-    /* Reset the encoders to zero when the 'Y' button is pressed.
-    Should only be used when arm is in neutral (starting) position. */
-    driverController.y().onTrue(Commands.runOnce(robotArm::resetPosition));
+    driverController.povUp().onTrue(robotArm.shiftUp());
 
     // Disable the arm controller when the 'X' button is pressed.
     driverController.x().onTrue(Commands.runOnce(robotArm::disable));
-  }
-
-  /**
-   * Disables all ProfiledPIDSubsystem and PIDSubsystem instances. This should be called on robot
-   * disable to prevent integral windup.
-   */
-  public void disablePIDSubsystems() {
-    robotArm.disable();
-    DataLogManager.log("disablePIDSubsystems");
   }
 
   /**

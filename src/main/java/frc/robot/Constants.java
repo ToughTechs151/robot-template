@@ -115,8 +115,11 @@ public final class Constants {
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-45);
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(120);
     public static final double ARM_OFFSET_RADS = MIN_ANGLE_RADS;
-    public static final double ARM_GOAL_POSITION = Units.degreesToRadians(45);
+    public static final double ARM_HIGH_POSITION = Units.degreesToRadians(45);
+    public static final double ARM_LOW_POSITION = Units.degreesToRadians(-40);
     public static final double POS_INCREMENT = Units.degreesToRadians(2); // For small adjustments
+    public static final double POSITION_TOLERANCE = Units.degreesToRadians(1);
+    public static final double VELOCITY_TOLERANCE = Units.degreesToRadians(1);
   }
 
   /** Constants used for assigning operator input. */
