@@ -94,10 +94,13 @@ public class DriveSubsystem extends SubsystemBase {
     this.rearLeftEncoder.setVelocityConversionFactor(DriveConstants.ENCODER_VELOCITY_CONVERSION);
     this.frontRightEncoder.setVelocityConversionFactor(DriveConstants.ENCODER_VELOCITY_CONVERSION);
     this.rearRightEncoder.setVelocityConversionFactor(DriveConstants.ENCODER_VELOCITY_CONVERSION);
+
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     rightMotorControllerGroup.setInverted(true);
+
+    SmartDashboard.putData(this);
     SmartDashboard.putData(this.drive);
   }
 
