@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +40,7 @@ public class DataLogging {
   private ShuffleboardTab sbDriverTab;
   private Field2d sbField;
   private DriveSubsystem drive;
+  private ArmSubsystem arm;
 
   private DataLogging() {
     // Starts recording to data log
@@ -175,6 +177,12 @@ public class DataLogging {
 
     PowerDistribution pdp;
     pdp = robotContainer.getPdp();
+    drive = robotContainer.getDriveSubsystem();
+    arm = robotContainer.getArmSubsystem();
+
+    sbCommandsTab.add(CommandScheduler.getInstance()).withSize(3, 2);
+    sbCommandsTab.add(arm).withSize(3, 1);
+    sbCommandsTab.add(drive).withSize(3, 1);
 
     // Add hardware sendables here
     // sbRobotTab.add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistribution)
@@ -191,8 +199,6 @@ public class DataLogging {
     pdpWidget.addNumber("PDP Current", pdp::getTotalCurrent);
     pdpWidget.addNumber("PDP Energy", pdp::getTotalEnergy);
     pdpWidget.addNumber("PDP Power", pdp::getTotalPower);
-
-    drive = robotContainer.getDriveSubsystem();
   }
 
   /**

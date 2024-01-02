@@ -50,12 +50,13 @@ public class RobotContainer {
         // A split-stick arcade command, with left side forward/backward controlled by the left
         // hand, and right side controlled by the right.
         new RunCommand(
-            () ->
-                this.robotDrive.tankDrive(
-                    -this.driverController.getLeftY(),
-                    -this.driverController.getRightY(),
-                    this.driverController.rightBumper().getAsBoolean()),
-            this.robotDrive));
+                () ->
+                    this.robotDrive.tankDrive(
+                        -this.driverController.getLeftY(),
+                        -this.driverController.getRightY(),
+                        this.driverController.rightBumper().getAsBoolean()),
+                this.robotDrive)
+            .withName("Drive Tank"));
   }
 
   /**
@@ -69,52 +70,65 @@ public class RobotContainer {
     driverController
         .a()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(Constants.ArmConstants.ARM_OFFSET_RADS);
-                  robotArm.enable();
-                },
-                robotArm));
+            Commands.startEnd(
+                    () -> {
+                      robotArm.setGoalPosition(Constants.ArmConstants.ARM_OFFSET_RADS);
+                      robotArm.enable();
+                    },
+                    () -> {},
+                    robotArm)
+                .withName("Arm to Start"));
 
     // Move the arm to the goal position when the 'B' button is pressed.
     driverController
         .b()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(Constants.ArmConstants.ARM_GOAL_POSITION);
-                  robotArm.enable();
-                },
-                robotArm));
+            Commands.startEnd(
+                    () -> {
+                      robotArm.setGoalPosition(Constants.ArmConstants.ARM_GOAL_POSITION);
+                      robotArm.enable();
+                    },
+                    () -> {},
+                    robotArm)
+                .withName("Arm to Up Position"));
 
     // Shift position down a small amount when the POV Down is pressed.
     driverController
         .povDown()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(robotArm.decreasedGoal());
-                  robotArm.enable();
-                },
-                robotArm));
+            Commands.startEnd(
+                    () -> {
+                      robotArm.setGoalPosition(robotArm.decreasedGoal());
+                      robotArm.enable();
+                    },
+                    () -> {},
+                    robotArm)
+                .withName("Arm Shift Down"));
 
     // Shift position up a small amount when the POV Down is pressed.
     driverController
         .povUp()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  robotArm.setGoalPosition(robotArm.increasedGoal());
-                  robotArm.enable();
-                },
-                robotArm));
+            Commands.startEnd(
+                    () -> {
+                      robotArm.setGoalPosition(robotArm.increasedGoal());
+                      robotArm.enable();
+                    },
+                    () -> {},
+                    robotArm)
+                .withName("Arm Shift Up"));
 
     /* Reset the encoders to zero when the 'Y' button is pressed.
     Should only be used when arm is in neutral (starting) position. */
-    driverController.y().onTrue(Commands.runOnce(robotArm::resetPosition));
+    driverController
+        .y()
+        .onTrue(
+            Commands.startEnd(robotArm::resetPosition, () -> {}, robotArm).withName("Arm Reset"));
 
     // Disable the arm controller when the 'X' button is pressed.
-    driverController.x().onTrue(Commands.runOnce(robotArm::disable));
+    driverController
+        .x()
+        .onTrue(Commands.startEnd(robotArm::disable, () -> {}, robotArm).withName("Arm Disable"));
   }
 
   /**
