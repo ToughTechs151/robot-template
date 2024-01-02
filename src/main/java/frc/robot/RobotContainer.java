@@ -113,7 +113,7 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to get the Arm Subsystem
+   * Use this to get the Arm Subsystem.
    *
    * @return the command to run in autonomous
    */
@@ -122,7 +122,7 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to get the Drivetrain Subsystem
+   * Use this to get the Drivetrain Subsystem.
    *
    * @return the Drivetrain Subsystem
    */
