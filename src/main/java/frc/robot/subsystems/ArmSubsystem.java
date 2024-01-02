@@ -16,185 +16,224 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 /** A robot arm subsystem that moves with a motion profile. */
-public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable {
+public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private final CANSparkMax motor = new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
   private final RelativeEncoder encoder = motor.getEncoder();
+
+  private ProfiledPIDController armController =
+      new ProfiledPIDController(
+          Constants.ArmConstants.DEFAULT_ARM_KP,
+          0,
+          0,
+          new TrapezoidProfile.Constraints(
+              ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC,
+              ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC));
 
   private ArmFeedforward feedforward =
       new ArmFeedforward(
           ArmConstants.DEFAULT_KS_VOLTS,
           ArmConstants.DEFAULT_KG_VOLTS,
           ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD,
-          ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
+          0.0); // Acceleration is not used in this implementation
 
+  private double output = 0.0;
+  private TrapezoidProfile.State setpoint = new State();
+  private double newFeedforward = 0;
+  private boolean armEnabled;
   private double voltageCommand = 0.0;
-  private double goalPosition;
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
   public ArmSubsystem() {
-    super(
-        new ProfiledPIDController(
-            Constants.ArmConstants.DEFAULT_ARM_KP,
-            0,
-            0,
-            new TrapezoidProfile.Constraints(
-                ArmConstants.DEFAULT_MAX_VELOCITY_RAD_PER_SEC,
-                ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC)),
-        0);
 
-    // Setup the encoder scale factors and reset encoder to 0
+    // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
+    // arm position will only be correct if the arm is in the starting rest position when the
+    // subsystem is constructed.
     encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
     encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
-    resetPosition();
+    encoder.setPosition(0);
 
-    // Configure the motor to use EMF braking when idle and set voltage to 0
+    // Configure the motor to use EMF braking when idle and set voltage to 0.
     motor.setIdleMode(IdleMode.kBrake);
     motor.setVoltage(0.0);
 
-    /* Assume the arm is starting in the back rest position, so initialize goal to this point so no
-    movement is needed when enabled */
-    setGoalPosition(ArmConstants.ARM_OFFSET_RADS);
+    // Set tolerances that will be used to determine when the arm is at the goal position.
+    armController.setTolerance(
+        Constants.ArmConstants.POSITION_TOLERANCE, Constants.ArmConstants.VELOCITY_TOLERANCE);
 
-    setupShuffleboard();
+    disable();
 
     initPreferences();
   }
 
   @Override
   public void periodic() {
-    if (m_enabled) {
-      useOutput(m_controller.calculate(getMeasurement()), m_controller.getSetpoint());
-    }
-    updateShuffleboard();
+
+    SmartDashboard.putBoolean("Arm Enabled", armEnabled);
+    SmartDashboard.putNumber("Arm Goal", Units.radiansToDegrees(armController.getGoal().position));
+    SmartDashboard.putNumber("Arm Angle", Units.radiansToDegrees(getMeasurement()));
+    SmartDashboard.putNumber("Arm Velocity", Units.radiansToDegrees(encoder.getVelocity()));
+    SmartDashboard.putNumber("Arm Voltage", voltageCommand);
+    SmartDashboard.putNumber("Arm Current", motor.getOutputCurrent());
+    SmartDashboard.putNumber("Arm Feedforward", newFeedforward);
+    SmartDashboard.putNumber("Arm PID output", output);
+    SmartDashboard.putNumber("Arm SetPt Pos", Units.radiansToDegrees(setpoint.position));
+    SmartDashboard.putNumber("Arm SetPt Vel", Units.radiansToDegrees(setpoint.velocity));
   }
 
-  // Generate the motor command using the PID controller and feedforward
-  @Override
-  public void useOutput(double output, TrapezoidProfile.State setpoint) {
-    double newFeedforward = 0;
-    if (m_enabled) {
-      // Calculate the feedforward from the setpoint
+  /** Generate the motor command using the PID controller and feedforward. */
+  public void useOutput() {
+    // Calculate the next set point along the profile to the goal and the next PID output based
+    // on the set point and current position.
+    output = armController.calculate(getMeasurement());
+    setpoint = armController.getSetpoint();
+
+    if (armEnabled) {
+      // Calculate the feedforward to move the arm at the desired velocity and offset
+      // the effect of gravity at the desired position. Voltage for acceleration is not
+      // used.
       newFeedforward = feedforward.calculate(setpoint.position, setpoint.velocity);
+
       // Add the feedforward to the PID output to get the motor output
       voltageCommand = output + newFeedforward;
+
     } else {
+      // If the arm isn't enabled, set the motor command to 0. In this state the arm
+      // will move down until it hits the rest position. Motor EMF braking will slow movement
+      // if that mode is used.
       voltageCommand = 0;
     }
     motor.setVoltage(voltageCommand);
-
-    SmartDashboard.putNumber("feedforward", newFeedforward);
-    SmartDashboard.putNumber("output", output);
-    SmartDashboard.putNumber("SetPt Pos", Units.radiansToDegrees(setpoint.position));
-    SmartDashboard.putNumber("SetPt Vel", Units.radiansToDegrees(setpoint.velocity));
   }
 
-  @Override
-  // Arm position for PID measurement (Radians relative to horizontal)
-  public double getMeasurement() {
-    // Add offset for starting zero point
-    return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS;
-  }
-
-  // Motor Commanded Voltage
-  public double getVoltageCommand() {
-    return voltageCommand;
+  /** Returns a Command that moves the arm to a new position. */
+  public Command moveToPosition(double goal) {
+    return runOnce(() -> setGoalPosition(goal))
+        .andThen(run(this::useOutput))
+        .until(this::atGoalPosition);
   }
 
   /**
-   * Reset the Arm encoder to zero. Should only be used when the arm is in the neutral offset
-   * position. This method is only allowed when the arm is disabled.
+   * Returns a Command that holds the arm at the last goal position using the PID Controller driving
+   * the motor.
    */
-  public void resetPosition() {
-
-    if (m_enabled) {
-      DataLogManager.log("Warning: Arm is enabled - encoder position not reset.");
-    } else {
-      encoder.setPosition(0);
-    }
+  public Command holdPosition() {
+    return run(this::useOutput).withName("Arm: Hold Position");
   }
 
-  /** Calculate increased goal, limited to allowed range. */
-  public double increasedGoal() {
-    double newGoal = m_controller.getGoal().position + Constants.ArmConstants.POS_INCREMENT;
-    return MathUtil.clamp(
-        newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
+  /** Returns a Command that shifts arm position up by a fixed increment. */
+  public Command shiftUp() {
+    return runOnce(
+            () ->
+                setGoalPosition(
+                    armController.getGoal().position + Constants.ArmConstants.POS_INCREMENT))
+        .andThen(run(this::useOutput))
+        .until(this::atGoalPosition)
+        .withName("Arm: Shift Position Up");
   }
 
-  /** Calculate decreased goal, limited to allowed range. */
-  public double decreasedGoal() {
-    double newGoal = m_controller.getGoal().position - Constants.ArmConstants.POS_INCREMENT;
-    return MathUtil.clamp(
-        newGoal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS);
+  /** Returns a Command that shifts arm position down by a fixed increment. */
+  public Command shiftDown() {
+    return runOnce(
+            () ->
+                setGoalPosition(
+                    armController.getGoal().position - Constants.ArmConstants.POS_INCREMENT))
+        .andThen(run(this::useOutput))
+        .until(this::atGoalPosition)
+        .withName("Arm: Shift Position Down");
   }
 
-  /** Enables the PID control. Resets the controller. */
-  @Override
-  public void enable() {
+  /**
+   * Set the goal state for the subsystem, limited to allowable range. Goal velocity is set to zero.
+   * The ProfiledPIDController drives the arm to this position and holds it there.
+   */
+  private void setGoalPosition(double goal) {
+    armController.setGoal(
+        new TrapezoidProfile.State(
+            MathUtil.clamp(
+                goal, Constants.ArmConstants.MIN_ANGLE_RADS, Constants.ArmConstants.MAX_ANGLE_RADS),
+            0));
+
+    // Call enable() to configure and start the controller in case it is not already enabled.
+    enable();
+  }
+
+  /** Returns whether the arm has reached the goal position and velocity is within limits. */
+  public boolean atGoalPosition() {
+    return armController.atGoal();
+  }
+
+  /**
+   * Sets up the PID controller to move the arm to the defined goal position and hold at that
+   * position. Preferences for tuning the controller are applied.
+   */
+  private void enable() {
 
     // Don't enable if already enabled since this may cause control transients
-    if (!m_enabled) {
-      m_enabled = true;
+    if (!armEnabled) {
       loadPreferences();
-      m_controller.reset(getMeasurement());
+      setDefaultCommand(holdPosition());
+
+      // Reset the PID controller to clear any previous state
+      armController.reset(getMeasurement());
+      armEnabled = true;
+
       DataLogManager.log(
           "Arm Enabled - kP="
-              + m_controller.getP()
+              + armController.getP()
               + " kI="
-              + m_controller.getI()
+              + armController.getI()
               + " kD="
-              + m_controller.getD()
+              + armController.getD()
               + " PosGoal="
-              + Units.radiansToDegrees(goalPosition)
+              + Units.radiansToDegrees(armController.getGoal().position)
               + " CurPos="
               + Units.radiansToDegrees(getMeasurement()));
     }
   }
 
-  /** Disables the PID control. Sets output to zero. */
-  @Override
+  /**
+   * Disables the PID control of the arm. Sets motor output to zero. NOTE: In this state the arm
+   * will move until it hits the stop. Using EMF braking mode with motor will slow this movement.
+   */
   public void disable() {
 
-    // Set goal to current position to minimize movement on re-enable and reset output
-    m_enabled = false;
-    setGoalPosition(getMeasurement());
-    useOutput(0, new State());
+    // Clear the enabled flag and call useOutput to zero the motor command
+    armEnabled = false;
+    useOutput();
+
+    // Remove the default command and cancel any command that is active
+    removeDefaultCommand();
+    Command currentCommand = CommandScheduler.getInstance().requiring(this);
+    if (currentCommand != null) {
+      CommandScheduler.getInstance().cancel(currentCommand);
+    }
     DataLogManager.log("Arm Disabled");
   }
 
+  /** Returns the Arm position for PID control and logging (Units are Radians from horizontal). */
+  private double getMeasurement() {
+    // Add the offset from the starting point. The arm must be at this position at startup for
+    // the relative encoder to provide a correct position.
+    return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS;
+  }
+
+  /** Returns the Motor Commanded Voltage. */
+  public double getVoltageCommand() {
+    return voltageCommand;
+  }
+
   /**
-   * Set the goal state for the subsystem and save the value for dashboard display and logging. Goal
-   * velocity assumed to be zero.
+   * Put tunable values in the Preferences table using default values, if the keys don't already
+   * exist.
    */
-  public void setGoalPosition(double goal) {
-    setGoal(new TrapezoidProfile.State(goal, 0));
-    goalPosition = goal;
-  }
-
-  /** Shuffleboard settings that only need to done during initialization. */
-  private void setupShuffleboard() {
-    // Put shuffleboard initialization here
-  }
-
-  /** Update Shuffleboard values (call periodically). */
-  public void updateShuffleboard() {
-
-    SmartDashboard.putBoolean("Arm Enabled", m_enabled);
-    SmartDashboard.putNumber("Arm Goal", Units.radiansToDegrees(goalPosition));
-    SmartDashboard.putNumber("Measured Angle", Units.radiansToDegrees(getMeasurement()));
-    SmartDashboard.putNumber("Arm Velocity", Units.radiansToDegrees(encoder.getVelocity()));
-    SmartDashboard.putNumber("Motor Voltage", voltageCommand);
-    SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage()); // sim
-    SmartDashboard.putNumber("Motor Current", motor.getOutputCurrent());
-  }
-
-  /** Put tunable values in Preferences table if the keys don't already exist. */
   private void initPreferences() {
 
     // Preferences for PID controller
@@ -216,19 +255,16 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
         Constants.ArmConstants.ARM_KG_KEY, Constants.ArmConstants.DEFAULT_KG_VOLTS);
     Preferences.initDouble(
         Constants.ArmConstants.ARM_KV_KEY, Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    Preferences.initDouble(
-        Constants.ArmConstants.ARM_KA_KEY,
-        Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
   }
 
   /**
    * Load Preferences for values that can be tuned at runtime. This should only be called when the
-   * controller is disabled, for example from enable()
+   * controller is disabled - for example from enable().
    */
   private void loadPreferences() {
 
     // Read Preferences for PID controller
-    m_controller.setP(
+    armController.setP(
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KP_KEY, Constants.ArmConstants.DEFAULT_ARM_KP));
 
@@ -241,7 +277,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
         Preferences.getDouble(
             Constants.ArmConstants.ARM_ACCELERATION_MAX_KEY,
             Constants.ArmConstants.DEFAULT_MAX_ACCELERATION_RAD_PER_SEC);
-    m_controller.setConstraints(new TrapezoidProfile.Constraints(velocityMax, accelerationMax));
+    armController.setConstraints(new TrapezoidProfile.Constraints(velocityMax, accelerationMax));
 
     // Read Preferences for Feedforward and create a new instance
     double staticGain =
@@ -254,13 +290,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements AutoCloseable 
         Preferences.getDouble(
             Constants.ArmConstants.ARM_KV_KEY,
             Constants.ArmConstants.DEFAULT_KV_VOLTS_PER_SEC_PER_RAD);
-    double accelerationGain =
-        Preferences.getDouble(
-            Constants.ArmConstants.ARM_KA_KEY,
-            Constants.ArmConstants.DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD);
-    feedforward = new ArmFeedforward(staticGain, gravityGain, velocityGain, accelerationGain);
+
+    feedforward = new ArmFeedforward(staticGain, gravityGain, velocityGain, 0);
   }
 
+  /** Close any objects that support it. */
   @Override
   public void close() {
     motor.close();

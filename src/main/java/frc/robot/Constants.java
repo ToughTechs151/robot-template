@@ -100,8 +100,6 @@ public final class Constants {
     public static final double DEFAULT_KG_VOLTS = 1.25;
     public static final String ARM_KV_KEY = "ArmKV"; // Velocity gain
     public static final double DEFAULT_KV_VOLTS_PER_SEC_PER_RAD = 0.8;
-    public static final String ARM_KA_KEY = "ArmKA"; // Acceleration gain
-    public static final double DEFAULT_KA_VOLTS_PER_SEC_SQUARED_PER_RAD = 0.05;
     public static final String ARM_VELOCITY_MAX_KEY = "ArmVelocityMax";
     public static final double DEFAULT_MAX_VELOCITY_RAD_PER_SEC = Units.degreesToRadians(90);
     public static final String ARM_ACCELERATION_MAX_KEY = "ArmAccelerationMax";
@@ -115,8 +113,11 @@ public final class Constants {
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-45);
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(120);
     public static final double ARM_OFFSET_RADS = MIN_ANGLE_RADS;
-    public static final double ARM_GOAL_POSITION = Units.degreesToRadians(45);
+    public static final double ARM_HIGH_POSITION = Units.degreesToRadians(45);
+    public static final double ARM_LOW_POSITION = Units.degreesToRadians(-40);
     public static final double POS_INCREMENT = Units.degreesToRadians(2); // For small adjustments
+    public static final double POSITION_TOLERANCE = Units.degreesToRadians(1);
+    public static final double VELOCITY_TOLERANCE = Units.degreesToRadians(1);
   }
 
   /** Constants used for assigning operator input. */
