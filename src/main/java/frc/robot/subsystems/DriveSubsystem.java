@@ -100,7 +100,6 @@ public class DriveSubsystem extends SubsystemBase {
     // gearbox is constructed, you might have to invert the left side instead.
     rightMotorControllerGroup.setInverted(true);
 
-    SmartDashboard.putData(this);
     SmartDashboard.putData(this.drive);
   }
 

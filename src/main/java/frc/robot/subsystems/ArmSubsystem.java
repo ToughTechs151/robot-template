@@ -71,8 +71,6 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     disable();
 
     initPreferences();
-
-    SmartDashboard.putData(this);
   }
 
   @Override
