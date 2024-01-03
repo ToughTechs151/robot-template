@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -88,7 +89,7 @@ import frc.robot.Constants.ArmConstants;
  *   - {@code private double newFeedforward}: The calculated feedforward value.
  *   - {@code private boolean armEnabled}: A flag indicating whether the arm is enabled.
  *   - {@code private double voltageCommand}: The motor commanded voltage.
- *</pre>
+ * </pre>
  */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private final CANSparkMax motor;
@@ -181,10 +182,20 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /** Returns a Command that moves the arm to a new position. */
-  public Command moveToPosition(double goal) {
+  public Command moveToPositionOrig(double goal) {
     return runOnce(() -> setGoalPosition(goal))
         .andThen(run(this::useOutput))
         .until(this::atGoalPosition);
+  }
+
+  /** Returns a Command that moves the arm to a new position. */
+  public Command moveToPosition(double goal) {
+    return new FunctionalCommand(
+        () -> setGoalPosition(goal),
+        this::useOutput,
+        interrupted -> {},
+        this::atGoalPosition,
+        this);
   }
 
   /**
@@ -286,7 +297,7 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   }
 
   /** Returns the Arm position for PID control and logging (Units are Radians from horizontal). */
-  private double getMeasurement() {
+  public double getMeasurement() {
     // Add the offset from the starting point. The arm must be at this position at startup for
     // the relative encoder to provide a correct position.
     return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS;
