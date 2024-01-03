@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -23,10 +22,77 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
-/** A robot arm subsystem that moves with a motion profile. */
+/**
+ * The {@code ArmSubsystem} class is a subsystem that controls the movement of an arm using a
+ * Profiled PID Controller. It uses a CANSparkMax motor and a RelativeEncoder to measure the arm's
+ * position. The class provides methods to move the arm to a specific position, hold the arm at the
+ * current position, and shift the arm's position up or down by a fixed increment.
+ *
+ * <p>Example Usage:
+ *
+ * <pre>{@code
+ * // Create a new instance of ArmSubsystem
+ * CANSparkMax motor = new CANSparkMax(1, MotorType.kBrushless);
+ * ArmSubsystem armSubsystem = new ArmSubsystem(motor);
+ *
+ * // Move the arm to a specific position
+ * Command moveToPositionCommand = armSubsystem.moveToPosition(90.0);
+ * moveToPositionCommand.schedule();
+ *
+ * // Hold the arm at the current position
+ * Command holdPositionCommand = armSubsystem.holdPosition();
+ * holdPositionCommand.schedule();
+ *
+ * // Shift the arm's position up by a fixed increment
+ * Command shiftUpCommand = armSubsystem.shiftUp();
+ * shiftUpCommand.schedule();
+ *
+ * // Shift the arm's position down by a fixed increment
+ * Command shiftDownCommand = armSubsystem.shiftDown();
+ * shiftDownCommand.schedule();
+ * }
+ *
+ * Code Analysis:
+ * - Main functionalities:
+ *   - Control the movement of an arm using a Profiled PID Controller
+ *   - Move the arm to a specific position
+ *   - Hold the arm at the current position
+ *   - Shift the arm's position up or down by a fixed increment
+ * - Methods:
+ *   - {@code periodic()}: Updates the SmartDashboard with information about the arm's state.
+ *   - {@code useOutput()}: Generates the motor command using the PID controller and feedforward.
+ *   - {@code moveToPosition(double goal)}: Returns a Command that moves the arm to a new position.
+ *   - {@code holdPosition()}: Returns a Command that holds the arm at the last goal position.
+ *   - {@code shiftUp()}: Returns a Command that shifts the arm's position up by a fixed increment.
+ *   - {@code shiftDown()}: Returns a Command that shifts the arm's position down by a fixed
+ *     increment.
+ *   - {@code setGoalPosition(double goal)}: Sets the goal state for the subsystem.
+ *   - {@code atGoalPosition()}: Returns whether the arm has reached the goal position.
+ *   - {@code enable()}: Enables the PID control of the arm.
+ *   - {@code disable()}: Disables the PID control of the arm.
+ *   - {@code getMeasurement()}: Returns the arm position for PID control and logging.
+ *   - {@code getVoltageCommand()}: Returns the motor commanded voltage.
+ *   - {@code initPreferences()}: Initializes the preferences for tuning the controller.
+ *   - {@code loadPreferences()}: Loads the preferences for tuning the controller.
+ *   - {@code close()}: Closes any objects that support it.
+ * - Fields:
+ *   - {@code private final CANSparkMax motor}: The motor used to control the arm.
+ *   - {@code private final RelativeEncoder encoder}: The encoder used to measure the arm's
+ *     position.
+ *   - {@code private ProfiledPIDController armController}: The PID controller used to control the
+ *     arm's movement.
+ *   - {@code private ArmFeedforward feedforward}: The feedforward controller used to calculate the
+ *     motor output.
+ *   - {@code private double output}: The output of the PID controller.
+ *   - {@code private TrapezoidProfile.State setpoint}: The setpoint of the PID controller.
+ *   - {@code private double newFeedforward}: The calculated feedforward value.
+ *   - {@code private boolean armEnabled}: A flag indicating whether the arm is enabled.
+ *   - {@code private double voltageCommand}: The motor commanded voltage.
+ *</pre>
+ */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
-  private final CANSparkMax motor = new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
-  private final RelativeEncoder encoder = motor.getEncoder();
+  private final CANSparkMax motor;
+  private final RelativeEncoder encoder;
 
   private ProfiledPIDController armController =
       new ProfiledPIDController(
@@ -51,8 +117,9 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private double voltageCommand = 0.0;
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
-  public ArmSubsystem() {
-
+  public ArmSubsystem(CANSparkMax motor) {
+    this.motor = motor;
+    this.encoder = motor.getEncoder();
     // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
     // arm position will only be correct if the arm is in the starting rest position when the
     // subsystem is constructed.
