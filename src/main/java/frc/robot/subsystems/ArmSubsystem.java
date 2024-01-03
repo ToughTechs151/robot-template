@@ -64,7 +64,8 @@ import frc.robot.Constants.ArmConstants;
  *   - {@code moveToPosition(double goal)}: Returns a Command that moves the arm to a new position.
  *   - {@code holdPosition()}: Returns a Command that holds the arm at the last goal position.
  *   - {@code shiftUp()}: Returns a Command that shifts the arm's position up by a fixed increment.
- *   - {@code shiftDown()}: Returns a Command that shifts the arm's position down by a fixed increment.
+ *   - {@code shiftDown()}: Returns a Command that shifts the arm's position down by a fixed
+ *     increment.
  *   - {@code setGoalPosition(double goal)}: Sets the goal state for the subsystem.
  *   - {@code atGoalPosition()}: Returns whether the arm has reached the goal position.
  *   - {@code enable()}: Enables the PID control of the arm.
@@ -76,7 +77,8 @@ import frc.robot.Constants.ArmConstants;
  *   - {@code close()}: Closes any objects that support it.
  * - Fields:
  *   - {@code private final CANSparkMax motor}: The motor used to control the arm.
- *   - {@code private final RelativeEncoder encoder}: The encoder used to measure the arm's position.
+ *   - {@code private final RelativeEncoder encoder}: The encoder used to measure the arm's
+ *     position.
  *   - {@code private ProfiledPIDController armController}: The PID controller used to control the
  *     arm's movement.
  *   - {@code private ArmFeedforward feedforward}: The feedforward controller used to calculate the
@@ -86,7 +88,7 @@ import frc.robot.Constants.ArmConstants;
  *   - {@code private double newFeedforward}: The calculated feedforward value.
  *   - {@code private boolean armEnabled}: A flag indicating whether the arm is enabled.
  *   - {@code private double voltageCommand}: The motor commanded voltage.
- * </pre>
+ *</pre>
  */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private final CANSparkMax motor;
