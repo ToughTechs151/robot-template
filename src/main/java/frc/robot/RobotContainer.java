@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -25,17 +28,24 @@ import frc.robot.subsystems.ExampleSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand autoCommand =
-      new ExampleCommand("ExampleCommand", this.exampleSubsystem);
+  // First we do things that are in all Robots.
   private PowerDistribution pdp = new PowerDistribution();
-  private final ArmSubsystem robotArm = new ArmSubsystem();
-  private final DriveSubsystem robotDrive = new DriveSubsystem();
-
   // The driver's controller
   private CommandXboxController driverController =
       new CommandXboxController(OIConstants.DRIVER_CONTROLLER_PORT);
+
+  // Now all the subsystems.
+  // The Example.
+  private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+  private final ExampleCommand autoCommand =
+      new ExampleCommand("ExampleCommand", this.exampleSubsystem);
+  // The Arm.
+  private final CANSparkMax armMotor =
+      new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
+  private final ArmSubsystem robotArm = new ArmSubsystem(armMotor);
+  // The drive.
+  private final DriveSubsystem robotDrive = new DriveSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

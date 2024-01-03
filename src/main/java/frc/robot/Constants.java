@@ -53,6 +53,7 @@ public final class Constants {
   // Set to true to log loop timing data. To false to disable.
   public static final boolean LOOP_TIMING_LOG = true;
 
+  /** Constants used for the Drive subsystem. */
   public static final class DriveConstants {
 
     private DriveConstants() {
@@ -80,6 +81,7 @@ public final class Constants {
     public static final double ENCODER_VELOCITY_CONVERSION =
         (WHEEL_DIAMETER_METERS * Math.PI) / (GEAR_RATIO * 60);
   }
+
   /** Constants used for the Arm subsystem. */
   public static final class ArmConstants {
 

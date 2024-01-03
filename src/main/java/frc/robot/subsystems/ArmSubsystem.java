@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -25,8 +24,8 @@ import frc.robot.Constants.ArmConstants;
 
 /** A robot arm subsystem that moves with a motion profile. */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
-  private final CANSparkMax motor = new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
-  private final RelativeEncoder encoder = motor.getEncoder();
+  private final CANSparkMax motor;
+  private final RelativeEncoder encoder;
 
   private ProfiledPIDController armController =
       new ProfiledPIDController(
@@ -51,8 +50,9 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private double voltageCommand = 0.0;
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
-  public ArmSubsystem() {
-
+  public ArmSubsystem(CANSparkMax motor) {
+    this.motor = motor;
+    this.encoder = motor.getEncoder();
     // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
     // arm position will only be correct if the arm is in the starting rest position when the
     // subsystem is constructed.
