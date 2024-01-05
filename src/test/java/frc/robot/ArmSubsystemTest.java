@@ -2,11 +2,17 @@ package frc.robot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,18 +25,27 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.AdditionalMatchers;
 
 class ArmSubsystemTest {
-
+  private final double DELTA = 5e-3;
   private Map<String, Double> telemetryDoubleMap = new HashMap<>();
   private Map<String, Boolean> telemetryBooleanMap = new HashMap<>();
 
+  private ArmSubsystem.Hardware armHardware;
   private ArmSubsystem arm;
+  private CANSparkMax mockMotor;
+  private RelativeEncoder mockEncoder;
 
   @BeforeEach
   public void initEach() {
-    CANSparkMax motor = new CANSparkMax(1, MotorType.kBrushless);
-    arm = new ArmSubsystem(motor);
+    // Create mock hardware devices
+    mockMotor = mock(CANSparkMax.class);
+    mockEncoder = mock(RelativeEncoder.class);
+
+    // Create subsystem object using mock hardware
+    armHardware = new ArmSubsystem.Hardware(mockMotor, mockEncoder);
+    arm = new ArmSubsystem(armHardware);
   }
 
   @AfterEach
@@ -41,63 +56,102 @@ class ArmSubsystemTest {
   @Test
   @DisplayName("Test constructor and initialization.")
   void testConstructor() {
-    /* We haven't enabled it yet, so the motor command should still be zero. */
-    // NOTE: this is probably always 0 in test without simulated motor
+    // We haven't enabled it yet, so command to motor and saved value should be zero.
+    verify(mockMotor).setVoltage(0.0);
     assertThat(arm.getVoltageCommand()).isZero();
-    /* Position should be set to starting position*/
+
+    // Position should be set to starting position
     assertThat(arm.getMeasurement()).isEqualTo(ArmConstants.ARM_OFFSET_RADS);
   }
 
   @Test
-  @DisplayName("Test move command.")
+  @DisplayName("Test move command and disable.")
   void testMoveCommand() {
 
-    // System.out.println("DS Enabled: " + DriverStationSim.getEnabled());
-    // DriverStationSim.setEnabled(true);
-    // System.out.println("DS Enabled: " + DriverStationSim.getEnabled());
-
-    /* Create a command to move the arm then initialize */
-    // Command moveCommandOrig = arm.moveToPositionOrig(Constants.ArmConstants.ARM_LOW_POSITION);
+    // Create a command to move the arm then initialize
     Command moveCommand = arm.moveToPosition(Constants.ArmConstants.ARM_LOW_POSITION);
-    System.out.println("Initialize");
-    // moveCommandOrig.initialize(); // ok
     moveCommand.initialize();
 
-    /* Run the periodic method to generate telemetry and verify it was published */
-    System.out.println("periodic");
+    // Run the periodic method to generate telemetry and verify it was published
     arm.periodic();
     int numEntries = readTelemetry();
     assertThat(numEntries).isPositive();
     assertEquals(
         Units.radiansToDegrees(ArmConstants.ARM_LOW_POSITION),
         telemetryDoubleMap.get("Arm Goal"),
-        0.01);
+        DELTA);
 
-    System.out.println("move execute");
-    // moveCommandOrig.execute(); // Doesn't actually execute
-    moveCommand.execute(); // ok
-    // CommandScheduler scheduler = CommandScheduler.getInstance();
-    // scheduler.enable();
-    // scheduler.schedule(moveCommandOrig);
-    // scheduler.run();
-    // System.out.println("Scheduled: " + scheduler.isScheduled(moveCommandOrig)); // false
-    // System.out.println("Composed: " + scheduler.isComposed(moveCommandOrig)); // false
-
-    System.out.println("periodic");
+    // Execute the command to run the controller
+    moveCommand.execute();
     arm.periodic();
     readTelemetry();
-
-    /*  Motor command should be positive to move arm up. */
     assertThat(telemetryDoubleMap.get("Arm Voltage")).isPositive();
-    // System.out.println("Enable: " + telemetryBooleanMap.get("Arm Enabled"));
     assertThat(telemetryBooleanMap.get("Arm Enabled")).isTrue();
+
+    // When disabled mMotor should be commanded to zero
+    verify(mockMotor, times(1)).setVoltage(0.0);
+    arm.disable();
+    arm.periodic();
+    readTelemetry();
+    verify(mockMotor, times(2)).setVoltage(0.0);
+    assertThat(telemetryDoubleMap.get("Arm Voltage")).isZero();
+    assertThat(telemetryBooleanMap.get("Arm Enabled")).isFalse();
+  }
+
+  @Test
+  @DisplayName("Test Motor and Encoder Sensors.")
+  void testSensors() {
+
+    // Set values for mocked sensors
+    final double fakeCurrent = -3.3;
+    when(mockMotor.getOutputCurrent()).thenReturn(fakeCurrent);
+    final double fakePosition = 1.5;
+    when(mockEncoder.getPosition()).thenReturn(fakePosition);
+    final double fakeVelocity = 0.123;
+    when(mockEncoder.getVelocity()).thenReturn(fakeVelocity);
+
+    // The motor voltage should be set twice: once to 0 when configured and once  to a
+    // positive value when controller is run.
+    Command moveCommand = arm.moveToPosition(Constants.ArmConstants.ARM_LOW_POSITION);
+    moveCommand.initialize();
+    moveCommand.execute();
+    verify(mockMotor, times(2)).setVoltage(anyDouble());
+    verify(mockMotor).setVoltage(0.0);
+    verify(mockMotor, times(1)).setVoltage(AdditionalMatchers.gt(0.0));
+
+    // This value was cheated by running working code as an example.  May be better to just
+    // check direction of command for complex controllers and leave controller response tests
+    // to simulation checking desired response over time.
+    final double expectedCommand = 0.33199;
+    verify(mockMotor, times(1)).setVoltage(AdditionalMatchers.eq(expectedCommand, DELTA));
+
+    // Alternative method: capture values and then use them in a test criteria
+    // ArgumentCaptor<Double> argument = ArgumentCaptor.forClass(Double.class);
+    // verify(mockMotor).setVoltage(argument.capture()); // Can use this if only called once
+    // verify(mockMotor, times(2)).setVoltage(argument.capture());
+    // assertEquals(expectedCommand, argument.getValue(), DELTA);
+
+    // Test position measurements from the encoder
+    assertThat(arm.getMeasurement()).isEqualTo(ArmConstants.ARM_OFFSET_RADS + fakePosition);
+
+    // Check that telemetry was sent to dashboard
+    arm.periodic();
+    readTelemetry();
+    assertEquals(expectedCommand, telemetryDoubleMap.get("Arm Voltage"), DELTA);
+    assertEquals(fakeCurrent, telemetryDoubleMap.get("Arm Current"), DELTA);
+    assertEquals(
+        Units.radiansToDegrees(ArmConstants.ARM_OFFSET_RADS + fakePosition),
+        telemetryDoubleMap.get("Arm Angle"),
+        DELTA);
+    assertEquals(
+        Units.radiansToDegrees(fakeVelocity), telemetryDoubleMap.get("Arm Velocity"), DELTA);
   }
 
   @Test
   @DisplayName("Test range limit and hold.")
   void testLimitAndHoldCommand() {
 
-    /* Try a command to move the arm above the limit */
+    // Try a command to move the arm above the limit
     Command moveCommand = arm.moveToPosition(Constants.ArmConstants.MAX_ANGLE_RADS + 0.1);
     moveCommand.initialize();
     arm.periodic();
@@ -105,22 +159,19 @@ class ArmSubsystemTest {
     assertEquals(
         Units.radiansToDegrees(ArmConstants.MAX_ANGLE_RADS),
         telemetryDoubleMap.get("Arm Goal"),
-        0.01);
+        DELTA);
 
-    /* Verify that the hold command runs the controller */
+    // Verify that the hold command runs the controller
     Command moveCommandHigh = arm.moveToPosition(Constants.ArmConstants.ARM_HIGH_POSITION);
     Command holdCommand = arm.holdPosition();
     // Initialize to set goal but don't execute so hold can be checked
     moveCommandHigh.initialize();
     holdCommand.execute();
-
-    System.out.println("periodic");
     arm.periodic();
     readTelemetry();
 
-    /*  Motor command should be positive to move arm up. */
+    // Motor command should be positive to move arm up.
     assertThat(telemetryDoubleMap.get("Arm Voltage")).isPositive();
-    // System.out.println("Enable: " + telemetryBooleanMap.get("Arm Enabled"));
     assertThat(telemetryBooleanMap.get("Arm Enabled")).isTrue();
   }
 
@@ -128,17 +179,19 @@ class ArmSubsystemTest {
   @DisplayName("Test shift down and up commands.")
   void testShiftDownCommand() {
     Command moveCommand = arm.moveToPositionOrig(Constants.ArmConstants.ARM_LOW_POSITION);
-    moveCommand.initialize();
     Command upCommand = arm.shiftUp();
 
+    // Command to a position and then shift up
+    moveCommand.initialize();
     upCommand.initialize();
     arm.periodic();
     readTelemetry();
     assertEquals(
         Units.radiansToDegrees(ArmConstants.ARM_LOW_POSITION + ArmConstants.POS_INCREMENT),
         telemetryDoubleMap.get("Arm Goal"),
-        0.01);
+        DELTA);
 
+    // Shift down
     Command downCommand = arm.shiftDown();
     downCommand.initialize();
     arm.periodic();
@@ -150,8 +203,22 @@ class ArmSubsystemTest {
                 + ArmConstants.POS_INCREMENT
                 - ArmConstants.POS_INCREMENT),
         telemetryDoubleMap.get("Arm Goal"),
-        0.01);
+        DELTA);
   }
+
+  @Test
+  @DisplayName("Test Preferences Table")
+  void testPrefs() {
+    NetworkTable prefTable = NetworkTableInstance.getDefault().getTable("Preferences");
+
+    // Currently just reading and setting values, but could set value and check effects
+    String keyName = "ArmKP";
+    NetworkTableEntry entry = prefTable.getEntry(keyName);
+    entry.setDouble(10.1);
+    assertEquals(10.1, entry.getDouble(-1), DELTA);
+  }
+
+  // ---------- Utility Functions --------------------------------------
 
   /* Read in telemetry values from the network table and store in maps */
   private int readTelemetry() {
@@ -167,9 +234,9 @@ class ArmSubsystemTest {
         telemetryBooleanMap.put(keyName, telemetryTable.getEntry(keyName).getBoolean(false));
       }
     }
-
     return telemetryKeys.size();
   }
+}
 
   // *** Available Telemetry Keys ***
   // "Arm Enabled"
@@ -182,4 +249,3 @@ class ArmSubsystemTest {
   // "Arm PID output"
   // "Arm SetPt Pos"
   // "Arm SetPt Vel"
-}

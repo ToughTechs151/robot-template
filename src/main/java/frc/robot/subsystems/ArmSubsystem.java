@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -92,6 +93,18 @@ import frc.robot.Constants.ArmConstants;
  * </pre>
  */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
+
+  /** Hardware components for the arm subsystem. */
+  public static class Hardware {
+    CANSparkMax motor;
+    RelativeEncoder encoder;
+
+    public Hardware(CANSparkMax motor, RelativeEncoder encoder) {
+      this.motor = motor;
+      this.encoder = encoder;
+    }
+  }
+
   private final CANSparkMax motor;
   private final RelativeEncoder encoder;
 
@@ -118,9 +131,9 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private double voltageCommand = 0.0;
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
-  public ArmSubsystem(CANSparkMax motor) {
-    this.motor = motor;
-    this.encoder = motor.getEncoder();
+  public ArmSubsystem(Hardware armHardware) {
+    this.motor = armHardware.motor;
+    this.encoder = armHardware.encoder;
 
     initializeArm();
   }
@@ -129,7 +142,7 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
 
     initPreferences();
     initEncoder();
-    initMotors();
+    initMotor();
 
     // Set tolerances that will be used to determine when the arm is at the goal position.
     armController.setTolerance(
@@ -138,7 +151,7 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     disable();
   }
 
-  private void initMotors() {
+  private void initMotor() {
     motor.restoreFactoryDefaults();
     // Maybe we should print the faults if non-zero before clearing?
     motor.clearFaults();
@@ -155,6 +168,18 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
     encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
     encoder.setPosition(0);
+  }
+
+  /**
+   * Initialize hardware devices for the arm subsystem.
+   *
+   * @return Hardware object containing all necessary devices for this subsystem
+   */
+  public static Hardware initializeHardware() {
+    CANSparkMax motor = new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
+    RelativeEncoder encoder = motor.getEncoder();
+
+    return new Hardware(motor, encoder);
   }
 
   @Override
@@ -174,12 +199,12 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
 
   /** Generate the motor command using the PID controller and feedforward. */
   public void useOutput() {
-    // Calculate the next set point along the profile to the goal and the next PID output based
-    // on the set point and current position.
-    output = armController.calculate(getMeasurement());
-    setpoint = armController.getSetpoint();
-
     if (armEnabled) {
+      // Calculate the next set point along the profile to the goal and the next PID output based
+      // on the set point and current position.
+      output = armController.calculate(getMeasurement());
+      setpoint = armController.getSetpoint();
+
       // Calculate the feedforward to move the arm at the desired velocity and offset
       // the effect of gravity at the desired position. Voltage for acceleration is not
       // used.
@@ -192,6 +217,8 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
       // If the arm isn't enabled, set the motor command to 0. In this state the arm
       // will move down until it hits the rest position. Motor EMF braking will slow movement
       // if that mode is used.
+      output = 0;
+      newFeedforward = 0;
       voltageCommand = 0;
     }
     motor.setVoltage(voltageCommand);
