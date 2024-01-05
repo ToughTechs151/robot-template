@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.AdditionalMatchers;
 
 class ArmSubsystemTest {
-  private final double DELTA = 5e-3;
+  private static final double DELTA = 5e-3;
   private Map<String, Double> telemetryDoubleMap = new HashMap<>();
   private Map<String, Boolean> telemetryBooleanMap = new HashMap<>();
 
