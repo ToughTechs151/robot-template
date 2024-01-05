@@ -121,24 +121,40 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   public ArmSubsystem(CANSparkMax motor) {
     this.motor = motor;
     this.encoder = motor.getEncoder();
-    // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
-    // arm position will only be correct if the arm is in the starting rest position when the
-    // subsystem is constructed.
-    encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
-    encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
-    encoder.setPosition(0);
 
-    // Configure the motor to use EMF braking when idle and set voltage to 0.
-    motor.setIdleMode(IdleMode.kBrake);
-    motor.setVoltage(0.0);
+    initializeArm();
+  }
+
+  private void initializeArm() {
+
+    initPreferences();
+    initEncoder();
+    initMotors();
 
     // Set tolerances that will be used to determine when the arm is at the goal position.
     armController.setTolerance(
         Constants.ArmConstants.POSITION_TOLERANCE, Constants.ArmConstants.VELOCITY_TOLERANCE);
 
     disable();
+  }
 
-    initPreferences();
+  private void initMotors() {
+    motor.restoreFactoryDefaults();
+    // Maybe we should print the faults if non-zero before clearing?
+    motor.clearFaults();
+    // Configure the motor to use EMF braking when idle and set voltage to 0.
+    motor.setIdleMode(IdleMode.kBrake);
+    motor.setVoltage(0.0);
+    DataLogManager.log("Arm motor firmware version:" + motor.getFirmwareString());
+  }
+
+  private void initEncoder() {
+    // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
+    // arm position will only be correct if the arm is in the starting rest position when the
+    // subsystem is constructed.
+    encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
+    encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
+    encoder.setPosition(0);
   }
 
   @Override
@@ -293,7 +309,11 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     if (currentCommand != null) {
       CommandScheduler.getInstance().cancel(currentCommand);
     }
-    DataLogManager.log("Arm Disabled");
+    DataLogManager.log(
+        "Arm Disabled CurPos="
+            + Units.radiansToDegrees(getMeasurement())
+            + " CurVel="
+            + Units.radiansToDegrees(encoder.getVelocity()));
   }
 
   /** Returns the Arm position for PID control and logging (Units are Radians from horizontal). */
