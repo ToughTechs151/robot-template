@@ -157,7 +157,6 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     motor.clearFaults();
     // Configure the motor to use EMF braking when idle and set voltage to 0.
     motor.setIdleMode(IdleMode.kBrake);
-    motor.setVoltage(0.0);
     DataLogManager.log("Arm motor firmware version:" + motor.getFirmwareString());
   }
 
