@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -29,13 +28,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final CANSparkMax rearRight =
       new CANSparkMax(DriveConstants.REAR_RIGHT_MOTOR_PORT, MotorType.kBrushless);
 
-  private final MotorControllerGroup leftMotorControllerGroup =
-      new MotorControllerGroup(frontLeft, rearLeft);
-  private final MotorControllerGroup rightMotorControllerGroup =
-      new MotorControllerGroup(frontRight, rearRight);
-
-  private final DifferentialDrive drive =
-      new DifferentialDrive(leftMotorControllerGroup, rightMotorControllerGroup);
+  private final DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
 
   // The front-left-side drive encoder
   private final RelativeEncoder frontLeftEncoder = this.frontLeft.getEncoder();
@@ -98,7 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    rightMotorControllerGroup.setInverted(true);
+    frontRight.setInverted(true);
 
     SmartDashboard.putData(this.drive);
   }
@@ -168,8 +161,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    leftMotorControllerGroup.setVoltage(leftVolts);
-    rightMotorControllerGroup.setVoltage(rightVolts);
+    frontLeft.setVoltage(leftVolts);
+    frontRight.setVoltage(rightVolts);
     drive.feed();
   }
 
@@ -255,7 +248,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return command to the left motor controller group in volts
    */
   public double getLeftMotorVolts() {
-    return leftMotorControllerGroup.get();
+    return frontLeft.get();
   }
 
   /**
@@ -264,6 +257,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @return command to the right motor controller group in volts
    */
   public double getRightMotorVolts() {
-    return rightMotorControllerGroup.get();
+    return frontRight.get();
   }
 }
