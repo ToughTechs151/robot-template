@@ -4,8 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -88,7 +88,7 @@ import frc.robot.Constants.ArmConstants;
  *   - {@code private double newFeedforward}: The calculated feedforward value.
  *   - {@code private boolean armEnabled}: A flag indicating whether the arm is enabled.
  *   - {@code private double voltageCommand}: The motor commanded voltage.
- *</pre>
+ * </pre>
  */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private final CANSparkMax motor;
