@@ -266,4 +266,13 @@ public class DriveSubsystem extends SubsystemBase {
   public double getRightMotorVolts() {
     return rightMotorControllerGroup.get();
   }
+
+  /**
+   * Disable the drive by setting motor output to zero. Any PID controllers should also be disabled
+   * here. NOTE: In this state the drive will roll to a stop if using coast mode. Using EMF braking
+   * mode will cause drive to stop quickly.
+   */
+  public void disable() {
+    tankDriveVolts(0, 0);
+  }
 }

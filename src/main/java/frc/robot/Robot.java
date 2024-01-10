@@ -64,12 +64,13 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+
     if (isSimulation() && simModel != null) {
       simModel.reset();
     }
 
-    // Add code for entering disabled mode.
     CommandScheduler.getInstance().cancelAll();
+    this.robotContainer.disableSubsystems();
   }
 
   @Override
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     // Add code to run repeatedly during Autonomous mode.
   }
 
+  /** This function is called once at the start of operator control. */
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -126,6 +128,7 @@ public class Robot extends TimedRobot {
     // Add code to run repeatedly during Teleop mode.
   }
 
+  /** This function is called once at the start of test mode. */
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.

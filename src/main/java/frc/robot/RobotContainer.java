@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
@@ -101,6 +102,17 @@ public class RobotContainer {
     // NOTE: This is intended for initial arm testing and should be removed in the final robot
     // to prevent accidental disable resulting in lowering of the arm.
     driverController.x().onTrue(Commands.runOnce(robotArm::disable));
+  }
+
+  /**
+   * Disables all subsystems. This should be called on robot disable to prevent integrator windup in
+   * subsystems with PID controllers. It also allows subsystems to setup disabled state so
+   * simulation matches RoboRio behavior. Commands are canceled at the Robot level.
+   */
+  public void disableSubsystems() {
+    robotArm.disable();
+    robotDrive.disable();
+    DataLogManager.log("disableSubsystems");
   }
 
   /**
