@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -91,6 +93,18 @@ import frc.robot.Constants.ArmConstants;
  * </pre>
  */
 public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
+
+  /** Hardware components for the arm subsystem. */
+  public static class Hardware {
+    CANSparkMax motor;
+    RelativeEncoder encoder;
+
+    public Hardware(CANSparkMax motor, RelativeEncoder encoder) {
+      this.motor = motor;
+      this.encoder = encoder;
+    }
+  }
+
   private final CANSparkMax motor;
   private final RelativeEncoder encoder;
 
@@ -117,27 +131,54 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
   private double voltageCommand = 0.0;
 
   /** Create a new ArmSubsystem controlled by a Profiled PID COntroller . */
-  public ArmSubsystem(CANSparkMax motor) {
-    this.motor = motor;
-    this.encoder = motor.getEncoder();
-    // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
-    // arm position will only be correct if the arm is in the starting rest position when the
-    // subsystem is constructed.
-    encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
-    encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
-    encoder.setPosition(0);
+  public ArmSubsystem(Hardware armHardware) {
+    this.motor = armHardware.motor;
+    this.encoder = armHardware.encoder;
 
-    // Configure the motor to use EMF braking when idle and set voltage to 0.
-    motor.setIdleMode(IdleMode.kBrake);
-    motor.setVoltage(0.0);
+    initializeArm();
+  }
+
+  private void initializeArm() {
+
+    initPreferences();
+    initEncoder();
+    initMotor();
 
     // Set tolerances that will be used to determine when the arm is at the goal position.
     armController.setTolerance(
         Constants.ArmConstants.POSITION_TOLERANCE, Constants.ArmConstants.VELOCITY_TOLERANCE);
 
     disable();
+  }
 
-    initPreferences();
+  private void initMotor() {
+    motor.restoreFactoryDefaults();
+    // Maybe we should print the faults if non-zero before clearing?
+    motor.clearFaults();
+    // Configure the motor to use EMF braking when idle and set voltage to 0.
+    motor.setIdleMode(IdleMode.kBrake);
+    DataLogManager.log("Arm motor firmware version:" + motor.getFirmwareString());
+  }
+
+  private void initEncoder() {
+    // Setup the encoder scale factors and reset encoder to 0. Since this is a relation encoder,
+    // arm position will only be correct if the arm is in the starting rest position when the
+    // subsystem is constructed.
+    encoder.setPositionConversionFactor(ArmConstants.ARM_RAD_PER_ENCODER_ROTATION);
+    encoder.setVelocityConversionFactor(ArmConstants.RPM_TO_RAD_PER_SEC);
+    encoder.setPosition(0);
+  }
+
+  /**
+   * Initialize hardware devices for the arm subsystem.
+   *
+   * @return Hardware object containing all necessary devices for this subsystem
+   */
+  public static Hardware initializeHardware() {
+    CANSparkMax motor = new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
+    RelativeEncoder encoder = motor.getEncoder();
+
+    return new Hardware(motor, encoder);
   }
 
   @Override
@@ -157,12 +198,12 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
 
   /** Generate the motor command using the PID controller and feedforward. */
   public void useOutput() {
-    // Calculate the next set point along the profile to the goal and the next PID output based
-    // on the set point and current position.
-    output = armController.calculate(getMeasurement());
-    setpoint = armController.getSetpoint();
-
     if (armEnabled) {
+      // Calculate the next set point along the profile to the goal and the next PID output based
+      // on the set point and current position.
+      output = armController.calculate(getMeasurement());
+      setpoint = armController.getSetpoint();
+
       // Calculate the feedforward to move the arm at the desired velocity and offset
       // the effect of gravity at the desired position. Voltage for acceleration is not
       // used.
@@ -175,16 +216,28 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
       // If the arm isn't enabled, set the motor command to 0. In this state the arm
       // will move down until it hits the rest position. Motor EMF braking will slow movement
       // if that mode is used.
+      output = 0;
+      newFeedforward = 0;
       voltageCommand = 0;
     }
     motor.setVoltage(voltageCommand);
   }
 
   /** Returns a Command that moves the arm to a new position. */
-  public Command moveToPosition(double goal) {
+  public Command moveToPositionOrig(double goal) {
     return runOnce(() -> setGoalPosition(goal))
         .andThen(run(this::useOutput))
         .until(this::atGoalPosition);
+  }
+
+  /** Returns a Command that moves the arm to a new position. */
+  public Command moveToPosition(double goal) {
+    return new FunctionalCommand(
+        () -> setGoalPosition(goal),
+        this::useOutput,
+        interrupted -> {},
+        this::atGoalPosition,
+        this);
   }
 
   /**
@@ -282,11 +335,15 @@ public class ArmSubsystem extends SubsystemBase implements AutoCloseable {
     if (currentCommand != null) {
       CommandScheduler.getInstance().cancel(currentCommand);
     }
-    DataLogManager.log("Arm Disabled");
+    DataLogManager.log(
+        "Arm Disabled CurPos="
+            + Units.radiansToDegrees(getMeasurement())
+            + " CurVel="
+            + Units.radiansToDegrees(encoder.getVelocity()));
   }
 
   /** Returns the Arm position for PID control and logging (Units are Radians from horizontal). */
-  private double getMeasurement() {
+  public double getMeasurement() {
     // Add the offset from the starting point. The arm must be at this position at startup for
     // the relative encoder to provide a correct position.
     return encoder.getPosition() + ArmConstants.ARM_OFFSET_RADS;

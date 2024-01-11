@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -41,9 +38,7 @@ public class RobotContainer {
   private final ExampleCommand autoCommand =
       new ExampleCommand("ExampleCommand", this.exampleSubsystem);
   // The Arm.
-  private final CANSparkMax armMotor =
-      new CANSparkMax(ArmConstants.MOTOR_PORT, MotorType.kBrushless);
-  private final ArmSubsystem robotArm = new ArmSubsystem(armMotor);
+  private final ArmSubsystem robotArm = new ArmSubsystem(ArmSubsystem.initializeHardware());
   // The drive.
   private final DriveSubsystem robotDrive = new DriveSubsystem();
 
