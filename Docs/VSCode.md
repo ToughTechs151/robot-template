@@ -24,6 +24,13 @@ The following extensions come preinstalled in the WPILIB VSCode environment. If 
 - Project Manager for Java
 - WPILIB
 
+As of 2024, WPILIB also installs extensions to support Python.
+
+- Black Formatter
+- Isort
+- Pylance
+- Python
+
 ### Install the Team Extension Pack
 
 Our Team has an extension pack in the VSCode Marketplace that will automatically install all of the extensions needed to work with the Robot Template. Some of the included extensions are extension packs themselves, so they will cause other extensions to be installed as well. You can install the team extension pack by going to the extensions tab in VScode and searching for "Tough Techs". The topmost extension should be ours. You can verify it by looking at the icon, which is our team logo. To install it, just click the install button. The extension can also be found at the [Marketplace Page](https://marketplace.visualstudio.com/items?itemName=ToughTechs151.tt151extpack) or the [repository releases.](https://github.com/ToughTechs151/tt151extpack/releases)
