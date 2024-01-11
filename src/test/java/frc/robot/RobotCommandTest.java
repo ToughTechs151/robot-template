@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SimHooks;
@@ -33,6 +32,7 @@ class RobotCommandTest {
 
   @BeforeEach
   void startThread() {
+    System.out.println(" =================== Starting Robot for Unit Test =================== ");
     HAL.initialize(500, 0);
     SimHooks.pauseTiming();
     DriverStationSim.resetData();
@@ -72,9 +72,6 @@ class RobotCommandTest {
     SimHooks.stepTiming(10 * TIME_STEP);
 
     // Ensure arm is still at start position and voltage command is 0.
-    System.out.println("Arm measurement: " + Units.radiansToDegrees(arm.getMeasurement()));
-    System.out.println("Arm voltage: " + arm.getVoltageCommand());
-
     assertEquals(Constants.ArmConstants.ARM_OFFSET_RADS, arm.getMeasurement(), POS_DELTA);
     assertThat(arm.getVoltageCommand()).isZero();
 
@@ -103,15 +100,11 @@ class RobotCommandTest {
 
     assertEquals(Constants.ArmConstants.ARM_HIGH_POSITION, arm.getMeasurement(), POS_DELTA);
 
-    // Disable the robot
+    // Disable the robot and check that motor command is 0
     DriverStationSim.setAutonomous(false);
     DriverStationSim.setEnabled(false);
     DriverStationSim.notifyNewData();
-    System.out.println("Disable");
-    arm.disable();
-
-    // advance 75 time steps
-    SimHooks.stepTiming(1.5);
+    SimHooks.stepTiming(0.5);
 
     assertThat(arm.getVoltageCommand()).isZero();
   }

@@ -18,6 +18,7 @@ class BlinkinSubsystemTest {
   private boolean mainState = false;
   private double whatDouble = 0.0;
   private PWM pwm;
+  private BlinkinSubsystem blinkin;
 
   private boolean isMainTrue() {
     return mainState;
@@ -34,13 +35,14 @@ class BlinkinSubsystemTest {
 
   @AfterEach
   public void closePWM() {
-    pwm.close();
+    blinkin.disable();
+    blinkin.close();
   }
 
   @Test
   @DisplayName("Test setting and getting and displaying the value.")
   void testSetValueAndGetValue() {
-    BlinkinSubsystem blinkin = new BlinkinSubsystem(pwm);
+    blinkin = new BlinkinSubsystem(pwm);
     double expectedValue = 0.5;
     blinkin.setValue(expectedValue);
     blinkin.periodic();
@@ -73,7 +75,7 @@ class BlinkinSubsystemTest {
     final double falseValue = 0.1;
 
     /* Get a new blinkin with the boolean lambda expression. */
-    BlinkinSubsystem blinkin = new BlinkinSubsystem(pwm, this::isMainTrue, trueValue, falseValue);
+    blinkin = new BlinkinSubsystem(pwm, this::isMainTrue, trueValue, falseValue);
     /* Disabled, so the raw value should be zero. */
     blinkin.periodic();
     assertThat(blinkin.getSpeed()).isZero();
@@ -96,7 +98,7 @@ class BlinkinSubsystemTest {
   void testDoubleConstructor() {
 
     /* Get a new blinkin with the boolean lambda expression. */
-    BlinkinSubsystem blinkin = new BlinkinSubsystem(pwm, this::whatIsDouble);
+    blinkin = new BlinkinSubsystem(pwm, this::whatIsDouble);
     whatDouble = 0.5;
     /* Disabled, so the raw value should be zero. */
     blinkin.periodic();
@@ -131,7 +133,7 @@ class BlinkinSubsystemTest {
   @Test
   @DisplayName("Test Alliance Display")
   void testAllianceDisplay() {
-    BlinkinSubsystem blinkin = new BlinkinSubsystem(pwm);
+    blinkin = new BlinkinSubsystem(pwm);
     blinkin.enable();
     blinkin.periodic();
     assertThat(blinkin.getSpeed()).isZero();
