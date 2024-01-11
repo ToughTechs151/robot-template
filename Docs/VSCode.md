@@ -24,6 +24,13 @@ The following extensions come preinstalled in the WPILIB VSCode environment. If 
 - Project Manager for Java
 - WPILIB
 
+As of 2024, WPILIB also installs extensions to support Python.
+
+- Black Formatter
+- Isort
+- Pylance
+- Python
+
 ### Install the Team Extension Pack
 
 Our Team has an extension pack in the VSCode Marketplace that will automatically install all of the extensions needed to work with the Robot Template. Some of the included extensions are extension packs themselves, so they will cause other extensions to be installed as well. You can install the team extension pack by going to the extensions tab in VScode and searching for "Tough Techs". The topmost extension should be ours. You can verify it by looking at the icon, which is our team logo. To install it, just click the install button. The extension can also be found at the [Marketplace Page](https://marketplace.visualstudio.com/items?itemName=ToughTechs151.tt151extpack) or the [repository releases.](https://github.com/ToughTechs151/tt151extpack/releases)
@@ -94,7 +101,7 @@ Many of the following settings are already set in the workspace settings file fo
 
   Complete documentation for Code Spell Check can be found at [Code Spell Check Homepage.](https://streetsidesoftware.com/vscode-spell-checker/)
 
-- Project Manager. The Project Manager panel allows you to organize your workspaces into an easily displayed list. You can save a workspace as a project, in which case it will appear in the "Favorites" list at the top of the panel, and the Project Manager can also detect workspaces or Git Repositories if you tell it where to look. You can use the Setting Editor, look under the "Project Manager" extension for the item "Project Manager > Git: Base Folders". Click the "Add Item" button, and enter the path to the base directory where your workspaces are saved. If you followed the team Java course, it will be "Documents\FRCProjects", under your home user folder. You can use the string "$home" to represent your home folder, so for this standard location you would enter "$home\Documents\FRCProject" before you pressed enter. After that, the Project Manager will detect all Git repositories under that folder.
+- Project Manager. The Project Manager panel allows you to organize your workspaces into an easily displayed list. You can save a workspace as a project, in which case it will appear in the "Favorites" list at the top of the panel, and the Project Manager can also detect workspaces or Git Repositories if you tell it where to look. You can use the Setting Editor, look under the "Project Manager" extension for the item "Project Manager > Git: Base Folders". Click the "Add Item" button, and enter the path to the base directory where your workspaces are saved. If you followed the team Java course, it will be "Documents\FRCProjects", under your home user folder. You can use the string "$home" to represent your home folder, so for this standard location you would enter "$home\Documents\FRCProjects" before you pressed enter. After that, the Project Manager will detect all Git repositories under that folder.
 
 - Git. The Git extension might ask you if you want to auto-fetch from remote repositories. This means that updates made to the remote repository will be periodically downloaded to the local repository, without sending local changes up to the remote, as the "Sync" button or command does. When the fetch is done, it does not update the working files with the changes, but they are available locally if you want to update manually. In you probably want auto fetching to be on, unless your computer is primarily used as a Drive Station since a Drive Station spends a lot of time without the Internet being accessible. If you answered no to the prompt you can search for "Autofetch" under the Git extension in Settings Editor, and set it to "True".
 
