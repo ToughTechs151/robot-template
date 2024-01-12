@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.Preferences;
 import java.util.Set;
 
 /** Utility class for managing preferences. */
+// TODO - Add functions to manage preferences more automatically with lists of keys and 
+//        default values defined in the constants file.
 public class RobotPreferences {
 
   private RobotPreferences() {
