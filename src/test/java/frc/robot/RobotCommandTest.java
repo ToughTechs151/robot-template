@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SimHooks;
 import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import frc.robot.subsystems.ArmSubsystem;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,11 @@ class RobotCommandTest {
     RoboRioSim.resetData();
     DriverStationSim.resetData();
     DriverStationSim.notifyNewData();
+    System.out.println(" =================== Stopped Robot for Unit Test =================== ");
+    Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+    for (Thread x : threadSet) {
+      System.out.println(x.getName());
+    }
   }
 
   @Test
