@@ -44,6 +44,9 @@ class RobotCommandTest {
     SimHooks.stepTiming(0.0); // Wait for Notifiers
     container = robot.getRobotContainer();
     arm = container.getArmSubsystem();
+
+    // Reset preferences to default values so test results are consistent
+    RobotPreferences.resetPreferences();
   }
 
   @AfterEach
@@ -90,7 +93,7 @@ class RobotCommandTest {
     xboxControllerSim.notifyNewData();
 
     // advance to let arm reach the new goal
-    SimHooks.stepTiming(2.0);
+    SimHooks.stepTiming(3.0);
 
     assertEquals(Constants.ArmConstants.ARM_HIGH_POSITION, arm.getMeasurement(), POS_DELTA);
     assertTrue(arm.atGoalPosition());

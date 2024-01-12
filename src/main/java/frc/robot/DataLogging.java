@@ -2,9 +2,6 @@ package frc.robot;
 
 // Forked from FRC Team 2832 "The Livonia Warriors"
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
@@ -26,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import java.util.Map;
-import java.util.Set;
 
 /** The DataLogging class contains all the logic for using telemetry. */
 public class DataLogging {
@@ -48,21 +44,8 @@ public class DataLogging {
     final DataLog log = DataLogManager.getLog();
 
     // Record the starting values of preferences
-    NetworkTable prefTable = NetworkTableInstance.getDefault().getTable("Preferences");
-    Set<String> prefKeys = prefTable.getKeys();
     DataLogManager.log("Starting Preference Values:");
-
-    for (String keyName : prefKeys) {
-      NetworkTableType prefType = prefTable.getEntry(keyName).getType();
-
-      if (prefType == NetworkTableType.kDouble) {
-        DataLogManager.log(
-            "Preferences/" + keyName + ": " + prefTable.getEntry(keyName).getDouble(-1));
-      } else if (prefType == NetworkTableType.kBoolean) {
-        DataLogManager.log(
-            "Preferences/" + keyName + ": " + prefTable.getEntry(keyName).getBoolean(false));
-      }
-    }
+    RobotPreferences.logPreferences();
 
     // Record both DS control and joystick data. To
     DriverStation.startDataLog(DataLogManager.getLog(), Constants.LOG_JOYSTICK_DATA);
