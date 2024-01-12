@@ -33,6 +33,10 @@ class RobotCommandTest {
 
   @BeforeEach
   void startThread() {
+    Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+    for (Thread x : threadSet) {
+      System.out.println(x.getName());
+    }
     System.out.println(" =================== Starting Robot for Unit Test =================== ");
     HAL.initialize(500, 0);
     SimHooks.pauseTiming();
