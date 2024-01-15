@@ -124,10 +124,12 @@ class ArmSubsystemTest {
     verify(mockMotor).setVoltage(0.0);
     verify(mockMotor, times(1)).setVoltage(AdditionalMatchers.gt(0.0));
 
-    // An example of looking for a specific value.
-    // This value was cheated by running working code as an example.  May be better to just
-    // check direction of command for complex controllers and leave controller response tests
-    // to simulation checking desired response over time.
+    // This unused code is provided as an example of looking for a specific value.
+    // This value was cheated by running working code as an example since calculating actual 
+    // controller expected values is difficult.  Insteat the test above just checks direction 
+    // of the command, and controller response tests are done in simulation by checking desired 
+    // response over time.
+    //
     // final double expectedCommand = 0.34092;
     // verify(mockMotor, times(1)).setVoltage(AdditionalMatchers.eq(expectedCommand, DELTA));
 
