@@ -95,13 +95,17 @@ public class DataLogging {
     CommandScheduler.getInstance()
         .onCommandInitialize(
             command -> commandLog.append("Command initialized:" + command.getName()));
-    CommandScheduler.getInstance()
-        .onCommandExecute(command -> commandLog.append("Command execute:" + command.getName()));
+
+    if (Constants.COMMAND_EXECUTE_LOG) {
+      CommandScheduler.getInstance()
+          .onCommandExecute(command -> commandLog.append("Command execute:" + command.getName()));
+    }
+
     CommandScheduler.getInstance()
         .onCommandInterrupt(
-            command -> commandLog.append("Command interrupted" + command.getName()));
+            command -> commandLog.append("Command interrupted:" + command.getName()));
     CommandScheduler.getInstance()
-        .onCommandFinish(command -> commandLog.append("Command finished" + command.getName()));
+        .onCommandFinish(command -> commandLog.append("Command finished:" + command.getName()));
     commandLog.append("Opened command log");
 
     loopTime = new DoubleLogEntry(log, "/robot/LoopTime");
