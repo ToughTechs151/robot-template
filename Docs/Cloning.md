@@ -37,3 +37,7 @@
   - Change the line that says "sonar.organization".
 
 The easiest way to do all the above is to use the "Replace in files" item in the "Edit" menu. If your SonarQube organization matches your GitHub organization, then you can simply do a replace of "ToughTech151" with your organizations name. Replace "robot-template" with your Github Repo name. Be sure to do both with "Match case" turned on. You will still need to replace the lower-case version, one in   The only place that you do not want to change robot-template to your repo name is in the file .github/workflows/template-sync.yml, if you want to be able to pull template changes.
+
+## Configure Repo settings
+
+Watch this space.
