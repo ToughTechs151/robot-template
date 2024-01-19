@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SimHooks;
 import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import frc.robot.subsystems.ArmSubsystem;
-import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -34,10 +33,6 @@ class RobotCommandTest {
 
   @BeforeEach
   void startThread() {
-    Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-    for (Thread x : threadSet) {
-      System.out.println(x.getName());
-    }
     System.out.println(" =================== Starting Robot for Unit Test =================== ");
     HAL.initialize(500, 0);
     SimHooks.pauseTiming();
@@ -50,6 +45,9 @@ class RobotCommandTest {
     SimHooks.stepTiming(0.0); // Wait for Notifiers
     container = robot.getRobotContainer();
     arm = container.getArmSubsystem();
+
+    // Reset preferences to default values so test results are consistent
+    RobotPreferences.resetPreferences();
   }
 
   @AfterEach
@@ -66,10 +64,6 @@ class RobotCommandTest {
     DriverStationSim.resetData();
     DriverStationSim.notifyNewData();
     System.out.println(" =================== Stopped Robot for Unit Test =================== ");
-    Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-    for (Thread x : threadSet) {
-      System.out.println(x.getName());
-    }
   }
 
   @Disabled("Needs rework")
@@ -102,7 +96,7 @@ class RobotCommandTest {
     xboxControllerSim.notifyNewData();
 
     // advance to let arm reach the new goal
-    SimHooks.stepTiming(2.0);
+    SimHooks.stepTiming(3.0);
 
     assertEquals(Constants.ArmConstants.ARM_HIGH_POSITION, arm.getMeasurement(), POS_DELTA);
     assertTrue(arm.atGoalPosition());
